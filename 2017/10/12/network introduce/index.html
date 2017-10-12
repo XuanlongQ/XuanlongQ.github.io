@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: sdn | XuanLong&#39;s Blog</title>
+  <title>网络基本介绍 | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="于我而言，社交生活不是必须的">
-<meta property="og:type" content="website">
-<meta property="og:title" content="XuanLong&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/sdn/index.html">
+  <meta name="description" content="这个专题主要讲述数据传输方向，主要普及关于网络方向，主要的拥塞避免方向会写在我的知乎专栏上。 网络传输的基本单位： bps(bit per second).  1 Network EdgeEdge Network(边缘网路)是由一群主机(host)和应用组成，核心网络(Core Network)则是由一群路由器(Router)将网络链接起来。 1.1 Client-Server Computing">
+<meta name="keywords" content="network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络基本介绍">
+<meta property="og:url" content="http://yoursite.com/2017/10/12/network introduce/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="于我而言，社交生活不是必须的">
+<meta property="og:description" content="这个专题主要讲述数据传输方向，主要普及关于网络方向，主要的拥塞避免方向会写在我的知乎专栏上。 网络传输的基本单位： bps(bit per second).  1 Network EdgeEdge Network(边缘网路)是由一群主机(host)和应用组成，核心网络(Core Network)则是由一群路由器(Router)将网络链接起来。 1.1 Client-Server Computing">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-12T13:03:04.020Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="XuanLong&#39;s Blog">
-<meta name="twitter:description" content="于我而言，社交生活不是必须的">
+<meta name="twitter:title" content="网络基本介绍">
+<meta name="twitter:description" content="这个专题主要讲述数据传输方向，主要普及关于网络方向，主要的拥塞避免方向会写在我的知乎专栏上。 网络传输的基本单位： bps(bit per second).  1 Network EdgeEdge Network(边缘网路)是由一群主机(host)和应用组成，核心网络(Core Network)则是由一群路由器(Router)将网络链接起来。 1.1 Client-Server Computing">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
   
@@ -183,174 +185,224 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-network introduce" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      网络基本介绍
+    </h1>
+  
+
+        
+        <a href="/2017/10/12/network introduce/" class="archive-article-date">
+  	<time datetime="2017-10-12T11:50:23.787Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-12</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个专题主要讲述数据传输方向，主要普及关于网络方向，主要的拥塞避免方向会写在我的知乎专栏上。</p>
+<p>网络传输的基本单位： bps(bit per second). </p>
+<h1 id="1-Network-Edge"><a href="#1-Network-Edge" class="headerlink" title="1 Network Edge"></a>1 Network Edge</h1><p>Edge Network(边缘网路)是由一群主机(host)和应用组成，核心网络(Core Network)则是由一群路由器(Router)将网络链接起来。</p>
+<h2 id="1-1-Client-Server-Computing-主从式运算"><a href="#1-1-Client-Server-Computing-主从式运算" class="headerlink" title="1.1 Client-Server Computing(主从式运算)"></a>1.1 Client-Server Computing(主从式运算)</h2><p>Client应用程序向Server要求服务，Server程序回应client并提供服务。(如：Web浏览器，Web Server)</p>
+<h2 id="1-2-Peer-to-Peer-P2P-点对点-Computing"><a href="#1-2-Peer-to-Peer-P2P-点对点-Computing" class="headerlink" title="1.2 Peer-to-Peer (P2P,点对点) Computing"></a>1.2 Peer-to-Peer (P2P,点对点) Computing</h2><p>Peer既是Client, 也是Server. (如: Skype, Bit Torrent)<br>资料在edge的两端, 传输服务(Transport Srvice)可能是可靠的 (如: TCP/Transmission Control Protocol), 或不可靠的 (如: UDP/User Datagram Protocol).</p>
+<p>TCP服务提供：<br>(1)顺序正确可靠的字节流(Byte-Stream)<br>(2)流量控制<br>(3)拥塞控制<br>TCP服务要先建立连接.  UDP服务是属于沒有记录状态(stateless)的不可靠服务.<br>UDP服务比TCP更快，超载时将会无法处理的资料舍弃。</p>
+<h2 id="1-3-Access-Network-接取网络"><a href="#1-3-Access-Network-接取网络" class="headerlink" title="1.3 Access Network (接取网络)"></a>1.3 Access Network (接取网络)</h2><p>家庭:<br>(1) Dialup Modem(拨号数据线,)-&gt;up to 56Kbps<br>(2) ADSL(Asymmetric Digital Subscriber Line)-&gt;Upstream:up to 1Mbps;downstream:up to 8Mbps<br>(3) HFC(Hybrid Fiber Coax)-&gt;Upstream:up to 2Mbps;downstream:up to 30Mbps</p>
+<p>学校公司 : WiFi</p>
+<p>无线网络: Wireless PAN/LAN/WAN</p>
+<h2 id="1-4-Physical-Media-传输媒介"><a href="#1-4-Physical-Media-传输媒介" class="headerlink" title="1.4 Physical Media (传输媒介)"></a>1.4 Physical Media (传输媒介)</h2><p>Twisted Pair (双绞线) : Catogory 5 UTP(100M/1Gbps ethernet)</p>
+<p>Coaxial cable (同轴电缆)</p>
+<p>Fiber</p>
+<p>Radio link :人造卫星 end-to-end delay 270ms.</p>
+<h2 id="1-5-网络拓扑-topology"><a href="#1-5-网络拓扑-topology" class="headerlink" title="1.5 网络拓扑 (topology)"></a>1.5 网络拓扑 (topology)</h2><p>(1) 汇流排拓扑(bus topology)所有的Host都会连接到一条共用的线路(i.e.汇流排)，所有的信息都会延着共用线路传输，和汇流排所相连的所有节点都可以接受到信息。</p>
+<p>(2) 星状拓扑(star topology) 主要是透过一个中央控制的节点(或是server)去连接所有的Host，Host之间沒有相连接。</p>
+<p>(3) 环状拓扑(ring topology)每一台Host都会和另一台Host相连接，最后会形式一个环状的结构，且所要传送的信息是利用单方向的传送。</p>
+<p>(4) 树状拓扑(tree topology)所有的Host连接的形式会成树状的结构，且任两个Host之间都只会有一条的传输路径。</p>
+<p>(5) 网状拓扑(mesh topology)<br>a. 完全连接网状拓扑：在网络系统中各个Host都会和所有的Host有相连接的路径。<br>b. 不完全连接网状拓扑：在网络系统中各的Host不一定会和所有的Host有相连接的路径；也就是说，传送信息时，可能要先经过其他的Host才会到达目的地。</p>
+<h1 id="2-Network-Core"><a href="#2-Network-Core" class="headerlink" title="2 Network Core"></a>2 Network Core</h1><h2 id="2-1-Circuit-Switching"><a href="#2-1-Circuit-Switching" class="headerlink" title="2.1 Circuit Switching"></a>2.1 Circuit Switching</h2><p>把网络资源分成很多份，每个Call都有专属的连线，资源不共享，如果一个连线无人使用，则会闲置，不会分给其他人使用。<br>Multiplexing (多工) 有2种方式  FDM vs. TDM</p>
+<p>FDM(Frequency-division multiplexing)：<br>以frequency划分，每个使用者平均分配所有的frequency</p>
+<p>TDM(Time-division multiplexing)：<br>以时间划分，时间內每个使用者享有所有的frequency</p>
+<h2 id="2-2-Packet-Switching"><a href="#2-2-Packet-Switching" class="headerlink" title="2.2 Packet Switching"></a>2.2 Packet Switching</h2><p>所有人的package共享所有网络资源<br>会发生coongestion原因：packet在queue里面等待被使用.</p>
+<p>Packet switching的优点:<br>处理bursty data的能力佳，共享网络资源，不必事先做call setup的动作。<br>Packet switching的缺点:<br>网络拥塞会造成packet delay和loss必须配合reliable data transfer和congestion control的机制。</p>
+<h2 id="2-3-Statistical-Multiplexing"><a href="#2-3-Statistical-Multiplexing" class="headerlink" title="2.3 Statistical Multiplexing"></a>2.3 Statistical Multiplexing</h2><p>不同于Circuit Switching事先分配好所有资源,依据需求來分配连结的使用,需要时频宽可分享。</p>
+<h2 id="2-4-Internet-Service-Provider-ISP"><a href="#2-4-Internet-Service-Provider-ISP" class="headerlink" title="2.4 Internet Service Provider (ISP)"></a>2.4 Internet Service Provider (ISP)</h2><p>网际网络供应商,Points-of-Presence (POP):從一ISP連到其他ISP的点。</p>
+<h1 id="3-Packet-Switching-分析-Delay-Loss-and-Throughput"><a href="#3-Packet-Switching-分析-Delay-Loss-and-Throughput" class="headerlink" title="3 Packet-Switching 分析 (Delay, Loss, and Throughput)"></a>3 Packet-Switching 分析 (Delay, Loss, and Throughput)</h1><h2 id="3-1-Delay-in-Packet-Switched-Network"><a href="#3-1-Delay-in-Packet-Switched-Network" class="headerlink" title="3.1 Delay in Packet-Switched Network"></a>3.1 Delay in Packet-Switched Network</h2><p>Statistical Multiplexing(统计复用):依据需求来分配链接的使用，需要时频宽可分享。<br>Store-and-Forwards:要接收到完整封包后才能把封包往外送。</p>
+<h2 id="3-2-Queuing-Delay-and-Packet-Loss"><a href="#3-2-Queuing-Delay-and-Packet-Loss" class="headerlink" title="3.2 Queuing Delay and Packet Loss"></a>3.2 Queuing Delay and Packet Loss</h2><p>Average queuing delay vs. Traffic Intensity (La/R)<br>L : packet length (bit/packet)<br>a : arrival rate (packet/sec)<br>R : transmission rate, bandwidth (bit/sec, bps)<br>La/R -&gt; 0 : average queueing delay small<br>La/R -&gt; 1 : delays become large.<br>La/R  &gt; 1 : more “work” arriving than can be serviced, average delay infinite!</p>
+<p>packet loss:若output queue已满(也就是La/R 接近1时),则会出现封包丢失。</p>
+<h2 id="3-3-End-to-End-Delay"><a href="#3-3-End-to-End-Delay" class="headerlink" title="3.3 End-to-End Delay"></a>3.3 End-to-End Delay</h2><p>dnodal =  dproc + dqueue + dtrans + dprop</p>
+<p>dproc = Processing delay : typically a few microsecs or less.<br>dqueue = Queuing delay : depends on congestion.<br>dtrans = Transmission delay : = L/R, significant for low-speed links.<br>dprop = Propagation dalay : a few microsecs to hundreds of msecs.</p>
+<p>路径种每个节点有以上四种延迟</p>
+<ol>
+<li>Nodal processing delay:check bit errors 决定要送往何处的时间</li>
+<li>Queueing delay:若封包要传出去的连结正在忙碌,在output queue等待的时间</li>
+<li>Transmission delay:因store and forward而引起,等待接收到完整封包的时间</li>
+<li>Propagation delay:把封包从link中传送到下一个router的时间</li>
+</ol>
+<h2 id="3-4-Throughput"><a href="#3-4-Throughput" class="headerlink" title="3.4 Throughput"></a>3.4 Throughput</h2><p>Throughput = min{Ra,Rb,….Rn}<br>就像是水管相连一樣,水流大小会取决于管子最细的那条。(ICMP就是这样)<br>ex:5公分 和3公分水管接再一起,水流量为3公分水管的流量</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>点它也没钱啊QAQ<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/10/11/buildryu/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.961Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/11/buildryu/">SDN虚拟机环境搭建（Mininet+Ryu）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">network</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/12/network introduce/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/10/11/switching hub/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.893Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2017/10/11/Ctex_paper/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Ctex插图以及pseudo codes</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/11/switching hub/">Switching Hub--real work</a>
-    </h1>
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="network introduce" data-title="网络基本介绍" data-url="http://yoursite.com/2017/10/12/network introduce/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/10/11/switch13/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.889Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/11/switch13/">Ryu交换机分析，详细类的继承</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/10/11/Pica8/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.852Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/11/Pica8/">SDN真机环境搭建</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -373,9 +425,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
