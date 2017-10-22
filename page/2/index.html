@@ -185,6 +185,107 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-长短流和多路径问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/长短流和多路径问题/">长短流和多路径选择问题</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/长短流和多路径问题/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.929Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>针对虚拟机迁移场景，会导致流量中长流增加，长流易辨别，低开销且在路径规划中对长流的规划会对我们的vm migration的迁移时间大幅度减下，大约调研了一天主要分成两个部分。一个是多路径选择，一个是流量的动态分配。</p>
+<h1 id="数据中心流量分析"><a href="#数据中心流量分析" class="headerlink" title="数据中心流量分析"></a>数据中心流量分析</h1><p>数据中心流量在南北方向主要是用户访问，在东西方向时数据备份和数据迁移之类的，大约东西是南北的4倍左右，SDN之所以这么在DC中这么火，很大一个原因就是SDN对链路利用率，感知链路剩余带宽获取链路信息上有很大的便捷，甚至会专门划一个服务器用来作为信息推送（pull和push的方式是不一样的）。</p>
+<p>SDN对上述链路信息的获取，大概常见方式也是两种，一个是定期抽样，一个是节点对之间的流量预测。<br>实际上ECMP的性能从调研文章来看并不很优秀，现在的Hedra大约是ECMP的4倍效率，在vm完成分发的时间上。<br>调研后发现ECMP这种静态方式，如果在链路差异大的的情况下，等价路由是会使效率极其低下。</p>
+<h1 id="等价路由协议"><a href="#等价路由协议" class="headerlink" title="等价路由协议"></a>等价路由协议</h1><p>传统的网络拓朴结构可以形象的表示为树结构，我们称之为“有中心的网络拓扑结构”，简单地认为很多流量请求最终会汇聚到主干网这样的路由中心，才能转发到下一条路径。</p>
+<p>传统的路由协议都是采用单路径路由的方式，简单地认为，从源到目的，所有的包都通过一条路径转发（如果某条最优路径出现了问题，再考虑下一条最优路径），其它链路处于备份状态或无效状态，并且在动态路由环境下相互的切换需要一定时间。</p>
+<p>现在问题来了：</p>
+<p>1）主干网总有一天会承受不了过多的流量请求；</p>
+<p>2）单一的路径路由会使很多路由路径处于相对空闲的状态。</p>
+<p>那么一个解决问题的办法就产生了，使用多路径路由，因为路由器是有多个端口的，所以这样的路由方式在硬件上是有支持的。好处就是，在网络环境下同时使用多条链路，不仅增加了传输带宽，并且可以无时延无丢包地备份失效链路的数据传输。</p>
+<p>多路径路由特点：（1）可以为不同的服务质量要求提供不同的路径。（2）多路可以为同一种类型的服务提供多条路径，经聚集可实现更高的服务质量。（3）由于主机对路径有自主的使用权，它可以通过探测各路径的状况（比如丢包率）猜测网络的拥塞程度，据此调整对各路径的使用，从而在得到优质服务的同时也提高了网络的利用率。因此，多路的正确使用还可以提高网络的利用率。</p>
+<p>根据不相交性，多路径路由可以分为3种：节点不相交（Node-Disjoint）多路径、链路不相交（Link-Disjoint）多路径和相交多路径。节点不相交多路径，也称为完全不相关多路径，就是各条路径中除源节点和目的节点之外没有其他任何共用节点。链路不相交多路径是指各条路径间没有任何共用的链路，但有可能有共用的节点。相交多路径是指各条路径间既有共用的节点，又有共用的链路。表1是3种路径间的比较。</p>
+<p>ECMP是指，到达一个目的地有多条相同度量值的路由项（路由路径），这样就可以使用不超过3条这样的路径来转发流量。ECMP最大的特点是实现了等值情况下，多路径负载均衡和链路备份的目的，在静态路由和OSPF中基本上都支持ECMP功能。</p>
+<p>但是实际情况是，各路径的带宽、时延和可靠性等不一样，把Cost认可成一样，不能很好地利用带宽，尤其在路径间差异大时，效果会非常不理想。例如，路由器两个出口，两路径，一个带宽是100M，一个是2M，如果部署是ECMP，则网络总带宽只能达到4M的利用率。（在RFC2991中讨论了一般的多路径路由。每一封包多路径路由的负载平衡通常不适用因为大辐变化的延迟、数据包重新排序，以及可以破坏许多互联网协定运作的最大传输单元（MTU）在网络流量的差异，最特别是传输控制协议（TCP）和path MTU discovery。）另外一种情况下等价多路径路由也不能提供真正的最佳路径路由的优点，例如，如果多个最佳的next-hop的路径到目的地重新汇聚到一个单一的低带宽的路径（一种常见的情形）下游，它只会增加到该目的地流量路径的复杂性，而无法提高带宽的能力。</p>
+<ul>
+<li>现在我比较担心的事ECMP在效果上未必会有那么好，可能要先把ECMP搭出来做一个判断，现有的GFF协议和Hedera看起来效果不错（搜索所有有效路径，发现带宽合适就转发，然后更新链路状态，）动态协议的优点这么明显，而之前不布置的原因是什么？</li>
+<li>比较好的消息长短流的选流算法和优先级调控就现在来看对虚拟机迁移是非常有效的。而且实验场景来看这篇清华的文章还是和我想的很相似。</li>
+</ul>
+<h1 id="流量动态分配（load-balance）"><a href="#流量动态分配（load-balance）" class="headerlink" title="流量动态分配（load balance）"></a>流量动态分配（load balance）</h1><p>负载分担方式有3种。</p>
+<ul>
+<li><p>基于流负载分担：路由器根据IP报文的五元组信息（是指源IP地址，源端口，目的IP地址，目的端口，和传输层协议这五个量组成的一个集合。 例如：192.168.1.1 10000 TCP 121.14.88.76 80 就构成了一个五元组）将数据分成不同的流。具有相同五元组信息的IP报文属于同一个流。转发数据时，路由器把不同的数据流根据算法从多个路径上依次发送出去。</p>
+</li>
+<li><p>基于包负载分担：转发数据时，路由器把数据包从多个路径上依次发送出去。</p>
+</li>
+<li><p>基于带宽的非平衡负载分担：报文按接口物理带宽进行负载分担(即基于报文的负载分担)。当用户为接口配置了指定的负载带宽后，设备将按用户指定的接口带宽进行负载分担，即根据各接口物理带宽比例关系进行分配。</p>
+</li>
+</ul>
+<p>基于包转发能够做到更精确的负载分担。但是由于路由器要对每一个包进行路由查表与转发操作，所以无法使用快速转发缓存来转发数据，转发效率降低了。另外，Internet应用都是基于流的，如果路由器采用基于包的负载分担，一条流中的数据包会经过不同路径到达目的地，可能会造成接收方的乱序接收，从而影响应用程序的正常运行。</p>
+<p>现在看起来做个长短流的选流算法（长流预测）和选路混在一起也许在特定的vm场景下效果会不错。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/长短流和多路径问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-常用的知识点" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -304,7 +405,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Xuanlong-Qin"><a href="#Xuanlong-Qin" class="headerlink" title="Xuanlong Qin"></a>Xuanlong Qin</h1><p><img src="/images/xuanlong.png" alt="Xuanlong"><br>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#113;&#x78;&#x6c;&#x70;&#107;&#117;&#x40;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#113;&#x78;&#x6c;&#x70;&#107;&#117;&#x40;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;</a><br><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x78;&#x75;&#97;&#x6e;&#108;&#x6f;&#110;&#103;&#x40;&#112;&#x6b;&#117;&#46;&#101;&#x64;&#117;&#x2e;&#x63;&#x6e;">&#x78;&#x75;&#97;&#x6e;&#108;&#x6f;&#110;&#103;&#x40;&#112;&#x6b;&#117;&#46;&#101;&#x64;&#117;&#x2e;&#x63;&#x6e;</a></p>
+<p>E-mail:<br><a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x71;&#120;&#108;&#x70;&#107;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x71;&#120;&#108;&#x70;&#107;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a><br><a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x78;&#x75;&#97;&#110;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#x63;&#x6e;">&#x78;&#x75;&#97;&#110;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#x63;&#x6e;</a></p>
 <pre><code>- Please pay attention to case sensitive
 </code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
 <p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
@@ -1042,83 +1143,6 @@
 
 
   
-    <article id="post-stack_test" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/stack_test/">用栈实现递归--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/stack_test/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.887Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这个还蛮有意思，有时候需要转变一下思维，慢慢靠近计算机思维。</p>
-<h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><p>用递归的方法来进行进制的转换，然后数字输出字符。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import Stack</div><div class="line">r_stack = Stack()</div><div class="line">def to_str(n,base):</div><div class="line">    convert_str = <span class="string">'0123456789ABCDEF'</span></div><div class="line">    <span class="keyword">if</span> n &lt; base:</div><div class="line">        r_stack.push(convert_str[n])</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        r_stack.push(convert_str[n%base])</div><div class="line">    n = n //base </div><div class="line">    res = <span class="string">" "</span></div><div class="line">    <span class="keyword">while</span> not r_stack.isempty():</div><div class="line">        res = res + str(r_stack.pop())</div><div class="line">    <span class="built_in">return</span> res</div></pre></td></tr></table></figure></p>
-<p>print (to_str(1453,16))</p>
-<p>重要的不是代码，是思想。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/stack_test/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1220,11 +1244,15 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">

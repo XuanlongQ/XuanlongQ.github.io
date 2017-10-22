@@ -185,6 +185,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-paixu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/paixu/">搜索和冒泡排序－－python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/paixu/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.850Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当数据项被存储在集合中时,如存储在一个列表中,我们说,它们有一个线性或顺序的关 系。 每一个数据项存储在一个与其他数据项相对的位置。在Python列表,这些相对位置所对应 的是单个项的索引值。由于这些索引值是有一定次序的,可以依次访问它们。这一过程产生了第 一个搜索方法,顺序搜索。</p>
+<h1 id="无序列表搜索"><a href="#无序列表搜索" class="headerlink" title="无序列表搜索"></a>无序列表搜索</h1><p>函数的参数为一个列表和一个我们正在寻找的 数据项,并且返回一个布尔值,判断它是否存在。布尔变量found初始化为False,如果我们发现 我们所要找的数据项在列表中,就将布尔变量赋为True。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">def sequentialSearch(alist,item):        </span></div><div class="line"><span class="string">    pos = 0                              </span></div><div class="line"><span class="string">    found = False                        </span></div><div class="line"><span class="string">    while pos &lt; len(alist) and not found:</span></div><div class="line"><span class="string">        if alist[pos] == item:           </span></div><div class="line"><span class="string">            found = True                 </span></div><div class="line"><span class="string">        else:                            </span></div><div class="line"><span class="string">            pos +=1                      </span></div><div class="line"><span class="string">    return found                         </span></div><div class="line"><span class="string">                                         </span></div><div class="line"><span class="string">testlist = [1,2,32,8,12,19,42,13,0]      </span></div><div class="line"><span class="string">print(sequentialSearch(testlist,3))      </span></div><div class="line"><span class="string">print(sequentialSearch(testlist,13)) </span></div><div class="line"><span class="string">'</span><span class="string">''</span></div></pre></td></tr></table></figure></p>
+<h1 id="有序列表搜索"><a href="#有序列表搜索" class="headerlink" title="有序列表搜索"></a>有序列表搜索</h1><p>我们早先假定我们集合里面的数据项都是被打乱放入的,这样,数据之间便没有相对关系。 如果在某些情况下,数据项是有序的,顺序搜索又会发生什么?我们能让我们的搜索技术更高效 吗?</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">def orderedSequentialSearch(alist,item):</div><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">    pos = 0</span></div><div class="line"><span class="string">    found = False</span></div><div class="line"><span class="string">    stop = False</span></div><div class="line"><span class="string">    while pos &lt; len(alist) and not found and not stop:</span></div><div class="line"><span class="string">        if alist[pos] == item:</span></div><div class="line"><span class="string">            found = True</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            if alist[pos] &gt; item:</span></div><div class="line"><span class="string">                stop = True</span></div><div class="line"><span class="string">            else:</span></div><div class="line"><span class="string">                pos += 1</span></div><div class="line"><span class="string">    return found</span></div><div class="line"><span class="string">testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,]</span></div><div class="line"><span class="string">print(orderedSequentialSearch(testlist, 3))</span></div><div class="line"><span class="string">print(orderedSequentialSearch(testlist, 13))</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div></pre></td></tr></table></figure>
+<h1 id="二分搜索有序列表"><a href="#二分搜索有序列表" class="headerlink" title="二分搜索有序列表"></a>二分搜索有序列表</h1><p>如果所采用的比较方法更聪明一些,我们可以更好地利用有序表的优势。在顺序搜索中,当 我们和第一项相比较时,如果第一个数据项不是我们要找的项,最多还有n-1项待比对。二分搜 索将从中间项开始检测,而不是按顺序搜索列表。如果查找项与我们刚搜索到的项匹配,则搜索 结束。如果不匹配,我们可以利用列表的有序性来排除掉一半的剩余项。如果查找项比中间项 大,我们可以把列表中较小的那一半全部和中间项可以从接下来的考察中排除了。因为如果查找 项在列表中,那它一定在较大的那一半。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">def binarySearch(alist,item):</div><div class="line">    first = 0</div><div class="line">    last = len(alist) -1</div><div class="line">    found = False</div><div class="line">    while first &lt;= last and not found:</div><div class="line">        print last</div><div class="line">        midpoint = (first+last)//2</div><div class="line">        if alist[midpoint] == item:</div><div class="line">            found = True</div><div class="line">        else:</div><div class="line">            if item &lt; alist[midpoint]:</div><div class="line">                last = midpoint-1</div><div class="line">                # print last</div><div class="line">            else:</div><div class="line">                first = midpoint+1</div><div class="line">    return found</div><div class="line">testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,]</div><div class="line">print(binarySearch(testlist, 3))</div><div class="line">print(binarySearch(testlist, 13))</div></pre></td></tr></table></figure></p>
+<h2 id="二分法搜索-递归写法"><a href="#二分法搜索-递归写法" class="headerlink" title="二分法搜索(递归写法)"></a>二分法搜索(递归写法)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def binarySearch(alist, item): </div><div class="line">    if len(alist) == 0 :</div><div class="line">        return False </div><div class="line">    else:</div><div class="line">        midpoint = len(alist)//2</div><div class="line">    if alist[midpoint] == item:</div><div class="line">        return True </div><div class="line">    else:</div><div class="line">        if item &lt; alist[midpoint]:</div><div class="line">            return binarySearch (alist[:midpoint],item)</div><div class="line">    else:</div><div class="line">        return binarySearch (alist[midpoint+1:],item)</div><div class="line">testlist = [0, 1, 2, 8, 13, 17, 19, 32, 42,] </div><div class="line">print(binarySearch(testlist, 3))</div><div class="line">print(binarySearch(testlist, 13))</div></pre></td></tr></table></figure>
+<h1 id="冒泡排序-号称最低效的排序"><a href="#冒泡排序-号称最低效的排序" class="headerlink" title="冒泡排序(号称最低效的排序)"></a>冒泡排序(号称最低效的排序)</h1><p>冒泡排序要对一个列表多次重复遍历。它要比较相邻的两项,并且交换顺序排错的项。每对 列表实行一次遍历,就有一个最大项排在了正确的位置。大体上讲,列表的每一个数据项都会在 其相应的位置“冒泡”。<br>它们的顺序是否正确。如果列表有n项,第一次遍历就要比较n-1对数据。需要注意,一旦列 表中最大(按照规定的原则定义大小)的数据是所比较的数据对中的一个,它就会沿着列表一直 后移,直到这次遍历结束<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def bubbleSort(alist):</div><div class="line">    for passnum in range(len(alist)-1,0,-1):</div><div class="line">        print passnum</div><div class="line">        for i in range(passnum):</div><div class="line">            if alist[i] &gt; alist[i+1]:</div><div class="line">                temp = alist[i]</div><div class="line">                alist[i] = alist[i+1]</div><div class="line">                alist[i+1]=temp</div><div class="line"></div><div class="line">alist = [54,26,93,17,77,31,44,55,20]</div><div class="line">bubbleSort(alist)</div><div class="line">print(alist)</div></pre></td></tr></table></figure></p>
+<h1 id="有序表冒泡排序"><a href="#有序表冒泡排序" class="headerlink" title="有序表冒泡排序"></a>有序表冒泡排序</h1><p>因为冒泡排序必须要在最终位置找到之前不断交换数据项,所以它经常被认为是最低效的排 序方法。这些“浪费式”的交换操作消耗了许多时间。但是,由于冒泡排序要遍历整个未排好的 部分,它可以做一些大多数排序方法做不到的事。尤其是如果在整个排序过程中没有交换,我们 就可断定列表已经排好。因此可改良冒泡排序,使其在已知列表排好的情况下􏰀前结束。这就是 说,如果一个列表只需要几次遍历就可排好,冒泡排序就占有优势:它可以在发现列表已排好时 立刻结束。代码2就是改良版冒泡排序。它通常被称作“短路冒泡排序”。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def shortBubbleSort(alist):</div><div class="line">    exchanges = True</div><div class="line">    passnum = len(alist)-1</div><div class="line">    while passnum &gt; 0 and exchanges:</div><div class="line">        exchanges = False</div><div class="line">        for i in range(passnum):</div><div class="line">            if alist[i] &gt; alist[i+1]:</div><div class="line">                exchanges = True</div><div class="line">                temp = alist[i]</div><div class="line">                alist = alist[i+1]</div><div class="line">                alist[i+1] = temp</div><div class="line">            passnum = passnum -1</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/paixu/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-os" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1113,85 +1194,6 @@
 
 
   
-    <article id="post-mytree" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/mytree/">树形的数据结构 -- Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/mytree/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.813Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>实现二叉树主要通过两种方式，一个是通过嵌套列表，一个是通过节点的引用，下面分开讲这两种方式。</p>
-<h1 id="通过嵌套列表实现二叉树"><a href="#通过嵌套列表实现二叉树" class="headerlink" title="通过嵌套列表实现二叉树"></a>通过嵌套列表实现二叉树</h1><p>在用嵌套列表实现树时,我们将用 Python 的列表数据结构来编写上面定义的功能。虽然把 界面 写成列表的一系列方法与我们已实现的其他抽象数据类型有些不同,但这样做的是有趣 的,因为它 为我们􏰁供一个简单、可以直接检查的递归数据结构。在列表实现树时,我们将存储根节点的值作 为列表的第一个元素。列表的第二个元素是一个表示其左子树的列表,第三个元素是表示其右子树 的另一个列表。</p>
-<p>BinaryTree 功能只是构建包含一个根节点和两个表示子节点的空列表的列表。给左子树添加到树 的根,我们需要插入一个新的列表到根列表的第二个位置。我们必须注意,如果列表中已经有元素 在第二个位置,我们需要跟踪它,并将新节点插入树中作为其左子节点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">myTree = [&apos;a&apos;, [&apos;b&apos;, [&apos;d&apos;,[],[]], [&apos;e&apos;,[],[]] ], [&apos;c&apos;, [&apos;f&apos;,[],[]], []] ]</div><div class="line">def insertLeft(root,newBranch):</div><div class="line">    t = root.pop(1)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(1,[newBranch,t,[]])</div><div class="line">    else:</div><div class="line">        root.insert(1,[newBranch, [], []])</div><div class="line">    return root</div><div class="line">    - 请注意,插入一个左子节点前,我们首先应获取对应于当前左子节点的列表(可能是空的)。 </div><div class="line">    - 然后,我们添加新的左子节点,将原来的左子结点作为新节点的左子节点。</div><div class="line"></div><div class="line">    pop() 函数用于移除列表中的一个元素（默认最后一个元素），并且返回该元素的值。</div></pre></td></tr></table></figure>
-<p>完整的树的基本功能模块如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">def BinaryTree(r):</div><div class="line">    return [r,[],[]]</div><div class="line">def insertLeft(root,newBranch):</div><div class="line">    t = root.pop(1)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(1,[newBranch,t,[]])</div><div class="line">    else:</div><div class="line">        root.insert(1,[newBranch,[],[]])</div><div class="line">    return root</div><div class="line"></div><div class="line">def insertRight(root,newBranch):</div><div class="line">    t = root.pop(2)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(2,[newBranch,[],t])</div><div class="line">    else:</div><div class="line">        root.insert(2,[newBranch,[],[]])</div><div class="line">    return root</div><div class="line"></div><div class="line">def getRootVal(root):</div><div class="line">    return root[0]</div><div class="line">def setRootVal(root,newVal):</div><div class="line">    root[0] = newVal</div><div class="line">def getLeftChild(root):</div><div class="line">    return root[1]</div><div class="line">def getRightChild(root):</div><div class="line">    return root[2]</div><div class="line"></div><div class="line">r= BinaryTree(3)</div><div class="line">insertLeft(r,4)</div><div class="line">insertLeft(r,5)</div><div class="line">insertRight(r,6)</div><div class="line">insertRight(r,7)</div><div class="line">I = getLeftChild(r)</div><div class="line">print (I)</div><div class="line">setRootVal(I,9)</div><div class="line">print (r)</div><div class="line">insertLeft(I,11)</div><div class="line">print (r)</div><div class="line">print(getRightChild(getRightChild(r)))</div></pre></td></tr></table></figure></p>
-<h1 id="通过节点和引用来实现二叉树"><a href="#通过节点和引用来实现二叉树" class="headerlink" title="通过节点和引用来实现二叉树"></a>通过节点和引用来实现二叉树</h1><p>代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">class BinaryTree:</div><div class="line">    def __init__(self,rootObj):</div><div class="line">        self.key = rootObj</div><div class="line">        self.leftChild = None</div><div class="line">        self.rightChild = None</div><div class="line"></div><div class="line">    def InsertLeft(self,newNode):</div><div class="line">        if self.leftChild == None:</div><div class="line">            self.leftChild = BinaryTree(newNode)</div><div class="line">        else:</div><div class="line">            t = BinaryTree(newNode)</div><div class="line">            t.leftChild = self.leftChild</div><div class="line">            self.leftChild = t</div><div class="line"></div><div class="line">    def InsertRight(self,newNode):</div><div class="line">        if self.rightChild == None:</div><div class="line">            self.rightChild = BinaryTree(newNode)</div><div class="line">        else:</div><div class="line">            t = BinaryTree(newNode)</div><div class="line">            t.rightChild = self.rightChild</div><div class="line">            self.rightChild = t</div><div class="line"></div><div class="line">    def getRightChild(self):</div><div class="line">        return self.rightChild</div><div class="line"></div><div class="line">    def getLeftChild(self):</div><div class="line">        return self.leftChild</div><div class="line"></div><div class="line">    def setRootVal(self,obj):</div><div class="line">        self.key = obj</div><div class="line"></div><div class="line">    def getRootVal(self):</div><div class="line">        return self.key</div><div class="line"></div><div class="line"></div><div class="line">r = BinaryTree(&apos;a&apos;)</div><div class="line">print (r.getRootVal())</div><div class="line">print (r.getLeftChild())</div><div class="line">print (r.getRightChild())</div></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/mytree/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1293,11 +1295,15 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">

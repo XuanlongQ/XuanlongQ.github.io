@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Leetcode-617/561--Python | XuanLong&#39;s Blog</title>
+  <title>Introducation- What is Machine Learning? | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="617.Merge Two Binary Trees给出两个二叉树想要合并，有一些结点会重叠而有一些不会，现在想把重叠的结点值变为两者值相加，不重叠的直接用，构建出新的树。Note:合并都从两个二叉树根部开始 思路考察的就是二叉树的遍历，遍历每个结点然后如果重叠（两个二叉树结点都不为空）新结点值便为两者和，不重叠（只有一个结点为空）新结点值为不为空的值，全为空到达底部返跳出。按照这个逻辑进行迭代">
-<meta name="keywords" content="leetcode">
+  <meta name="description" content="What is Machine Learning?Two definitions of Machine Learning are offered. Arthur Samuel described it as: “the field of study that gives computers the ability to learn without being explicitly programm">
+<meta name="keywords" content="Bigdata">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Leetcode-617&#x2F;561--Python">
-<meta property="og:url" content="http://yoursite.com/2017/10/11/leetcode 617/index.html">
+<meta property="og:title" content="Introducation- What is Machine Learning?">
+<meta property="og:url" content="http://yoursite.com/2017/10/22/Introduction/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="617.Merge Two Binary Trees给出两个二叉树想要合并，有一些结点会重叠而有一些不会，现在想把重叠的结点值变为两者值相加，不重叠的直接用，构建出新的树。Note:合并都从两个二叉树根部开始 思路考察的就是二叉树的遍历，遍历每个结点然后如果重叠（两个二叉树结点都不为空）新结点值便为两者和，不重叠（只有一个结点为空）新结点值为不为空的值，全为空到达底部返跳出。按照这个逻辑进行迭代">
+<meta property="og:description" content="What is Machine Learning?Two definitions of Machine Learning are offered. Arthur Samuel described it as: “the field of study that gives computers the ability to learn without being explicitly programm">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-06-22T15:17:28.000Z">
+<meta property="og:updated_time" content="2017-10-22T05:46:00.975Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leetcode-617&#x2F;561--Python">
-<meta name="twitter:description" content="617.Merge Two Binary Trees给出两个二叉树想要合并，有一些结点会重叠而有一些不会，现在想把重叠的结点值变为两者值相加，不重叠的直接用，构建出新的树。Note:合并都从两个二叉树根部开始 思路考察的就是二叉树的遍历，遍历每个结点然后如果重叠（两个二叉树结点都不为空）新结点值便为两者和，不重叠（只有一个结点为空）新结点值为不为空的值，全为空到达底部返跳出。按照这个逻辑进行迭代">
+<meta name="twitter:title" content="Introducation- What is Machine Learning?">
+<meta name="twitter:description" content="What is Machine Learning?Two definitions of Machine Learning are offered. Arthur Samuel described it as: “the field of study that gives computers the ability to learn without being explicitly programm">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
   
@@ -185,34 +185,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-leetcode 617" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Introduction" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Leetcode-617/561--Python
+      Introducation- What is Machine Learning?
     </h1>
   
 
         
-        <a href="/2017/10/11/leetcode 617/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.795Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+        <a href="/2017/10/22/Introduction/" class="archive-article-date">
+  	<time datetime="2017-10-22T05:09:17.552Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="617-Merge-Two-Binary-Trees"><a href="#617-Merge-Two-Binary-Trees" class="headerlink" title="617.Merge Two Binary Trees"></a>617.Merge Two Binary Trees</h1><p>给出两个二叉树想要合并，有一些结点会重叠而有一些不会，现在想把重叠的结点值变为两者值相加，不重叠的直接用，构建出新的树。<br>Note:合并都从两个二叉树根部开始</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>考察的就是二叉树的遍历，遍历每个结点然后如果重叠（两个二叉树结点都不为空）新结点值便为两者和，不重叠（只有一个结点为空）新结点值为不为空的值，全为空到达底部返跳出。按照这个逻辑进行迭代</p>
-<p>联想：二叉树遍历方式有深度优先和广度优先，深度（纵向）优先在Python中一般使用列表，广度优先（横向）一般使用迭代。 //注意深度优先和广度优先的区别</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Definition for a binary tree node.</span></div><div class="line"><span class="comment"># class TreeNode(object):</span></div><div class="line"><span class="comment">#     def __init__(self, x):</span></div><div class="line"><span class="comment">#         self.val = x</span></div><div class="line"><span class="comment">#         self.left = None</span></div><div class="line"><span class="comment">#         self.right = None</span></div><div class="line"></div><div class="line">class Solution(object):</div><div class="line">    def mergeTrees(self, t1, t2):</div><div class="line">        </div><div class="line">        <span class="comment">#:type t1: TreeNode</span></div><div class="line">        <span class="comment">#:type t2: TreeNode</span></div><div class="line">        <span class="comment">#:rtype: TreeNode</span></div><div class="line">        </div><div class="line">       <span class="comment">#t1和t2是代表两颗树，先对根节点进行运算</span></div><div class="line">        <span class="comment">#两个都节点都是空</span></div><div class="line">        <span class="comment">#if t1 is None and t2 is None: (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> None</div><div class="line">        <span class="comment">#只有一个节点为空</span></div><div class="line">        <span class="comment">#if t1 is None:  (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> t2</div><div class="line">        <span class="comment">#if t2 is None: (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> t1</div><div class="line">        </div><div class="line">        <span class="comment">#结点重叠时    </span></div><div class="line">        t1.val += t2.val</div><div class="line">        <span class="comment">#进行迭代</span></div><div class="line">        t1.right = self.mergeTrees(t1.right, t2.right)</div><div class="line">        t1.left = self.mergeTrees(t1.left,t2.left)</div><div class="line">        <span class="built_in">return</span> t1</div><div class="line"></div><div class="line">注：这个题主要是用了广度优先遍历，所以使用了迭代，一颗树做完之后，可以迭代左子树和右子树。</div></pre></td></tr></table></figure>
-<h1 id="561-Array-Partition-I"><a href="#561-Array-Partition-I" class="headerlink" title="561. Array Partition I"></a>561. Array Partition I</h1><p>对数组排序，两两一组，取每组的第一个数求和<br>Note：实际上题目不是说要对数组排序而是要求最小值的最大和，看不太懂什么意思，看他的示例似乎是要先排序，我查了了下其他博客主的文章都是先排序，然后去小的值，而且judge后发现accepted所以应该是要先排序。<br>用了两种方法。<br>法一：<br>先排序，然后每隔2个值就输出一下加到sum里，代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def arrayPairSum(self, nums):</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        :<span class="built_in">type</span> nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        nums.sort()</div><div class="line">        i = 0</div><div class="line">        sum = 0</div><div class="line">        <span class="keyword">while</span> i &lt; len(nums):</div><div class="line">            sum += nums[i]</div><div class="line">            i += 2</div><div class="line">        <span class="built_in">return</span> sum</div></pre></td></tr></table></figure></p>
-<p>法二：<br>这个方法比较取巧就是，看出规律输出偶数个位就行，因为是从0开始计算的，所以2就是第三个，输出的就相当于第二组数的第一个。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def arrayPairSum(self, nums):</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        :<span class="built_in">type</span> nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        nums.sort()</div><div class="line">        <span class="built_in">return</span> sum(nums[::2])</div></pre></td></tr></table></figure></p>
-<p>法二就两行比较取巧，但是你要对python内置函数要熟一些。<br>今天先刷两道题。考虑到ryu就是拿python写的，所以项目可能要偏python一些，所以leetcode拿py刷，c++刷了30道还是太难了。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+        <h1 id="What-is-Machine-Learning"><a href="#What-is-Machine-Learning" class="headerlink" title="What is Machine Learning?"></a>What is Machine Learning?</h1><p>Two definitions of Machine Learning are offered. Arthur Samuel described it as: “the field of study that gives computers the ability to learn without being explicitly programmed.” This is an older, informal definition.</p>
+<p>Tom Mitchell provides a more modern definition: “A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.”</p>
+<p>Example: playing checkers.</p>
+<p>E = the experience of playing many games of checkers</p>
+<p>T = the task of playing checkers.</p>
+<p>P = the probability that the program will win the next game.</p>
+<p>In general, any machine learning problem can be assigned to one of two broad classifications:</p>
+<p>Supervised learning and Unsupervised learning.</p>
+<h1 id="Supervised-Learning"><a href="#Supervised-Learning" class="headerlink" title="Supervised Learning"></a>Supervised Learning</h1><p>In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.</p>
+<p>Supervised learning problems are categorized into “regression” and “classification” problems. In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. In a classification problem, we are instead trying to predict results in a discrete output. In other words, we are trying to map input variables into discrete categories.</p>
+<p>Example 1:</p>
+<p>Given data about the size of houses on the real estate market, try to predict their price. Price as a function of size is a continuous output, so this is a regression problem.</p>
+<p>We could turn this example into a classification problem by instead making our output about whether the house “sells for more or less than the asking price.” Here we are classifying the houses based on price into two discrete categories.<br>(a) Regression - Given a picture of a person, we have to predict their age on the basis of the given picture</p>
+<p>(b) Classification - Given a patient with a tumor, we have to predict whether the tumor is malignant or benign.</p>
+<p>假设你想预测房价（无比需要啊！）， 之前某学生已经从某地收集了数据集（不是中国的，囧）其中一个数据集是这样的。这是横坐标，即不同房子的面积，单位平方脚（^-^）纵轴上是房价，单位千美元。根据给定数据，假设你朋友有栋房子，750平尺（70平米）想知道这房子能卖多少，好卖掉。那么学习算法怎么帮你呢？学习算法可以：绘出一条直线，让直线尽可能匹配到所有数据。 基于此看上去，那个房子应该、可能、也许、大概卖到15万美元（一平米两千刀！）。但这不是唯一的学习算法。可能还有更好的。比如不用直线了，可能平方函数会更好， 即二次多项式更符合数据集。如果你这样做，预测结果就应该是20万刀（一平三千刀，涨价好快）。后面我们会介绍到如何选择是选择直线还是平方函数来拟合。没有明确的选择，就不知哪个能给你的朋友更好的卖房建议。只是这些每个都是很好的学习算法例子。也是监督学习的例子。术语监督学习，意指给出一个算法，需要部分数据集已经有正确答案。比如给定房价数据集，对于里面每个数据，算法都知道对应的正确房价，即这房子实际卖出的价格。算法的结果就是 算出更多的正确价格，比如那个新房子， 你朋友想卖的那个。用更术语的方式来定义，监督学习又叫回归问题（应该是回归属于监督中的一种）意指要预测一个连续值的输出，比如房价。 虽然从技术上，一般把房价记到美分单位。所以实际还是个离散值，但通常把它看作实际数字，是一个标量值，一个连续值的数，而术语回归，意味着要预测这类连续值属性的种类。 </p>
+<p>另一个监督学习的例子，我和一些朋友之前研究的领域。让我们来看医学记录，并预测胸部肿瘤是恶性良性。如果某人发现有胸部肿瘤，恶性肿瘤有害又危险,良性肿瘤则是少害。显然人们很关注这个。让我们看一个收集好的数据集，假设在数据集中，横轴表示肿瘤的大小，纵轴我打算圈上0或1，是或否，即肿瘤是恶性的还是良性的。所以如图所示，可以看到这个大小的肿瘤块是良性的，还有这些大小的都是良性的。不幸地是也看到一些恶性肿瘤，比如这些大小的肿瘤。所以，有5个良性块，在这一块，还有5个恶性的，它们纵轴值为1.现在假设某人杯具地得胸部肿瘤了，大小大概是这么大。对应的机器学习问题就是，你能否估算出一个概率，即肿瘤为恶或为良的概率？专业地说，这是个分类问题。 分类是要预测一个离散值输出。 这里是0或1，恶性或良性。事实证明，在分类问题中，有时会有超过两个的值，输出的值可能超过两种。举个具体例子，胸部肿瘤可能有三种类型，所以要预测离散值0，1，2，3.0就是良性肿瘤，没有癌症。 1 表示1号癌症，假设总共有三种癌症。 2 是2号癌症，3 就是3号癌症。这同样是个分类问题，因为它的输出的离散值集合分别对应于无癌，1号，2号，3号癌症我再露一小手，在分类问题中，还有另一种作图方式来描述数据。我画你猜。要用到些许不同的符号集合来描绘数据。如果肿瘤大小作为唯一属性，被用于预测恶性良性，可以把数据作图成这样。使用不同的符号来表示良性和恶性，即阴性和阳性。所以，不再统一画叉叉了，改用圈圈来代表良性肿瘤，就像这样。仍沿用X（叉叉）代表恶性肿瘤。希望你能明白。我所做的就是，把在上面的数据，映射下来。再用不同的符号，圈和叉来分别代表良性和恶性。 在上例中，只使用了一个特征属性，即肿瘤块大小，来预测肿瘤是恶性良性。在其它机器学习问题里，有着不只一个的特征和属性。例子，现在不只是知道肿瘤大小，病人年龄和肿瘤大小都知道了。这种情况下，数据集如表图所示，有些病人，年龄、肿瘤已知，不同的病人，会有一点不一样，肿瘤恶性，则用叉来代表。所以，假设有一朋友得了肿瘤。肿瘤大小和年龄落在此处。那么依据这个给定的数据集，学习算法所做的就是画一条直线，分开恶性肿瘤和良性肿瘤，所以学习算法会画条直线，像这样，把两类肿瘤分开。然后你就能判断你朋友的肿瘤是…了,如果它在那边，学习算法就说你朋友的肿瘤在良性一边，因此更可能是良性的。好，本例中，总共有两个特征，即病人年龄和肿瘤大小。在别的ML问题中，经常会用到更多特征，我朋友研究这个问题时，通常使用这些特征：比如块的厚度，即胸部肿瘤的厚度肿瘤细胞大小和形状的一致性， 等等。它表明，最有趣的学习算法（本课中将学到）能够处理，无穷多个特征。不是3到5个这么少。在这张幻灯片中，我已经列举了总共5个不同的特征。但对于一些学习问题，真要用到的不只是三五个特征，要用到无数多个特征，非常多的属性，所以，你的学习算法要使用很多的属性或特征、线索来进行预测。那么，你如何处理无限多特征呢？甚至你如何存储无数的东西进电脑里，又要避免内存不足？事实上，等我们介绍一种叫支持向量机的算法时， 就知道存在一个简洁的数学方法，能让电脑处理无限多的特征。想像下，我不是这边写两个特征， 右边写三个特征。而是，写一个无限长的特征表，不停地写特征，似乎是个无限长的特征的表。 但是，我们也有能力设计一个算法来处理这个问题。所以再从头复述一遍。本课中，我们介绍监督学习。其基本思想是，监督学习中，对于数据集中的每个数据，都有相应的正确答案，（训练集）算法就是基于这些来做出预测。就像那个房价，或肿瘤的性质。后面介绍了回归问题。 即通过回归来预测一个连续值输出。我们还谈到了分类问题，目标是预测离散值输出。</p>
+<p>下面是个小测验题目： 假设你有家公司，希望研究相应的学习算法去解决两个问题。第一个问题，你有一堆货物的清单。假设一些货物有几千件可卖，你想预测出，你能在未来三个月卖出多少货物。第二个问题，你有很多用户，你打算写程序来检查每个用户的帐目。对每个用户的帐目， 判断这个帐目是否被黑过（hacked or compromised）。请问，这两个问题是分类问题，还是回归问题？当视频暂停时，请用你的鼠标进行选择，四选一，选择你认为正确的答案。 好，希望你刚才答对了。问题一是个回归问题因为如果我有几千件货物，可能只好把它当作一个实际的值，一个连续的值。也把卖出的数量当作连续值。第二个问题，则是分类问题，因为可以把我想预测的一个值设为0，来表示账目没有被hacked另一个设为1，表示已经被hacked。 就像乳癌例子中，0表示良性，1表示恶性。 所以这个值为0或1，取决于是否被hacked， 有算法能预测出是这两个离散值中的哪个。因为只有少量的离散值，所以这个就是个分类问题。 这就是监督学习.</p>
+<h1 id="Unsupervised-Learning"><a href="#Unsupervised-Learning" class="headerlink" title="Unsupervised Learning"></a>Unsupervised Learning</h1><p>Unsupervised Learning</p>
+<p>Unsupervised learning allows us to approach problems with little or no idea what our results should look like. We can derive structure from data where we don’t necessarily know the effect of the variables.</p>
+<p>We can derive this structure by clustering the data based on relationships among the variables in the data.</p>
+<p>With unsupervised learning there is no feedback based on the prediction results.</p>
+<p>Example:</p>
+<p>Clustering: Take a collection of 1,000,000 different genes, and find a way to automatically group these genes into groups that are somehow similar or related by different variables, such as lifespan, location, roles, and so on.</p>
+<p>Non-clustering: The “Cocktail Party Algorithm”, allows you to find structure in a chaotic environment. (i.e. identifying individual voices and music from a mesh of sounds at a cocktail party).<br>在上一节视频中我们已经讲过监督学习回想起上次的数据集每个样本都已经被标明为 正样本或者负样本即良性或恶性肿瘤.</p>
+<p>因此对于监督学习中的每一个样本我们已经被清楚地告知了什么是所谓的正确答案即它们是良性还是恶性在无监督学习中我们用的数据会和监督学习里的看起来有些不一样在无监督学习中没有属性或标签这一概念也就是说所有的数据都是一样的没有区别</p>
+<p>所以在无监督学习中我们只有一个数据集没人告诉我们该怎么做我们也不知道每个数据点究竟是什么意思相反它只告诉我们现在有一个数据集你能在其中找到某种结构吗？对于给定的数据集无监督学习算法可能判定该数据集包含两个不同的聚类你看这是第一个聚类,然后这是另一个聚类.</p>
+<p>无监督学习算法会把这些数据分成两个不同的聚类,所以这就是所谓的聚类算法实际上它被用在许多地方我们来举一个聚类算法的栗子 Google 新闻的例子如果你还没见过这个页面的话你可以到这个URL news.google.com 去看看谷歌新闻每天都在干什么呢？他们每天会去收集成千上万的网络上的新闻然后将他们分组组成一个个新闻专题,比如让我们来看看这里这里的URL链接连接着不同的有关BP油井事故的报道所以让我们点击这些URL中的一个恩让我们点一个然后我们会来到这样一个网页这是一篇来自华尔街日报的 有关……你懂的 有关BP油井泄漏事故的报道标题为《BP杀死了Macondo》 Macondo 是个地名 就是那个漏油事故的地方,如果你从这个组里点击一个不同的URL,那么你可能会得到不同的新闻 这里是一则CNN的新闻是一个有关BP石油泄漏的视频,如果你再点击第三个链接又会出现不同的新闻这边是英国卫报的报道也是关于BP石油泄漏,所以谷歌新闻所做的就是去搜索成千上万条新闻 然后自动的将他们聚合在一起 因此 有关同一主题的 新闻被显示在一起 实际上 聚类算法和无监督学习算法 也可以被用于许多其他的问题.</p>
+<p>这里我们举个它在基因组学中的应用,下面是一个关于基因芯片的例子 基本的思想是 给定一组不同的个体 对于每个个体 检测它们是否拥有某个特定的基因 也就是说，你要去分析有多少基因显现出来了 因此 这些颜色 红 绿 灰 等等 它们 展示了这些不同的个体 是否拥有一个特定基因 的不同程度 然后你能做的就是 运行一个聚类算法 把不同的个体归入不同的类 或归为不同类型的人,这就是无监督学习 我们没有提前告知这个算法 这些是第一类的人 这些是第二类的人 这些是第三类的人等等 相反我们只是告诉算法 你看 这儿有一堆数据 我不知道这个数据是什么东东 我不知道里面都有些什么类型 叫什么名字 我甚至不知道都有哪些类型 但是 请问你可以自动的找到这些数据中的类型吗？ 然后自动的 按得到的类型把这些个体分类 虽然事先我并不知道哪些类型 因为对于这些数据样本来说 我们没有给算法一个 正确答案 所以 这就是无监督学习.</p>
+<p>无监督学习或聚类算法在其他领域也有着大量的应用,它被用来组织大型的计算机集群.我有一些朋友在管理 大型数据中心 也就是 大型计算机集群 并试图 找出哪些机器趋向于 协同工作 如果你把这些机器放在一起你就可以让你的数据中心更高效地工作.</p>
+<p>第二种应用是用于社交网络的分析,所以 如果可以得知 哪些朋友你用email联系的最多 或者知道你的Facebook好友 或者你Google+里的朋友 知道了这些之后 我们是否可以自动识别 哪些是很要好的朋友组 哪些仅仅是互相认识的朋友组.</p>
+<p>还有在市场分割中的应用<br>许多公司拥有庞大的客户信息数据库那么给你一个客户数据集你能否自动找出不同的市场分割,并自动将你的客户分到不同的 细分市场中 从而有助于我在 不同的细分市场中 进行更有效的销售 这也是无监督学习 我们现在有 这些客户数据 但我们预先并不知道 有哪些细分市场 而且 对于我们数据集的某个客户 我们也不能预先知道 谁属于细分市场一 谁又属于细分市场二等等 但我们必须让这个算法自己去从数据中发现这一切</p>
+<p>我们谈到了无监督学习它是一种学习机制你给算法大量的数据要求它找出数据中蕴含的类型结构 以下的三个例子中 哪一个 您认为是 无监督学习算法 而不是监督学习问题 对于每一个选项 在左边的复选框 选中你认为 属于无监督学习的 选项 然后按一下右下角的按钮 提交你的答案 所以 当视频暂停时 请回答幻灯片上的这个问题 </p>
+<p>恩 没忘记垃圾邮件文件夹问题吧？ 如果你已经标记过数据 那么就有垃圾邮件和 非垃圾邮件的区别 我们会将此视为一个监督学习问题 </p>
+<p>新闻故事的例子 正是我们在本课中讲到的 谷歌新闻的例子 我们介绍了你可以如何使用 聚类算法这些文章聚合在一起 所以这是无监督学习问题 </p>
+<p>市场细分的例子 我之前有说过 这也是一个无监督学习问题 因为我是要 拿到数据 然后要求 它自动发现细分市场 </p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><ol>
+<li><a href="https://www.coursera.org/instructor/andrewng" target="_blank" rel="external">Machine Learning Andrew Ng</a>.</li>
+</ol>
+<p>复制转载，侵删！ 博主看到可联系我。</p>
 
       
 
@@ -247,7 +278,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Bigdata</a>
         		</li>
       		
 		</ul>
@@ -303,7 +334,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/11/leetcode 617/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/22/Introduction/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -317,18 +348,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/10/11/leetcode 628/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Leetcode-628--Python
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/10/11/leetcode 599/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Leetcode-599--Python</div>
+    <a href="/2017/10/12/network introduce/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">网络基本介绍</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -356,7 +378,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="leetcode 617" data-title="Leetcode-617/561--Python" data-url="http://yoursite.com/2017/10/11/leetcode 617/"></div>
+	<div class="ds-thread" data-thread-key="Introduction" data-title="Introducation- What is Machine Learning?" data-url="http://yoursite.com/2017/10/22/Introduction/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

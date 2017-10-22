@@ -185,6 +185,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-leetcode 476" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/leetcode 476/">Leetcode-476--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/leetcode 476/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.768Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="476-Number-Complement"><a href="#476-Number-Complement" class="headerlink" title="476. Number Complement"></a>476. Number Complement</h1><p>给定一个正整数，输出其补数.<br>题目意思就是将10进制转换成2进制，取反，再换为10进制。<br>实际上不能直接用“~”按位取反符号来做，主要原因是他的前缀也会被取反，比如我们是32bit的那么5的二进制是“0000 0000 0000 0000 0000 0000 00000 0101”取反就变成“1111 1111 1111 1111 1111 1111 1111 1010”那就多了29个1，这么做还得把前面的1去掉，所以就衍生出两种做法。</p>
+<p>Note：</p>
+<ul>
+<li>给定正数确保是32位带符号整数。</li>
+<li>可以假设整数的二进制表示不包含前导0。</li>
+</ul>
+<p>法一：<br>这个方法比较笨，我把他按照list的格式输入进去，我一个一个的去读里面的数，那因为是取反，所以我读一个“0”我自己新建一个列表存个1进去，读个“1”我存个“0”进去，遍历完整个列表那我们也得到取反的二进制数，再使用int(arg,x)来转换进制就好。代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def findComplement(num):</div><div class="line">        bn = bin(num[2:]) <span class="comment">#把bin里面的0b去掉</span></div><div class="line">        rlist = list(bn)       //这个地方用的是list（）</div><div class="line">        orilist = []</div><div class="line">    <span class="comment">#for number in rlist:</span></div><div class="line">     <span class="comment">#   if number == "1":</span></div><div class="line">            orilist.append[<span class="string">"0"</span>]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            orilist.append[<span class="string">"1"</span>]</div><div class="line">    r = <span class="string">''</span>.join(orilist)</div><div class="line">    <span class="built_in">return</span> int(r,2)</div><div class="line">P = Solution()</div><div class="line"><span class="built_in">print</span> P.findComplement(5)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>把元组换成list这个用的()不是［］<br>list( seq )<br>seq – This is a tuple to be converted into list.</li>
+<li>append是[]的属性。</li>
+<li>注意区分()和[]</li>
+</ul>
+<p>法二：<br>第二个方法比较巧妙，就是用异或“^”的特性。<br>异或可以看成是将两个值交换。<br>如果两个相应位相同，则结果为0，否则为1。即：0^0=0， 1^0=1， 0^1=1， 1^1=0<br>－ 0异或任何数＝任何数<br>－ 1异或任何数－任何数取反<br>－ 任何数异或自己＝把自己置0</p>
+<p>考虑到这个特性 5 是 “101” ，2 是“010”，1异或任意数等于取反，所以我们要异或111<br>这就是101 ^ 111 = 010这样就代表取反，那我们如何得到111.<br>这就是这个算法的精髓，111是1000 －1 ，就是说所有位都为1时，那么加1，必然会进位，就变成多一位的最小值，我们要做的就是把多一位的最小值－1就能得到少一位的最大值。<br>代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">def findComplement(num):</div><div class="line">    value =1</div><div class="line">   <span class="comment"># if num == 1:</span></div><div class="line">        <span class="built_in">return</span> 0</div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="keyword">while</span> value &lt;= num:</div><div class="line">            value &lt;&lt; = 1 //这里就是一直循环，直到我的value的位数大于num，不够的话就一直左移</div><div class="line">        new_value = value - 1  //这里时，已经比num多一位，所以－1就是num位数的1.</div><div class="line">        <span class="built_in">return</span> new_value ^ num</div><div class="line"></div><div class="line"><span class="built_in">print</span> findComplement(5)</div></pre></td></tr></table></figure></p>
+<p>关于value &lt;&lt;= 1其实“&lt;&lt;= ”的操作是等同于 value = value &lt;&lt; 1和 “＋＝”，“－＝”一样<br>通常我们在对单个量才会只用“&lt;&lt;”来看值是否左移。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/leetcode 476/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-leetcode 463" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -913,85 +1002,6 @@
 
 
   
-    <article id="post-leetcode 104" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 104/">Leetcode-136--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 104/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.720Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>题目大意：求一颗二叉树的最大深度，最大深度指跟节点到最底层叶子节点的距离。</p>
-<p>这种打卡题没什么说的，只是想把今天的更新刷到绿的而已～</p>
-<p>用递归的方法，当前节点的最大深度就是左节点的最大深度和右节点的最大深度之中取大的加一。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Solution(object):</div><div class="line">    def maxDepth(self, root):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type root: TreeNode</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        if root == None:</div><div class="line">            return 0</div><div class="line">        leftdep = self.maxDepth(root.left)</div><div class="line">        rightdep = self.maxDepth(root.right)</div><div class="line">        if leftdep &gt;= rightdep:</div><div class="line">            return leftdep + 1</div><div class="line">        else:</div><div class="line">            return rightdep + 1</div></pre></td></tr></table></figure>
-<p>看了几道二叉树的题目，感觉BFS和DFS应用很广，学会了能很好的理解树的遍历！但是写代码不带大括号好不爽啊。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 104/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
@@ -1093,11 +1103,15 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -185,6 +185,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mytree" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/mytree/">树形的数据结构 -- Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/mytree/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.813Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>实现二叉树主要通过两种方式，一个是通过嵌套列表，一个是通过节点的引用，下面分开讲这两种方式。</p>
+<h1 id="通过嵌套列表实现二叉树"><a href="#通过嵌套列表实现二叉树" class="headerlink" title="通过嵌套列表实现二叉树"></a>通过嵌套列表实现二叉树</h1><p>在用嵌套列表实现树时,我们将用 Python 的列表数据结构来编写上面定义的功能。虽然把 界面 写成列表的一系列方法与我们已实现的其他抽象数据类型有些不同,但这样做的是有趣 的,因为它 为我们􏰁供一个简单、可以直接检查的递归数据结构。在列表实现树时,我们将存储根节点的值作 为列表的第一个元素。列表的第二个元素是一个表示其左子树的列表,第三个元素是表示其右子树 的另一个列表。</p>
+<p>BinaryTree 功能只是构建包含一个根节点和两个表示子节点的空列表的列表。给左子树添加到树 的根,我们需要插入一个新的列表到根列表的第二个位置。我们必须注意,如果列表中已经有元素 在第二个位置,我们需要跟踪它,并将新节点插入树中作为其左子节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">myTree = [&apos;a&apos;, [&apos;b&apos;, [&apos;d&apos;,[],[]], [&apos;e&apos;,[],[]] ], [&apos;c&apos;, [&apos;f&apos;,[],[]], []] ]</div><div class="line">def insertLeft(root,newBranch):</div><div class="line">    t = root.pop(1)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(1,[newBranch,t,[]])</div><div class="line">    else:</div><div class="line">        root.insert(1,[newBranch, [], []])</div><div class="line">    return root</div><div class="line">    - 请注意,插入一个左子节点前,我们首先应获取对应于当前左子节点的列表(可能是空的)。 </div><div class="line">    - 然后,我们添加新的左子节点,将原来的左子结点作为新节点的左子节点。</div><div class="line"></div><div class="line">    pop() 函数用于移除列表中的一个元素（默认最后一个元素），并且返回该元素的值。</div></pre></td></tr></table></figure>
+<p>完整的树的基本功能模块如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">def BinaryTree(r):</div><div class="line">    return [r,[],[]]</div><div class="line">def insertLeft(root,newBranch):</div><div class="line">    t = root.pop(1)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(1,[newBranch,t,[]])</div><div class="line">    else:</div><div class="line">        root.insert(1,[newBranch,[],[]])</div><div class="line">    return root</div><div class="line"></div><div class="line">def insertRight(root,newBranch):</div><div class="line">    t = root.pop(2)</div><div class="line">    if len(t) &gt; 1:</div><div class="line">        root.insert(2,[newBranch,[],t])</div><div class="line">    else:</div><div class="line">        root.insert(2,[newBranch,[],[]])</div><div class="line">    return root</div><div class="line"></div><div class="line">def getRootVal(root):</div><div class="line">    return root[0]</div><div class="line">def setRootVal(root,newVal):</div><div class="line">    root[0] = newVal</div><div class="line">def getLeftChild(root):</div><div class="line">    return root[1]</div><div class="line">def getRightChild(root):</div><div class="line">    return root[2]</div><div class="line"></div><div class="line">r= BinaryTree(3)</div><div class="line">insertLeft(r,4)</div><div class="line">insertLeft(r,5)</div><div class="line">insertRight(r,6)</div><div class="line">insertRight(r,7)</div><div class="line">I = getLeftChild(r)</div><div class="line">print (I)</div><div class="line">setRootVal(I,9)</div><div class="line">print (r)</div><div class="line">insertLeft(I,11)</div><div class="line">print (r)</div><div class="line">print(getRightChild(getRightChild(r)))</div></pre></td></tr></table></figure></p>
+<h1 id="通过节点和引用来实现二叉树"><a href="#通过节点和引用来实现二叉树" class="headerlink" title="通过节点和引用来实现二叉树"></a>通过节点和引用来实现二叉树</h1><p>代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">class BinaryTree:</div><div class="line">    def __init__(self,rootObj):</div><div class="line">        self.key = rootObj</div><div class="line">        self.leftChild = None</div><div class="line">        self.rightChild = None</div><div class="line"></div><div class="line">    def InsertLeft(self,newNode):</div><div class="line">        if self.leftChild == None:</div><div class="line">            self.leftChild = BinaryTree(newNode)</div><div class="line">        else:</div><div class="line">            t = BinaryTree(newNode)</div><div class="line">            t.leftChild = self.leftChild</div><div class="line">            self.leftChild = t</div><div class="line"></div><div class="line">    def InsertRight(self,newNode):</div><div class="line">        if self.rightChild == None:</div><div class="line">            self.rightChild = BinaryTree(newNode)</div><div class="line">        else:</div><div class="line">            t = BinaryTree(newNode)</div><div class="line">            t.rightChild = self.rightChild</div><div class="line">            self.rightChild = t</div><div class="line"></div><div class="line">    def getRightChild(self):</div><div class="line">        return self.rightChild</div><div class="line"></div><div class="line">    def getLeftChild(self):</div><div class="line">        return self.leftChild</div><div class="line"></div><div class="line">    def setRootVal(self,obj):</div><div class="line">        self.key = obj</div><div class="line"></div><div class="line">    def getRootVal(self):</div><div class="line">        return self.key</div><div class="line"></div><div class="line"></div><div class="line">r = BinaryTree(&apos;a&apos;)</div><div class="line">print (r.getRootVal())</div><div class="line">print (r.getLeftChild())</div><div class="line">print (r.getRightChild())</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/mytree/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-multi-path" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -957,95 +1036,6 @@
 
 
   
-    <article id="post-leetcode 476" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 476/">Leetcode-476--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 476/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.768Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="476-Number-Complement"><a href="#476-Number-Complement" class="headerlink" title="476. Number Complement"></a>476. Number Complement</h1><p>给定一个正整数，输出其补数.<br>题目意思就是将10进制转换成2进制，取反，再换为10进制。<br>实际上不能直接用“~”按位取反符号来做，主要原因是他的前缀也会被取反，比如我们是32bit的那么5的二进制是“0000 0000 0000 0000 0000 0000 00000 0101”取反就变成“1111 1111 1111 1111 1111 1111 1111 1010”那就多了29个1，这么做还得把前面的1去掉，所以就衍生出两种做法。</p>
-<p>Note：</p>
-<ul>
-<li>给定正数确保是32位带符号整数。</li>
-<li>可以假设整数的二进制表示不包含前导0。</li>
-</ul>
-<p>法一：<br>这个方法比较笨，我把他按照list的格式输入进去，我一个一个的去读里面的数，那因为是取反，所以我读一个“0”我自己新建一个列表存个1进去，读个“1”我存个“0”进去，遍历完整个列表那我们也得到取反的二进制数，再使用int(arg,x)来转换进制就好。代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def findComplement(num):</div><div class="line">        bn = bin(num[2:]) <span class="comment">#把bin里面的0b去掉</span></div><div class="line">        rlist = list(bn)       //这个地方用的是list（）</div><div class="line">        orilist = []</div><div class="line">    <span class="comment">#for number in rlist:</span></div><div class="line">     <span class="comment">#   if number == "1":</span></div><div class="line">            orilist.append[<span class="string">"0"</span>]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            orilist.append[<span class="string">"1"</span>]</div><div class="line">    r = <span class="string">''</span>.join(orilist)</div><div class="line">    <span class="built_in">return</span> int(r,2)</div><div class="line">P = Solution()</div><div class="line"><span class="built_in">print</span> P.findComplement(5)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>把元组换成list这个用的()不是［］<br>list( seq )<br>seq – This is a tuple to be converted into list.</li>
-<li>append是[]的属性。</li>
-<li>注意区分()和[]</li>
-</ul>
-<p>法二：<br>第二个方法比较巧妙，就是用异或“^”的特性。<br>异或可以看成是将两个值交换。<br>如果两个相应位相同，则结果为0，否则为1。即：0^0=0， 1^0=1， 0^1=1， 1^1=0<br>－ 0异或任何数＝任何数<br>－ 1异或任何数－任何数取反<br>－ 任何数异或自己＝把自己置0</p>
-<p>考虑到这个特性 5 是 “101” ，2 是“010”，1异或任意数等于取反，所以我们要异或111<br>这就是101 ^ 111 = 010这样就代表取反，那我们如何得到111.<br>这就是这个算法的精髓，111是1000 －1 ，就是说所有位都为1时，那么加1，必然会进位，就变成多一位的最小值，我们要做的就是把多一位的最小值－1就能得到少一位的最大值。<br>代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">def findComplement(num):</div><div class="line">    value =1</div><div class="line">   <span class="comment"># if num == 1:</span></div><div class="line">        <span class="built_in">return</span> 0</div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="keyword">while</span> value &lt;= num:</div><div class="line">            value &lt;&lt; = 1 //这里就是一直循环，直到我的value的位数大于num，不够的话就一直左移</div><div class="line">        new_value = value - 1  //这里时，已经比num多一位，所以－1就是num位数的1.</div><div class="line">        <span class="built_in">return</span> new_value ^ num</div><div class="line"></div><div class="line"><span class="built_in">print</span> findComplement(5)</div></pre></td></tr></table></figure></p>
-<p>关于value &lt;&lt;= 1其实“&lt;&lt;= ”的操作是等同于 value = value &lt;&lt; 1和 “＋＝”，“－＝”一样<br>通常我们在对单个量才会只用“&lt;&lt;”来看值是否左移。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 476/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1147,11 +1137,15 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">
