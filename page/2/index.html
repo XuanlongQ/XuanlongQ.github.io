@@ -185,6 +185,168 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ACID" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ACID/">浅谈SQL SERVER中事务的ACID</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ACID/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.934Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们将看到进程是如何保证每个查询在自己的事务内执行的。但开始之前，我们需要理解ACID事务的概念。</p>
+<h1 id="Server中的ACID"><a href="#Server中的ACID" class="headerlink" title="Server中的ACID"></a>Server中的ACID</h1><p>一个ACID事务是一个工作单元，它要保证4个属性：</p>
+<ul>
+<li>A:原子性(Atomicity),事务『要么全部完成，要么全部取消』，即使它持续运行10个小时。如果事务崩溃，状态回到事务之前(事务回滚)。</li>
+<li>C:一致性（Consistency）,只有合法的数据（依照关系约束和函数约束）能写入数据库，一致性与原子性和隔离性有关。</li>
+<li>I:隔离性（Isolation）,如果2个事务 A 和 B 同时运行，事务 A 和 B 最终的结果是相同的，不管 A 是结束于 B 之前/之后/运行期间。</li>
+<li>D:持久性（Durability）,一旦事务提交（也就是成功执行）,不管发生什么（崩溃或者出错），数据要保存在数据库中。</li>
+</ul>
+<p>在同一个事务内，你可以运行多个SQL查询来读取、创建、更新和删除数据。当两个事务使用相同的数据，麻烦就来了。经典的例子是从账户A到账户B的汇款。假设有2个事务：</p>
+<ul>
+<li>事务1（T1）从账户A取出100美元给账户B</li>
+<li>事务2（T2）从账户A取出50美元给账户B</li>
+</ul>
+<p>我们回来看看ACID属性:</p>
+<ul>
+<li>原子性确保不管 T1 期间发生什么（服务器崩溃、网络中断…），你不能出现账户A 取走了100美元但没有给账户B 的现象（这就是数据不一致状态）。</li>
+<li>隔离性确保如果 T1 和 T2 同时发生，最终A将减少150美元，B将得到150美元，而不是其他结果，比如因为 T2 部分抹除了 T1 的行为，A减少150美元而B只得到50美元（这也是不一致状态）。</li>
+<li>持久性确保如果 T1 刚刚提交，数据库就发生崩溃，T1 不会消失得无影无踪。</li>
+<li>一致性确保钱不会在系统内生成或灭失</li>
+</ul>
+<p>现代数据库不会使用纯粹的隔离作为默认模式，因为它会带来巨大的性能消耗。SQL一般定义4个隔离级别：<br>1.串行化(Serializable，SQLite默认模式）：最高级别的隔离。两个同时发生的事务100%隔离，每个事务有自己的『世界』<br>2.可重复读（Repeatable read，MySQL默认模式）：每个事务有自己的『世界』，除了一种情况。如果一个事务成功执行并且添加了新数据，这些数据对其他正在执行的事务是可见的。但是如果事务成功修改了一条数据，修改结果对正在运行的事务不可见。所以，事务之间只是在新数据方面突破了隔离，对已存在的数据仍旧隔离。<br>举个例子，如果事务A运行”SELECT count(1) from TABLE_X” ，然后事务B在 TABLE_X 加入一条新数据并提交，当事务A再运行一次 count(1)结果不会是一样的。<br>这叫幻读（phantom read）。<br>3.读取已提交（Read committed，Oracle、PostgreSQL、SQL Server默认模式）：可重复读+新的隔离突破。如果事务A读取了数据D，然后数据D被事务B修改（或删除）并提交，事务A再次读取数据D时数据的变化（或删除）是可见的。<br>这叫不可重复读（non-repeatable read）。<br>4.读取未提交（Read uncommitted）：最低级别的隔离，是读取已提交+新的隔离突破。如果事务A读取了数据D，然后数据D被事务B修改（但并未提交，事务B仍在运行中），事务A再次读取数据D时，数据修改是可见的。如果事务B回滚，那么事务A第二次读取的数据D是无意义的，因为那是事务B所做的从未发生的修改（已经回滚了嘛）。<br>这叫脏读（dirty read）</p>
+<h2 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h2><p>确保隔离性、一致性和原子性的真正问题是对相同数据的写操作（增、更、删）：</p>
+<ul>
+<li>如果所有事务只是读取数据，它们可以同时工作，不会更改另一个事务的行为。</li>
+<li>如果（至少）有一个事务在修改其他事务读取的数据，数据库需要找个办法对其它事务隐藏这种修改。而且，它还需要确保这个修改操作不会被另一个看不到这些数据修改的事务擦除。<br>这个问题叫并发控制。<br>最简单的解决办法是依次执行每个事务（即顺序执行），但这样就完全没有伸缩性了，在一个多处理器/多核服务器上只有一个核心在工作，效率很低。<br>理想的办法是，每次一个事务创建或取消时:</li>
+<li>监控所有事务的所有操作</li>
+<li>检查是否2个（或更多）事务的部分操作因为读取/修改相同的数据而存在冲突</li>
+<li>重新编排冲突事务中的操作来减少冲突的部分</li>
+<li>按照一定的顺序执行冲突的部分（同时非冲突事务仍然在并发运行）</li>
+<li>考虑事务有可能被取消<br>用更正规的说法，这是对冲突的调度问题。更具体点儿说，这是个非常困难而且CPU开销很大的优化问题。企业级数据库无法承担等待几个小时，来寻找每个新事务活动最好的调度，因此就使用不那么理想的方式以避免更多的时间浪费在解决冲突上。</li>
+</ul>
+<h2 id="锁管理器"><a href="#锁管理器" class="headerlink" title="锁管理器"></a>锁管理器</h2><p>为了解决这个问题，多数数据库使用锁和/或数据版本控制。这是个很大的话题，我会集中探讨锁，和一点点数据版本控制。</p>
+<p>悲观锁:</p>
+<ul>
+<li>如果一个事务需要一条数据</li>
+<li>它就把数据锁住</li>
+<li>如果另一个事务也需要这条数据</li>
+<li>它就必须要等第一个事务释放这条数据这个锁叫排他锁。<br>但是对一个仅仅读取数据的事务使用排他锁非常昂贵，因为这会迫使其它只需要读取相同数据的事务等待。因此就有了另一种锁，共享锁。</li>
+</ul>
+<p>共享锁:</p>
+<ul>
+<li>如果一个事务只需要读取数据A</li>
+<li>它会给数据A加上『共享锁』并读取</li>
+<li>如果第二个事务也需要仅仅读取数据A</li>
+<li>它会给数据A加上『共享锁』并读取</li>
+<li>如果第三个事务需要修改数据A</li>
+<li>它会给数据A加上『排他锁』，但是必须等待另外两个事务释放它们的共享锁。<br>同样的，如果一块数据被加上排他锁，一个只需要读取该数据的事务必须等待排他锁释放才能给该数据加上共享锁。</li>
+</ul>
+<h3 id="lockmanager"><a href="#lockmanager" class="headerlink" title="lockmanager"></a>lockmanager</h3><p>锁管理器是添加和释放锁的进程，在内部用一个哈希表保存锁信息（关键字是被锁的数据），并且了解每一块数据是：</p>
+<ul>
+<li>被哪个事务加的锁</li>
+<li>哪个事务在等待数据解锁<br><img src="/images/lockmanager1.png" alt="Lockmanager1"></li>
+</ul>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>但是使用锁会导致一种情况，2个事务永远在等待一块数据：<br>在本图中：<br><img src="/images/lockmanager2.png" alt="Lockmanager2"></p>
+<ul>
+<li>事务A 给 数据1 加上排他锁并且等待获取数据2</li>
+<li>事务B 给 数据2 加上排他锁并且等待获取数据1<br>这叫死锁。</li>
+</ul>
+<p>在死锁发生时，锁管理器要选择取消（回滚）一个事务，以便消除死锁。这可是个艰难的决定：</p>
+<ul>
+<li>杀死数据修改量最少的事务（这样能减少回滚的成本）？</li>
+<li>杀死持续时间最短的事务 (因为其它事务的用户等的时间更长)？</li>
+<li>杀死能用更少时间结束的事务（避免可能的资源饥荒）？</li>
+<li>一旦发生回滚，有多少事务会受到回滚的影响？<br>在作出选择之前，锁管理器需要检查是否有死锁存在。<br>哈希表可以看作是个图表,图中出现循环就说明有死锁。由于检查循环是昂贵的（所有锁组成的图表是很庞大的），经常会通过简单的途径解决：使用超时设定。如果一个锁在超时时间内没有加上，那事务就进入死锁状态。</li>
+</ul>
+<p>锁管理器也可以在加锁之前检查该锁会不会变成死锁，但是想要完美的做到这一点还是很昂贵的。因此这些预检经常设置一些基本规则。</p>
+<p>两段锁：<br>实现纯粹的隔离最简单的方法是：事务开始时获取锁，结束时释放锁。就是说，事务开始前必须等待确保自己能加上所有的锁，当事务结束时释放自己持有的锁。这是行得通的，但是为了等待所有的锁，大量的时间被浪费了。<br>更快的方法是两段锁协议（Two-Phase Locking Protocol，由 DB2 和 SQL Server使用），在这里，事务分为两个阶段：</p>
+<ul>
+<li>成长阶段：事务可以获得锁，但不能释放锁。</li>
+<li>收缩阶段：事务可以释放锁（对于已经处理完而且不会再次处理的数据），但不能获得新锁。<br><img src="/images/lockmanager3.png" alt="Lockmanager3"></li>
+</ul>
+<p>这两条简单规则背后的原理是：</p>
+<ul>
+<li>释放不再使用的锁，来降低其它事务的等待时间</li>
+<li>防止发生这类情况：事务最初获得的数据，在事务开始后被修改，当事务重新读取该数据时发生不一致。</li>
+</ul>
+<p>这个规则可以很好地工作，但有个例外：如果修改了一条数据、释放了关联的锁后，事务被取消（回滚），而另一个事务读到了修改后的值，但最后这个值却被回滚。为了避免这个问题，所有独占锁必须在事务结束时释放。</p>
+<p>真实的数据库使用更复杂的系统，涉及到更多类型的锁（比如意向锁，intention locks）和更多的粒度（行级锁、页级锁、分区锁、表锁、表空间锁），但是道理是相同的。</p>
+<p>我只探讨纯粹基于锁的方法，数据版本控制是解决这个问题的另一个方法。</p>
+<p>版本控制是这样的：</p>
+<ul>
+<li>每个事务可以在相同时刻修改相同的数据</li>
+<li>每个事务有自己的数据拷贝（或者叫版本）</li>
+<li>如果2个事务修改相同的数据，只接受一个修改，另一个将被拒绝，相关的事务回滚（或重新运行）<br>这将提高性能，因为：</li>
+<li>读事务不会阻塞写事务</li>
+<li>写事务不会阻塞读</li>
+<li>没有『臃肿缓慢』的锁管理器带来的额外开销<br>除了两个事务写相同数据的时候，数据版本控制各个方面都比锁表现得更好。只不过，你很快就会发现磁盘空间消耗巨大。数据版本控制和锁机制是两种不同的见解：乐观锁和悲观锁。两者各有利弊，完全取决于使用场景（读多还是写多）。</li>
+</ul>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://blog.jobbole.com/100349/" target="_blank" rel="external">原文链接-link</a>.<br>2.<a href="http://momjian.us/main/writings/pgsql/mvcc.pdf" target="_blank" rel="external">版本控制-pdf</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ACID/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-长短流和多路径问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -405,7 +567,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Xuanlong-Qin"><a href="#Xuanlong-Qin" class="headerlink" title="Xuanlong Qin"></a>Xuanlong Qin</h1><p><img src="/images/xuanlong.png" alt="Xuanlong"><br>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x71;&#120;&#108;&#x70;&#107;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;">&#x71;&#120;&#108;&#x70;&#107;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a><br><a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x78;&#x75;&#97;&#110;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#x63;&#x6e;">&#x78;&#x75;&#97;&#110;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#117;&#x2e;&#x65;&#x64;&#117;&#x2e;&#x63;&#x6e;</a></p>
+<p>E-mail:<br><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#113;&#120;&#x6c;&#112;&#x6b;&#117;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#113;&#120;&#x6c;&#112;&#x6b;&#117;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a><br><a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#120;&#117;&#x61;&#x6e;&#x6c;&#111;&#x6e;&#103;&#x40;&#x70;&#x6b;&#117;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#110;">&#120;&#117;&#x61;&#x6e;&#x6c;&#111;&#x6e;&#103;&#x40;&#x70;&#x6b;&#117;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#110;</a></p>
 <pre><code>- Please pay attention to case sensitive
 </code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
 <p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
@@ -1069,80 +1231,6 @@
 
 
   
-    <article id="post-switch13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/switch13/">Ryu交换机分析，详细类的继承</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/switch13/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.889Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>可以对着switch13.py那个官方入门例子来比对一下，里面的add_flow只有一部分，只看这篇blog可能会晕<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line">from ryu.base import app_manager</div><div class="line">from ryu.controller import ofp_event</div><div class="line">from ryu.controller.handler import CONFIG_DISPATCHER , MAIN_DISPATCHER</div><div class="line">from ryu.controller.handler import set_ev_cls</div><div class="line">from ryu.ofproto import ofproto_v1_3</div><div class="line">from ryu.lib.packet import packet</div><div class="line">from ryu.lib.packet import ethernet</div><div class="line"></div><div class="line">class SimpleSwitch13(app_manager.RyuApp):</div><div class="line">    OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]</div><div class="line">    <span class="string">""</span><span class="string">"docstring for SimpleSwitch13"</span><span class="string">""</span></div><div class="line">    def __init__(self, *arg, **kwargs):</div><div class="line">        super(SimpleSwitch13, self).__init__(*args,**kwargs)</div><div class="line">        self.mac_to_port = &#123;&#125;</div><div class="line">        <span class="comment"># mac地址表现自刚开始的时候是空的</span></div><div class="line">        <span class="comment"># set_ev_cls(事件类别，交换器状态)</span></div><div class="line">                    (EventOFP+&lt;Openflow讯息名称&gt;)</div><div class="line">    @set_ev_cls(ofp_event.EventOFPSwitchFeatures , CONFIG_DISPATCHER)</div><div class="line">    def switch_features_handler(self,ev):</div><div class="line">        <span class="comment"># ev.msg用来存储对应事件的oprnflow信息实体，在这里就是ryu.ofproto.ofproto_v1_3_parser.OFPSwitchFeatures </span></div><div class="line">        <span class="comment"># msg.datapath 用来存储OF交换机的ryu.controller.controller.Datapath类的对应的实体</span></div><div class="line">        <span class="comment"># datapath 处理OF交换机重要的讯息，例如执行与交换器的通讯和触发接收讯息相关的事件</span></div><div class="line">        datapath = ev.msg.datapath</div><div class="line">        ofproto = datapath.ofproto</div><div class="line">        parser = datapath.ofproto_parser </div><div class="line"></div><div class="line">        <span class="comment"># ofproto 表示使用的 OpenFlow 版本所对应的 ofproto module</span></div><div class="line">        <span class="comment"># ofproto_parser 和 ofproto 一樣，表示 ofproto_parser module</span></div><div class="line">    <span class="comment"># 交换器本身不仅仅使用switch feature 信息，还使用事件处理以取得新增table-miss flow entry的时间点。</span></div><div class="line">        def switch_features_handler(self , ev):</div><div class="line">            match = parser.OFPMatch() <span class="comment">#空的match将被产生，为了match所有封包，match表示在OFPMatch类别中</span></div><div class="line">            <span class="comment"># 為了轉送到 Controller 連接埠，OUTPUT action 類別（ OFPActionOutput ）的实例將会</span></div><div class="line">            被产生。Controller 会被指定为封包的目的地，OFPCML_NO_BUFFER 会被设定为 max_len 以便接</div><div class="line">            下來的封包傳送。</div><div class="line">            actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER ,ofproto.OFPCML_NO_BUFFER)] </div><div class="line"></div><div class="line">            self.add_flow(datapath , 0, match , actions)  <span class="comment">#跳转到add_flow()发送 Flow Mod 信息</span></div><div class="line"></div><div class="line">        def add_flow(self,datapath,priority,match,actions):</div><div class="line">            ofproto = datapath.ofproto</div><div class="line">            parser = datapath.ofproto_parser</div><div class="line"></div><div class="line">            inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,actions)]</div><div class="line">            <span class="comment">#对于flow entry来说，设定match条件以分辨目标封包，设定instruction以处理封包以及Entry的优先权和有效时间</span></div><div class="line">            <span class="comment">#对于交换机的实作，Apply Actions是用来设定那些必须立即执行的action所使用。</span></div><div class="line">            <span class="comment">#最后通过flow mod信息将flow entry新增到flow table中。</span></div><div class="line">        <span class="comment"># def add_flow(self,datapath,port,dst,actions):</span></div><div class="line">        <span class="comment">#   mod = parser.OFPFlowMod(datapath=datapath , priority=priority ,match=match , instructions=inst)</span></div><div class="line">        <span class="comment">#   datapath.send_msg(mod)</span></div><div class="line">            <span class="comment">#Flow Mod 信息的类别为OFPFlow Mod,使用OFPFlowMod所产生的实体通过datapath.send_msg()方法来发送信息给OF交换机</span></div><div class="line">            <span class="comment">#OFPFlowMod类的子函数很多，大多都有预设值，源码中括号内的部分就是预设值</span></div><div class="line">            <span class="comment">#比如有：datapath cookie(0) cookie_mask(0) table_id (0) command (ofproto_v1_3.OFPFC_ADD) idle_timeout (0)</span></div><div class="line">            <span class="comment"># hard_timeout (0) priority (0) buffer_id (ofproto_v1_3.OFP_NO_BUFFER) out_port (0) out_group (0) flags (0)</span></div><div class="line">            <span class="comment"># match (None)  instructions ([])</span></div><div class="line"></div><div class="line">        @set_ev_cls(ofp_event.EventOFPPacketIn , MAIN_DISPATCHER)</div><div class="line">        <span class="comment">#为了接收处理未知目的地的封包，需要packet-in事件管理</span></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            msg = ev.msg</div><div class="line">            datapath = msg.datapath</div><div class="line">            ofproto = datapath.ofproto</div><div class="line">            parser = datapath.ofproto_parser</div><div class="line"></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            <span class="comment"># ...</span></div><div class="line">            in_port = msg.match[<span class="string">'in_port'</span>]<span class="comment">#从 OFPPacketIn 类別的 match 得到接收点（ in_port ）的信息。</span></div><div class="line">            pkt = packet.Packet(msg.data)</div><div class="line">            eth = pkt.get_protocols(ethernet.ethernet)[0]</div><div class="line">            <span class="comment"># 目的 MAC 位址和來源 MAC 位址使用 Ryu 的封包函式库，从接收到封包的 Ethernet header 取得。</span></div><div class="line">            dst = eth.dst</div><div class="line">            src = eth.src</div><div class="line">            dpid = datapath.id</div><div class="line">            <span class="comment"># 得知目的 MAC 位址和來源 Mac 位址，更新 MAC 位址表</span></div><div class="line">            self.mac_to_port.setdefault(dpid , &#123;&#125;)</div><div class="line">            self.logger.info(<span class="string">"packet in %s %s %s %s"</span>, dpid , src, dst, in_port)</div><div class="line">            <span class="comment"># learn a mac address to avoid FLOOD next time.</span></div><div class="line">            self.mac_to_port[dpid][src] = in_port</div><div class="line">            <span class="comment"># ...</span></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            <span class="comment"># ...</span></div><div class="line">            <span class="keyword">if</span> dst <span class="keyword">in</span> self.mac_to_port[dpid]:</div><div class="line">            out_port = self.mac_to_port[dpid][dst]</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">            out_port = ofproto.OFPP_FLOOD</div><div class="line">            actions = [parser.OFPActionOutput(out_port)]</div><div class="line">            <span class="comment"># install a flow to avoid packet_in next time</span></div><div class="line">            <span class="keyword">if</span> out_port != ofproto.OFPP_FLOOD:</div><div class="line">            match = parser.OFPMatch(in_port=in_port , eth_dst=dst)</div><div class="line">            self.add_flow(datapath , 1, match , actions)</div><div class="line">            <span class="comment"># ...</span></div><div class="line"></div><div class="line">        def _packet_in_handler(self,ev):</div><div class="line">            data = None</div><div class="line">            <span class="keyword">if</span> msg.buffer_id == ofproto.OFP_NO_BUFFER:</div><div class="line">                data = msg.data</div><div class="line">            out = parser.OFPPacketOut(datapath=datapath , buffer_id=msg.buffer_id ,</div><div class="line">                in_port=in_port , actions=actions , data=data)</div><div class="line">            datapath.send_msg(out)</div><div class="line"></div><div class="line">            Packet-Out 信息对应的类别是 OFPPacketOut </div><div class="line">            OFPPacketOut 的子函数有：datapath buffer_id in_port actions data</div><div class="line">            交换机的实作时，在 Packet-In 信息中指定 buffer_id。若是 Packet-In 信息中 buffer_id 被设定</div><div class="line">为无效时。Packet-In 的封包必须指定 data 以便传送。</div></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/switch13/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1240,19 +1328,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">

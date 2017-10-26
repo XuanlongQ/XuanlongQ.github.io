@@ -185,6 +185,80 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-switch13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/switch13/">Ryu交换机分析，详细类的继承</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/switch13/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.889Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>可以对着switch13.py那个官方入门例子来比对一下，里面的add_flow只有一部分，只看这篇blog可能会晕<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line">from ryu.base import app_manager</div><div class="line">from ryu.controller import ofp_event</div><div class="line">from ryu.controller.handler import CONFIG_DISPATCHER , MAIN_DISPATCHER</div><div class="line">from ryu.controller.handler import set_ev_cls</div><div class="line">from ryu.ofproto import ofproto_v1_3</div><div class="line">from ryu.lib.packet import packet</div><div class="line">from ryu.lib.packet import ethernet</div><div class="line"></div><div class="line">class SimpleSwitch13(app_manager.RyuApp):</div><div class="line">    OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]</div><div class="line">    <span class="string">""</span><span class="string">"docstring for SimpleSwitch13"</span><span class="string">""</span></div><div class="line">    def __init__(self, *arg, **kwargs):</div><div class="line">        super(SimpleSwitch13, self).__init__(*args,**kwargs)</div><div class="line">        self.mac_to_port = &#123;&#125;</div><div class="line">        <span class="comment"># mac地址表现自刚开始的时候是空的</span></div><div class="line">        <span class="comment"># set_ev_cls(事件类别，交换器状态)</span></div><div class="line">                    (EventOFP+&lt;Openflow讯息名称&gt;)</div><div class="line">    @set_ev_cls(ofp_event.EventOFPSwitchFeatures , CONFIG_DISPATCHER)</div><div class="line">    def switch_features_handler(self,ev):</div><div class="line">        <span class="comment"># ev.msg用来存储对应事件的oprnflow信息实体，在这里就是ryu.ofproto.ofproto_v1_3_parser.OFPSwitchFeatures </span></div><div class="line">        <span class="comment"># msg.datapath 用来存储OF交换机的ryu.controller.controller.Datapath类的对应的实体</span></div><div class="line">        <span class="comment"># datapath 处理OF交换机重要的讯息，例如执行与交换器的通讯和触发接收讯息相关的事件</span></div><div class="line">        datapath = ev.msg.datapath</div><div class="line">        ofproto = datapath.ofproto</div><div class="line">        parser = datapath.ofproto_parser </div><div class="line"></div><div class="line">        <span class="comment"># ofproto 表示使用的 OpenFlow 版本所对应的 ofproto module</span></div><div class="line">        <span class="comment"># ofproto_parser 和 ofproto 一樣，表示 ofproto_parser module</span></div><div class="line">    <span class="comment"># 交换器本身不仅仅使用switch feature 信息，还使用事件处理以取得新增table-miss flow entry的时间点。</span></div><div class="line">        def switch_features_handler(self , ev):</div><div class="line">            match = parser.OFPMatch() <span class="comment">#空的match将被产生，为了match所有封包，match表示在OFPMatch类别中</span></div><div class="line">            <span class="comment"># 為了轉送到 Controller 連接埠，OUTPUT action 類別（ OFPActionOutput ）的实例將会</span></div><div class="line">            被产生。Controller 会被指定为封包的目的地，OFPCML_NO_BUFFER 会被设定为 max_len 以便接</div><div class="line">            下來的封包傳送。</div><div class="line">            actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER ,ofproto.OFPCML_NO_BUFFER)] </div><div class="line"></div><div class="line">            self.add_flow(datapath , 0, match , actions)  <span class="comment">#跳转到add_flow()发送 Flow Mod 信息</span></div><div class="line"></div><div class="line">        def add_flow(self,datapath,priority,match,actions):</div><div class="line">            ofproto = datapath.ofproto</div><div class="line">            parser = datapath.ofproto_parser</div><div class="line"></div><div class="line">            inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,actions)]</div><div class="line">            <span class="comment">#对于flow entry来说，设定match条件以分辨目标封包，设定instruction以处理封包以及Entry的优先权和有效时间</span></div><div class="line">            <span class="comment">#对于交换机的实作，Apply Actions是用来设定那些必须立即执行的action所使用。</span></div><div class="line">            <span class="comment">#最后通过flow mod信息将flow entry新增到flow table中。</span></div><div class="line">        <span class="comment"># def add_flow(self,datapath,port,dst,actions):</span></div><div class="line">        <span class="comment">#   mod = parser.OFPFlowMod(datapath=datapath , priority=priority ,match=match , instructions=inst)</span></div><div class="line">        <span class="comment">#   datapath.send_msg(mod)</span></div><div class="line">            <span class="comment">#Flow Mod 信息的类别为OFPFlow Mod,使用OFPFlowMod所产生的实体通过datapath.send_msg()方法来发送信息给OF交换机</span></div><div class="line">            <span class="comment">#OFPFlowMod类的子函数很多，大多都有预设值，源码中括号内的部分就是预设值</span></div><div class="line">            <span class="comment">#比如有：datapath cookie(0) cookie_mask(0) table_id (0) command (ofproto_v1_3.OFPFC_ADD) idle_timeout (0)</span></div><div class="line">            <span class="comment"># hard_timeout (0) priority (0) buffer_id (ofproto_v1_3.OFP_NO_BUFFER) out_port (0) out_group (0) flags (0)</span></div><div class="line">            <span class="comment"># match (None)  instructions ([])</span></div><div class="line"></div><div class="line">        @set_ev_cls(ofp_event.EventOFPPacketIn , MAIN_DISPATCHER)</div><div class="line">        <span class="comment">#为了接收处理未知目的地的封包，需要packet-in事件管理</span></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            msg = ev.msg</div><div class="line">            datapath = msg.datapath</div><div class="line">            ofproto = datapath.ofproto</div><div class="line">            parser = datapath.ofproto_parser</div><div class="line"></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            <span class="comment"># ...</span></div><div class="line">            in_port = msg.match[<span class="string">'in_port'</span>]<span class="comment">#从 OFPPacketIn 类別的 match 得到接收点（ in_port ）的信息。</span></div><div class="line">            pkt = packet.Packet(msg.data)</div><div class="line">            eth = pkt.get_protocols(ethernet.ethernet)[0]</div><div class="line">            <span class="comment"># 目的 MAC 位址和來源 MAC 位址使用 Ryu 的封包函式库，从接收到封包的 Ethernet header 取得。</span></div><div class="line">            dst = eth.dst</div><div class="line">            src = eth.src</div><div class="line">            dpid = datapath.id</div><div class="line">            <span class="comment"># 得知目的 MAC 位址和來源 Mac 位址，更新 MAC 位址表</span></div><div class="line">            self.mac_to_port.setdefault(dpid , &#123;&#125;)</div><div class="line">            self.logger.info(<span class="string">"packet in %s %s %s %s"</span>, dpid , src, dst, in_port)</div><div class="line">            <span class="comment"># learn a mac address to avoid FLOOD next time.</span></div><div class="line">            self.mac_to_port[dpid][src] = in_port</div><div class="line">            <span class="comment"># ...</span></div><div class="line">        def _packet_in_handler(self , ev):</div><div class="line">            <span class="comment"># ...</span></div><div class="line">            <span class="keyword">if</span> dst <span class="keyword">in</span> self.mac_to_port[dpid]:</div><div class="line">            out_port = self.mac_to_port[dpid][dst]</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">            out_port = ofproto.OFPP_FLOOD</div><div class="line">            actions = [parser.OFPActionOutput(out_port)]</div><div class="line">            <span class="comment"># install a flow to avoid packet_in next time</span></div><div class="line">            <span class="keyword">if</span> out_port != ofproto.OFPP_FLOOD:</div><div class="line">            match = parser.OFPMatch(in_port=in_port , eth_dst=dst)</div><div class="line">            self.add_flow(datapath , 1, match , actions)</div><div class="line">            <span class="comment"># ...</span></div><div class="line"></div><div class="line">        def _packet_in_handler(self,ev):</div><div class="line">            data = None</div><div class="line">            <span class="keyword">if</span> msg.buffer_id == ofproto.OFP_NO_BUFFER:</div><div class="line">                data = msg.data</div><div class="line">            out = parser.OFPPacketOut(datapath=datapath , buffer_id=msg.buffer_id ,</div><div class="line">                in_port=in_port , actions=actions , data=data)</div><div class="line">            datapath.send_msg(out)</div><div class="line"></div><div class="line">            Packet-Out 信息对应的类别是 OFPPacketOut </div><div class="line">            OFPPacketOut 的子函数有：datapath buffer_id in_port actions data</div><div class="line">            交换机的实作时，在 Packet-In 信息中指定 buffer_id。若是 Packet-In 信息中 buffer_id 被设定</div><div class="line">为无效时。Packet-In 的封包必须指定 data 以便传送。</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/switch13/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-stack_test" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1030,89 +1104,6 @@
 
 
   
-    <article id="post-Pica8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/Pica8/">SDN真机环境搭建</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/Pica8/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.853Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>首先看一下pica8的参数,pica8支持传统网络协议和OpenFlow技术，同时基于专利CrossFlow技术实现两种协议在单台设备间的互通。<br>Pica8 P-5401 40GbE交换机:<br>Pica8交换机运行PicOS™操作系统，高性能硬件平台涵盖1G/10G/25G/40G/100G不同规格，1GbE设备最大交换能力可达176Gbps，10GbE设备最大交换能力可达1.44Tbps,40GbE设备最大交换能力可达2.56Tbps, 25G/100GbE设备最大交换能力可达3.2Tbps。</p>
-<ul>
-<li>集成OpenSwitch(OVS)2.3,支持Openflow 1.4</li>
-<li>多控制器联通(ODL,ONOS,Ryu,Floodlight,NOX)</li>
-<li>多线程无缝添加协议</li>
-</ul>
-<p>基本上还是非常土豪的，造价：$11,600.00 大概也就7-8万，走之前去耍一耍那个造价30W的100G，美滋滋。</p>
-<p>现在实验环境只分给我一台openflow交换机(不支持P4)，然后通过comport线连接，一条设定主机，一条接到内网，内网是普通交换机大约20台20口左右，看起来ovs还是要在server上做，不知道混合网络效果怎么样。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//驱动文件贴到resource里面 这种专门的线还要自己买～</div><div class="line"><span class="variable">$screen</span> /dev/cu.UC-232AC 115200</div><div class="line"><span class="variable">$ovs</span>-vsctl <span class="built_in">set</span>-controller br0 tcp:127.0.0.1(switch ip) 6633(default)</div><div class="line"><span class="comment"># --wsapi-port(不建议换端口)</span></div><div class="line"><span class="comment"># test</span></div><div class="line">ovs-ofctl dump-flows br0</div><div class="line"><span class="comment">#ovs-ofctl 和ovs-vsctl指令集</span></div></pre></td></tr></table></figure></p>
-<p>具体的东西我就不能再贴了，因为清大的网络有受过攻击，我就不贴公网IP了。<br>主要是配置的时候需要一些驱动，和测试所以浪费了很多时间，下面是一些链接，其中有HSNL维护的multi-table和我要做的QOS，还有一些驱动文件以及工作手册，看起来会很有用。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="https://osrg.github.io/ryu/" target="_blank" rel="external">[Ryu安装]</a>.之前的博文我也有写过怎么搭建Ryu+mininet的环境，但是考虑到虚拟机可能会出现nat的ip分配问题，所以还是考虑在server上重新搭一个环境，同时完善vm migration的迁移场景。<br>2.<a href="https://osrg.github.io/ryu-book/zh_tw/html/switching_hub.html" target="_blank" rel="external">[Ryu-Book]</a>.入门必备<br>3.<a href="https://github.com/hsnl-dev/vcpe-hub" target="_blank" rel="external">[vCPE-Hub]</a>.据说vcpe的前后端是vicky一个人写的，吓尿了。<br>4.<a href="http://openvswitch.org/support/dist-docs/ovs-ofctl.8.txt" target="_blank" rel="external">[Ovs-ofctl指令集]</a>.<br>5.<a href="http://www.rendoumi.com/open-vswitchde-ovs-vsctlming-ling-xiang-jie/" target="_blank" rel="external">[Ovs-vsctl指令集]</a>.<br>6.<a href="http://www.pica8.com/" target="_blank" rel="external">[Pica8官方]</a>.<br>7.<a href="http://www.aten.com/us/en/products/usb-&amp;-thunderbolt/usb-converters/uc232a/#.WVJiwBOGN-U" target="_blank" rel="external">[USB to RS-232 Adapter (35cm)-UC232A]</a>.买的时候会送你驱动。<br>1x USB-to-Serial Converter<br>1x Driver Disk<br>1x User Manual<br>接了一晚上真机，觉得真实流量环境还是很爽的，跑起真实流量才感觉网络活起来了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/Pica8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1210,19 +1201,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">

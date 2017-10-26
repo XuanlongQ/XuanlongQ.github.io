@@ -185,6 +185,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Pica8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/Pica8/">SDN真机环境搭建</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/Pica8/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.853Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>首先看一下pica8的参数,pica8支持传统网络协议和OpenFlow技术，同时基于专利CrossFlow技术实现两种协议在单台设备间的互通。<br>Pica8 P-5401 40GbE交换机:<br>Pica8交换机运行PicOS™操作系统，高性能硬件平台涵盖1G/10G/25G/40G/100G不同规格，1GbE设备最大交换能力可达176Gbps，10GbE设备最大交换能力可达1.44Tbps,40GbE设备最大交换能力可达2.56Tbps, 25G/100GbE设备最大交换能力可达3.2Tbps。</p>
+<ul>
+<li>集成OpenSwitch(OVS)2.3,支持Openflow 1.4</li>
+<li>多控制器联通(ODL,ONOS,Ryu,Floodlight,NOX)</li>
+<li>多线程无缝添加协议</li>
+</ul>
+<p>基本上还是非常土豪的，造价：$11,600.00 大概也就7-8万，走之前去耍一耍那个造价30W的100G，美滋滋。</p>
+<p>现在实验环境只分给我一台openflow交换机(不支持P4)，然后通过comport线连接，一条设定主机，一条接到内网，内网是普通交换机大约20台20口左右，看起来ovs还是要在server上做，不知道混合网络效果怎么样。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//驱动文件贴到resource里面 这种专门的线还要自己买～</div><div class="line"><span class="variable">$screen</span> /dev/cu.UC-232AC 115200</div><div class="line"><span class="variable">$ovs</span>-vsctl <span class="built_in">set</span>-controller br0 tcp:127.0.0.1(switch ip) 6633(default)</div><div class="line"><span class="comment"># --wsapi-port(不建议换端口)</span></div><div class="line"><span class="comment"># test</span></div><div class="line">ovs-ofctl dump-flows br0</div><div class="line"><span class="comment">#ovs-ofctl 和ovs-vsctl指令集</span></div></pre></td></tr></table></figure></p>
+<p>具体的东西我就不能再贴了，因为清大的网络有受过攻击，我就不贴公网IP了。<br>主要是配置的时候需要一些驱动，和测试所以浪费了很多时间，下面是一些链接，其中有HSNL维护的multi-table和我要做的QOS，还有一些驱动文件以及工作手册，看起来会很有用。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="https://osrg.github.io/ryu/" target="_blank" rel="external">[Ryu安装]</a>.之前的博文我也有写过怎么搭建Ryu+mininet的环境，但是考虑到虚拟机可能会出现nat的ip分配问题，所以还是考虑在server上重新搭一个环境，同时完善vm migration的迁移场景。<br>2.<a href="https://osrg.github.io/ryu-book/zh_tw/html/switching_hub.html" target="_blank" rel="external">[Ryu-Book]</a>.入门必备<br>3.<a href="https://github.com/hsnl-dev/vcpe-hub" target="_blank" rel="external">[vCPE-Hub]</a>.据说vcpe的前后端是vicky一个人写的，吓尿了。<br>4.<a href="http://openvswitch.org/support/dist-docs/ovs-ofctl.8.txt" target="_blank" rel="external">[Ovs-ofctl指令集]</a>.<br>5.<a href="http://www.rendoumi.com/open-vswitchde-ovs-vsctlming-ling-xiang-jie/" target="_blank" rel="external">[Ovs-vsctl指令集]</a>.<br>6.<a href="http://www.pica8.com/" target="_blank" rel="external">[Pica8官方]</a>.<br>7.<a href="http://www.aten.com/us/en/products/usb-&amp;-thunderbolt/usb-converters/uc232a/#.WVJiwBOGN-U" target="_blank" rel="external">[USB to RS-232 Adapter (35cm)-UC232A]</a>.买的时候会送你驱动。<br>1x USB-to-Serial Converter<br>1x Driver Disk<br>1x User Manual<br>接了一晚上真机，觉得真实流量环境还是很爽的，跑起真实流量才感觉网络活起来了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/Pica8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-paixu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1101,99 +1184,6 @@
 
 
   
-    <article id="post-ns_vmmodel_tcp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/ns_vmmodel_tcp/">NS2构建以及关于虚拟机模型和tcp的改进</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/ns_vmmodel_tcp/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.818Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ns2-simulator"><a href="#ns2-simulator" class="headerlink" title="ns2 simulator"></a>ns2 simulator</h1><p>关于搭建ns2模拟器没什么好说的，不会的话建议转行。<br>讲一下比较关键的路径配置，常见的配置是<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ 1.cd ~</div><div class="line">$ 2.gedit .bashrc  /*这是linux的PATH，所以一般是配置在这里，但是可能会出现问题，等下我讲可能会出什么问题*/</div><div class="line">$ 3.export PATH=/home/balabala;/*这里就是＝号两边不要有空格，linux路径就两种一种是带$一种是不带直接用“/”的，理论上没什么差，你怕出问题就按这个配*/</div></pre></td></tr></table></figure></p>
-<p>这么配置可能你新开terminal执行ns的时候可用，但是也有另一种可能，就是你的路径其实错了，这样你的终端执行什么都会显示错误，所以一般我们开调试的时候会开一个root权限的端口用来回退，所以在执行第二条指令的时候你其实可以开一个root终端。<br>上面这个路径很多人这么配没有错，我的是错的，但是因为我还有环境所以我不可能重装我的PATH的路径是:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gedit /root/.bashrc</div></pre></td></tr></table></figure></p>
-<ul>
-<li>上面的环境变量之后变了之后你都要执行<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">source</span> .bashrc</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>在新开终端执行ns看见％就表示成功，如果发现报错或者功能不全那就是你的依赖包没装好，你可以整个update下，最稳定的版本还是ubuntu 14.04,如果这种环境都出问题，以后的环境出问题的概率会更大，还是把基本的jdk什么的调好了，再来使用ubuntu较好。</p>
-<h1 id="vm-model"><a href="#vm-model" class="headerlink" title="vm_model"></a>vm_model</h1><p>这部分的代码我会po到我的github<a href="https://github.com/XuanlongQ/NetworkSimulator/tree/master/VM" target="_blank" rel="external">［Xuanlong-Github］</a>.<br>采用的模型是华中科技大学刘海坤老师的performance and energy model。<br>这篇文章来自paper<a href="https://link.springer.com/article/10.1007/s10586-011-0194-3" target="_blank" rel="external">［Performance and energy modeling for live migration virtual］</a>.刘海坤老师人非常好，学术上也很严谨，我也像他请教过这篇文章的内容，所以有什么关于vm live migration问题你也可以给我或者刘老师发邮件。<br>刘海坤老师主页<a href="http://grid.hust.edu.cn/hkliu/" target="_blank" rel="external">[HaiKun-Liu]</a>,实验室主页<a href="http://grid.hust.edu.cn/" target="_blank" rel="external">[Lab-CGCL－Cluster and Grid Computing Lab]</a>.</p>
-<ul>
-<li>哈哈上次去他主页他还不是副教授，我还没有女朋友，现在他是副教授了，我他么还是没有女朋友～。</li>
-</ul>
-<h2 id="application"><a href="#application" class="headerlink" title="application"></a>application</h2><p>这部分的主要贡献在于轮次的流量产生，实际上我们在做的时候用的就是ftp的源，他就是不断的发送数据，所以通过一个processVM进行模型的迭代和抽象，做一个应用分发。</p>
-<h2 id="tcp部分"><a href="#tcp部分" class="headerlink" title="tcp部分"></a>tcp部分</h2><p>这个部分主要是能找到buffer变空的位置，把时间点打下去，simulator::now()这个位置找好，然后把队长序列号都扔去，就可以大概知道每一轮的传输时间和buffer大小，具体的实现可以看我的github在tcp部分上的实现。</p>
-<h2 id="tcl语言部分"><a href="#tcl语言部分" class="headerlink" title="tcl语言部分"></a>tcl语言部分</h2><p>这个部分主要是脚本编辑拓扑，但是怎么把参数传进去就涉及到参数的bind<br>实际上ns2看起来只有c++和TCL的两种绑定实际上，他是有两个绑定口的，嗯 我要不要写呢，太麻烦了～<br>我大致讲一下，就不画图了，实际上两个口在哪里呢？<br>1.tcl本身是构成ns2的一个重要部分，很大一部分关键内核是tcl写的，这里会有一个绑定，即tcl bind c++<br>2.另外就是你实验要传参，你也需要绑定，为什么呢？因为你的实验脚本是tcl但是你的实现语言是c++，所以有两个绑定机制。<br>总结就是  TCL －－ C++ －－ TCL<br>其实我现在觉得ns2没那么难，ns3 挖槽，真难！！</p>
-<p>关于ns2如果你的硬件条件实在不够可以考虑去做，实际上ns3虽然难，但是模块很细很散，虽然难但是是值得一学的，希望大家都加入ns3我就去去加入SDN (逃….</p>
-<ul>
-<li>6.15的HPCC做完，两个月就开始校招了，慌成马了！唉，如果在深圳的话，我就要更加努力才能进好地方啊，但是要不要选深圳呢，Q同学看你给不给这个机会咯～</li>
-</ul>
-<hr>
-<p>顺祝母校生快，每年的六一都是我们的Cumter的节日<br><img src="/images/cumt.png" alt="CUMT"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/ns_vmmodel_tcp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1291,19 +1281,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
