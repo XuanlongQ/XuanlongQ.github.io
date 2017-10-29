@@ -4,8 +4,42 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/10/12/network%20introduce/</loc>
+    <lastmod>2017-10-29T09:01:15.215Z</lastmod>
+    <data>
+        <display>
+        <title>网络基本介绍</title>
+        <pubTime>2017-10-12T11:50:23.788Z</pubTime>
+        
+        <tag>network</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/10/29/interesting%20blog/</loc>
+    <lastmod>2017-10-29T09:01:14.014Z</lastmod>
+    <data>
+        <display>
+        <title>网络基本介绍</title>
+        <pubTime>2017-10-29T08:57:57.327Z</pubTime>
+        
+        <tag>network</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/10/26/numpy_basic/</loc>
-    <lastmod>2017-10-26T13:29:38.982Z</lastmod>
+    <lastmod>2017-10-27T07:49:25.421Z</lastmod>
     <data>
         <display>
         <title>NumPy基础：数组和矢量计算</title>
@@ -29,23 +63,6 @@
         <pubTime>2017-10-22T05:09:17.552Z</pubTime>
         
         <tag>Bigdata</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/10/12/network%20introduce/</loc>
-    <lastmod>2017-10-12T13:03:04.021Z</lastmod>
-    <data>
-        <display>
-        <title>网络基本介绍</title>
-        <pubTime>2017-10-12T11:50:23.788Z</pubTime>
-        
-        <tag>network</tag>
          
          
            

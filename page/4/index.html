@@ -185,6 +185,103 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python_class" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/python_class/">类属性、实例属性、类方法、实例方法以及静态方法--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/python_class/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.857Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="类属性、实例属性的区别"><a href="#类属性、实例属性的区别" class="headerlink" title="类属性、实例属性的区别"></a>类属性、实例属性的区别</h1><h2 id="类属性"><a href="#类属性" class="headerlink" title="类属性"></a>类属性</h2><p>类属性就是类对象所拥有的属性，它被所有类对象的实例对象所共有，在内存中只存在一个副本，这个和C++中类的静态成员变量有点类似。对于公有的类属性，在类外可以通过类对象和实例对象访问。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  <span class="comment">#公有的类属性  </span></div><div class="line">    __age = 12     <span class="comment">#私有的类属性  </span></div><div class="line"></div><div class="line">p = people()  </div><div class="line"></div><div class="line"><span class="built_in">print</span> p.name             <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.name        <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.__age            <span class="comment">#错误，不能在类外通过实例对象访问私有的类属性  </span></div><div class="line"><span class="built_in">print</span> people.__age       <span class="comment">#错误，不能在类外通过类对象访问私有的类属性</span></div></pre></td></tr></table></figure></p>
+<h2 id="实例属性"><a href="#实例属性" class="headerlink" title="实例属性"></a>实例属性</h2><p>实例属性是不需要在类中显示定义的，比如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  </div><div class="line"></div><div class="line">p = people()  </div><div class="line">p.age =24  </div><div class="line"><span class="built_in">print</span> p.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.age     <span class="comment">#正确  </span></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.age     <span class="comment">#错误</span></div></pre></td></tr></table></figure></p>
+<p>在类外对类对象people进行实例化之后，产生了一个实例对象p，然后p.age = 24这句给p添加了一个实例属性age，赋值为24。这个实例属性是实例对象p所特有的，<br>注意，类对象people并不拥有它（所以不能通过类对象来访问这个age属性）。当然还可以在实例化对象的时候给age赋值。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#__init__()是内置的构造方法，在实例化对象时自动调用  </span></div><div class="line">    def __init__(self,age):  </div><div class="line">        self.age = age  </div><div class="line"></div><div class="line">p = people(12)  </div><div class="line"><span class="built_in">print</span> p.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.age     <span class="comment">#正确  </span></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.age     <span class="comment">#错误</span></div></pre></td></tr></table></figure></p>
+<p>如果需要在类外修改类属性，必须通过类对象去引用然后进行修改。如果通过实例对象去引用，会产生一个同名的实例属性，这种方式修改的是实例属性，不会影响到类属性，并且之后如果通过实例对象去引用该名称的属性，实例属性会强制屏蔽掉类属性，即引用的是实例属性，除非删除了该实例属性。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.country  </div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.country  </div><div class="line">p.country = <span class="string">'Taiwan'</span>   </div><div class="line"><span class="built_in">print</span> p.country      <span class="comment">#实例属性会屏蔽掉同名的类属性  </span></div><div class="line"><span class="built_in">print</span> people.country  </div><div class="line">del p.country    <span class="comment">#删除实例属性  </span></div><div class="line"><span class="built_in">print</span> p.country</div></pre></td></tr></table></figure></p>
+<h1 id="类方法、实例方法和静态方法的区别"><a href="#类方法、实例方法和静态方法的区别" class="headerlink" title="类方法、实例方法和静态方法的区别"></a>类方法、实例方法和静态方法的区别</h1><h2 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h2><p>类方法：是类对象所拥有的方法，需要用修饰器”@classmethod”来标识其为类方法，对于类方法，第一个参数必须是类对象，一般以”cls”作为第一个参数（当然可以用其他名称的变量作为其第一个参数，但是大部分人都习惯以’cls’作为第一个参数的名字，就最好用’cls’了），能够通过实例对象和类对象去访问。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">  class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#类方法，用classmethod来进行修饰  </span></div><div class="line">    @classmethod  </div><div class="line">    def getCountry(cls):  </div><div class="line">        <span class="built_in">return</span> cls.country  </div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()    <span class="comment">#可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#可以通过类对象引用</span></div></pre></td></tr></table></figure></p>
+<p>类方法还有一个用途就是可以对类属性进行修改：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">    class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#类方法，用classmethod来进行修饰  </span></div><div class="line">    @classmethod  </div><div class="line">    def getCountry(cls):  </div><div class="line">        <span class="built_in">return</span> cls.country  </div><div class="line"></div><div class="line">    @classmethod  </div><div class="line">    def setCountry(cls,country):  </div><div class="line">        cls.country = country  </div><div class="line"></div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()    <span class="comment">#可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#可以通过类对象引用  </span></div><div class="line"></div><div class="line">p.setCountry(<span class="string">'Taiwan'</span>)     </div><div class="line"></div><div class="line"><span class="built_in">print</span> p.getCountry()     </div><div class="line"><span class="built_in">print</span> people.getCountry()</div></pre></td></tr></table></figure></p>
+<p>运行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">china  </div><div class="line">china  </div><div class="line">Taiwan  </div><div class="line">Taiwan</div></pre></td></tr></table></figure></p>
+<p>实际上就是调用了类方法p.setCountry（）修改了类属性。在用类方法对类属性修改之后，通过类对象和实例对象访问都发生了改变。 </p>
+<h2 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h2><p>实例方法：在类中最常定义的成员方法，它至少有一个参数并且必须以实例对象作为其第一个参数，一般以名为’self’的变量作为第一个参数（当然可以以其他名称的变量作为第一个参数）。</p>
+<ul>
+<li>在类外实例方法只能通过实例对象去调用，不能通过其他方式去调用。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#实例方法  </span></div><div class="line">    def getCountry(self):  </div><div class="line">        <span class="built_in">return</span> self.country  </div><div class="line"></div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()         <span class="comment">#正确，可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#错误，不能通过类对象引用实例方法</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>实例方法在类外和类内不一样，不过我们经常在类内定义方法，在类外实例化进行调用。</p>
+<h2 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h2><p>静态方法：需要通过修饰器”@staticmethod”来进行修饰，静态方法不需要多定义参数。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    @staticmethod  </div><div class="line">    <span class="comment">#静态方法  </span></div><div class="line">    def getCountry():  </div><div class="line">        <span class="built_in">return</span> people.country  </div><div class="line"></div><div class="line"><span class="built_in">print</span> people.getCountry()</div></pre></td></tr></table></figure></p>
+<p>总结一下：</p>
+<ul>
+<li><p>对于类属性和实例属性，如果在类方法中引用某个属性，该属性必定是类属性，而如果在实例方法中引用某个属性（不作更改），并且存在同名的类属性，此时若实例对象有该名称的实例属性，则实例属性会屏蔽类属性，即引用的是实例属性，若实例对象没有该名称的实例属性，则引用的是类属性；如果在实例方法更改某个属性，并且存在同名的类属性，此时若实例对象有该名称的实例属性，则修改的是实例属性，若实例对象没有该名称的实例属性，则会创建一个同名称的实例属性。想要修改类属性，如果在类外，可以通过类对象修改，如果在类里面，只有在类方法中进行修改。<br>－ 类外实例做的修改不会影响类本身，要想对类对象修改那就需要在类方法里面改。实例属性调用覆盖类属性，说明实例的优先级高。</p>
+</li>
+<li><p>从类方法和实例方法以及静态方法的定义形式就可以看出来，类方法的第一个参数是类对象cls，那么通过cls引用的必定是类对象的属性和方法；而实例方法的第一个参数是实例对象self，那么通过self引用的可能是类属性、也有可能是实例属性（这个需要具体分析），不过在存在相同名称的类属性和实例属性的情况下，实例属性优先级更高。静态方法中不需要额外定义参数，因此在静态方法中引用类属性的话，必须通过类对象来引用。</p>
+</li>
+<li><p>下一篇要看看继承和多继承</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/python_class/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Pica8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1091,102 +1188,9 @@
 
 
   
-    <article id="post-ns3_linux" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/ns3_linux/">NS-3网络模拟器基础及应用/ns-3内核(对象模型部分 一)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/ns3_linux/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.820Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="对象模型"><a href="#对象模型" class="headerlink" title="对象模型"></a>对象模型</h1><p>ns-3 中的变量说明和初始化的语法规则在ns3中同样适用，同时ns3在原有的基础上增加了标准C++的特征，亦即ns3中特有的对象模型。<br>ns-3中使用的设计模式包括经典的面向对象设计、接口与实现分离、非虚拟的公共借口设计模式，对象聚合以及引用计数内存管理模式。</p>
-<h2 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h2><p>这部分请自学= =！</p>
-<h2 id="对象基类"><a href="#对象基类" class="headerlink" title="对象基类"></a>对象基类</h2><p>ns-3中提供了3个对象基类供用户继承，这三个类是：</p>
-<ul>
-<li>Object</li>
-<li>ObjectBase</li>
-<li>SimpleRefCount</li>
-</ul>
-<p>ns-3不强迫每个类都继承这3个类，但是这3各类包含了ns-3的所有特性。</p>
-<h2 id="内存管理与引用计数指针-Ptr"><a href="#内存管理与引用计数指针-Ptr" class="headerlink" title="内存管理与引用计数指针(Ptr)"></a>内存管理与引用计数指针(Ptr)</h2><ul>
-<li>引用计数指针(Ptr)</li>
-<li>CreateObject和Create<br>在ns-3中针对包含引用计数的对象，就是通过模板函数CreateObject和Create来创建。<br>对于基类为Object的类创建对象的方法是：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Ptr&lt;Myobject&gt; mo = CreateObject&lt;Myobject&gt;();</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><p>查询接口设计模式，ns-3中类Node是使用聚合的一个很好的例子</p>
-<ul>
-<li>ns-3中没有Node子类，所以任何终端使用相同的Node，但是构建协议则是聚合起来的。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">static void</div><div class="line">AddIpv4Stack(Ptr&lt;Node&gt; Node)</div><div class="line">&#123;</div><div class="line">	Ptr&lt;Ipv4L3Protocol&gt; ipv4 = CreateObject&lt;IPv4L3Protocol&gt; ();</div><div class="line">	/*创建一个IPV4协议的指针独享，接着把IPV4协议聚合到节点中*/</div><div class="line">	ipv4-&gt;SetNode (node);</div><div class="line">	node-&gt;AggregateObject (ipv4);</div><div class="line">	Ptr&lt;IPv4Impl&gt; ipv4Impl = CreateObject&lt;IPv4Impl&gt; ();</div><div class="line">	ipv4Impl-&gt;SetIPv4 (ipv4);</div><div class="line">	node-&gt;AggregateObject (ipv4Impl)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>－－－<br>下一节会介绍ns-3的属性系统</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/ns3_linux/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
     </nav>
   
 
@@ -1281,15 +1285,7 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1297,11 +1293,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
               </li>
             
             <div class="clearfix"></div>

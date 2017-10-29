@@ -185,6 +185,119 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-switching hub" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/switching hub/">Switching Hub--real work</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/switching hub/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.894Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>想了很久决定新划一个版面出来。所有实验环境基于如下：</p>
+<ul>
+<li>linux 14.04+Ryu+pica8+openflow1.3+python(3.6)<br>今天主要是看了一个最基本的switch的flood和match，以及和controller交互。</li>
+</ul>
+<h1 id="Switching-Hub"><a href="#Switching-Hub" class="headerlink" title="Switching Hub"></a>Switching Hub</h1><p>首先看一下简单的交换机具备的基本功能</p>
+<ul>
+<li>连接到端口的host的MAC地址，并记录在MAC表中</li>
+<li>对于已经记录的MAC地址，若是收到送往改MAC地址的封包，则转送改封包到相应的port。</li>
+<li>对于未制定目标地址的封包就执行flooding</li>
+</ul>
+<p>这个模型其实就是switch_simple_13.py 看起来基本上时调用和导入模块，实际上很多模块里面的功能我都不知道，还好奕衔他们说出了常用模块，基本都是现查，感觉还是有点难度的。</p>
+<h1 id="opendlow实作交换机"><a href="#opendlow实作交换机" class="headerlink" title="opendlow实作交换机"></a>opendlow实作交换机</h1><p>Openflow交换机会收到来自ryu的指令并完成以下功能。</p>
+<ul>
+<li>对收到的封包进行修改或者针对指定的端口进行转发</li>
+<li>对于收到的封包传到Controller的action.(Packet-In)，一般都是不能识别的包才会Packet—In吧。</li>
+<li>对于来自controller的封包转送到指定的port.(Packet-Out).<br>把这些组合起来就是一个完整的交换机功能。</li>
+</ul>
+<p>对于一个新的交换机，里面的mac table，flow table,都是空的，所以无论什么流进来他都无法识别，所以Packet－In这个时候就充当了学习的功能。对封包分析获得host的mac之类的操作。<br>在学习之后，对所收到的封包进行转送，将封包的dst address在已经学习的host资料中进行检索，根据检索的结果进行处理：<br>1.如果纪录存在，packet-out至对应的port。<br>2.纪录不存在，pactet-out，flooding，这就是正常网络的操作，不过这样相当于把信息全部存在了controller里面了而已。</p>
+<h1 id="代码常用模块分析"><a href="#代码常用模块分析" class="headerlink" title="代码常用模块分析"></a>代码常用模块分析</h1><p>这个种东西我应该只会写一次，因为是最基本的模块，一定要扎实，具体的代码还是会po到github，或者你直接去ryu/app/simple_switch_13.py里面自己看。<br>主要分为以下几个模块。</p>
+<h2 id="类别的定义和初始化"><a href="#类别的定义和初始化" class="headerlink" title="类别的定义和初始化"></a>类别的定义和初始化</h2><p>首先实作Ryu一定要继承app_manager.RyuApp,为了使用openflow-1.3,指定version没毛病。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class SimpleSwitch13(app_manager.RyuApp):</div><div class="line">    OFP_VERSION = [ofproto_v1.3.OFP_VERSION]</div><div class="line">    <span class="string">""</span><span class="string">"docstring for SimpleSwitch13"</span><span class="string">""</span></div><div class="line">    def __init__(self, *arg,**kwargs):</div><div class="line">        super(SimpleSwitch13, self).__init__(*args,**kwargs)</div><div class="line">        self.mac_to_port = &#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>MAC的地址表由mac_to_port定义。</p>
+<h2 id="事件管理-Event-Handler"><a href="#事件管理-Event-Handler" class="headerlink" title="事件管理(Event Handler)"></a>事件管理(Event Handler)</h2><p>对于Ryu来说，接受到任何一个openflow讯息即会产生一个相对应的事件，而Ryu必须实作事件管理来处理相对应发生的事件。<br>事件管理有一个Event Object作为参数，并且使用set_ev_cls的装饰器函数。<br>set_ev_cls：指定事件类别得以接受信息和交换机状态作为参数</p>
+<p>事件类别的命名规则：<br>ryu.controller.ofp_event.EventOFP + <openflow 信息名字=""><br>比如packet-in信息的状态下事件的名称就是EventOFPPacketIn.<br>交换机状态如下：<br>名称                                           说明<br>ryu.controller.handler.HANDSHAKE_DISPATCHER “交换 HELLO 信息” //就是握手协议<br>ryu.controller.handler.CONFIG_DISPATCHER    接收 SwitchFeatures 信息<br>ryu.controller.handler.MAIN_DISPATCHER      一般状态<br>ryu.controller.handler.DEAD_DISPATCHER      连线中断</openflow></p>
+<p>新增Table-miss Flow Entry<br>openflow交换机的握手协议完成之后，新增table-miss flow 进到flow table中为接收packet-in信息做准备。(具体来说接收到switch features(fetures reply)信息后就会新增table-miss flow entry)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@set_ev_cls(ofp_event.EventOFPSwitchFeatures,CONFIG_DISPATCHER)</div><div class="line">def switch_features_handler(self,ev):</div><div class="line">    datapath = ev.msg.datapath</div><div class="line">    ofproto = datapath.ofproto</div><div class="line">    parser = datapath.ofproto_parser</div><div class="line">    ...</div></pre></td></tr></table></figure></p>
+<p>ev.msg用来存储openflow信息实体<br>datapath类别用来处理openflow交换器重要的信息，例如执行与交换机的通信和触发接受讯息相关的事件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">math = parser.OFPMatch()</div><div class="line">        actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,ofproto.OFPCML_NO_BUFFER)]</div><div class="line">        self.add_flow(datapath,0,match,actions)</div></pre></td></tr></table></figure></p>
+<p>Table-miss Flow Entry 的优先级 0 即最低的优先级,而且此 Entry 可以 match 所有的封包。 这个 Entry 的 Instruction 通常指定为 output action ,並且输出的端口将指向Controller。因此当封包沒有 match 任何一個普通 Flow Entry 時,则触发 Packet-In。<br>空的 match 将被产生为了 match 所有的封包。match 表示在 OFPMatch 类別中。<br>接下來,为了转送到 Controller 连接点,OUTPUT action 类別(OFPActionOutput )的实例将会 被产生。Controller 会被指定为封包的目的地,OFPCML_NO_BUFFER 会被设定为 max_len 以便接 下來的封包传送。</p>
+<ul>
+<li>最后将优先级设为 0(最低优先级),然后执行 add_flow() 方法以发送 Flow Mod 信息。</li>
+</ul>
+<h3 id="Packet-in信息"><a href="#Packet-in信息" class="headerlink" title="Packet-in信息"></a>Packet-in信息</h3><p>为了接收处理未知目的地的封包，需要packet-in事件管理。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@set_ev_cls(ofp_event.EventOFPPacketIn,MAIN_DISPATCHER)</div><div class="line">def _packet_in_handler(self,ev):</div><div class="line">    msg = ev.msg</div><div class="line">    datapath = msg.datapath</div><div class="line">    ofproto = datapath.ofproto</div><div class="line">    parser = datapath.ofproto_parser</div></pre></td></tr></table></figure></p>
+<p>OFPPacketIn类别常使用的属性有：<br>match,data,total_len,buffer_id(这个书上说如果存在Openflow交换器上所指定的ID如果在没有buffer的状况下，则缺省为ryu.ofproto.ofproto_v1_3.OFP_NO_BUFFER)</p>
+<h3 id="更新MAC表和判断封包的连接点"><a href="#更新MAC表和判断封包的连接点" class="headerlink" title="更新MAC表和判断封包的连接点"></a>更新MAC表和判断封包的连接点</h3><p>其实这个章节反而没什么说的，就是按照实例和逻辑输出。<br>这个直接看代码就行</p>
+<h3 id="新增Flow-Entry的处理"><a href="#新增Flow-Entry的处理" class="headerlink" title="新增Flow Entry的处理"></a>新增Flow Entry的处理</h3><p>Packet-In handler 的处理尚未说明,先來看一看新增 Flow Entry 的方法。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">def add_flow(self,datapath,priority,match,actions):</div><div class="line">        ofproto = datapath.ofproto</div><div class="line">        parser = datapath.ofproto_parser</div><div class="line">        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS,actions)]</div></pre></td></tr></table></figure></p>
+<p>对于 Flow Entry 来说,设定 match 条件以分辨目标封包、设定 instruction 来处理封包以及 Entry 的优先级和有效时间。<br>对于交换机的实操,Apply Actions 是用來设定那些必须立即执行的 action 所使用。<br>最后通过 Flow Mod 信息將 Flow Entry 新增到 Flow table 中。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def add_flow(self,datapath,priority,match,actions):</div><div class="line">        ...</div><div class="line">        mod = parser.gOFPFlowMod(datapath = datapath,priority = priority,match = match,instructions = inst)</div><div class="line"></div><div class="line">        datapath.send_msg(mod)</div></pre></td></tr></table></figure></p>
+<p>Flow Mod 信息的类别为 OFPFlowMod 。使用 OFPFlowMod 所产生的实体通过 Datap- ath.send_msg() 方法來发送信息给 OpenFlow 交换机。<br>OFPFlowMod 类別构建的子参数非常多，大多数都有缺省值，这个就需要自己去源码里查询了。</p>
+<h3 id="转发封包"><a href="#转发封包" class="headerlink" title="转发封包"></a>转发封包</h3><p>回到 Packet-In handler 并说明转发封包的最后一步。<br>在 MAC 位址表中寻找目的 MAC 位址,若是有找到则发送 Packet-Out 信息,並且转发封包。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">def _packet_in_handler(self, ev):</div><div class="line">        ...</div><div class="line">        data = None</div><div class="line"></div><div class="line"> <span class="comment">#       if msg.buffer_id == ofproto.OFP_NO_BUFFER:</span></div><div class="line">            data = msg.data</div><div class="line"></div><div class="line">        out = parser.OFPPacketOut(datapath=datapath,buffer_id = msg.buffer_id,in_port = in_port,actions = actions,data = data)</div><div class="line"></div><div class="line">        datapath.send_msg(out)</div></pre></td></tr></table></figure></p>
+<p>Packet-Out 信息对应的类别是 OFPPacketOut，同样 OFPPacketOut 的子函数及初始化的值需要自己去查找。</p>
+<hr>
+<p>后面的博客就不会分析的这么仔细了，毕竟一个一个字敲太累了，后面主要会讲一些project和sdn实操，具体的代码我就自己看就不分析了。吃饭，累～</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/ryu/tree/master/ryu/app" target="_blank" rel="external">[Github-link]</a>.example_switch_13.py</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/switching hub/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-switch13" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1007,106 +1120,9 @@
 
 
   
-    <article id="post-python_class" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/python_class/">类属性、实例属性、类方法、实例方法以及静态方法--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/python_class/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.857Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="类属性、实例属性的区别"><a href="#类属性、实例属性的区别" class="headerlink" title="类属性、实例属性的区别"></a>类属性、实例属性的区别</h1><h2 id="类属性"><a href="#类属性" class="headerlink" title="类属性"></a>类属性</h2><p>类属性就是类对象所拥有的属性，它被所有类对象的实例对象所共有，在内存中只存在一个副本，这个和C++中类的静态成员变量有点类似。对于公有的类属性，在类外可以通过类对象和实例对象访问。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  <span class="comment">#公有的类属性  </span></div><div class="line">    __age = 12     <span class="comment">#私有的类属性  </span></div><div class="line"></div><div class="line">p = people()  </div><div class="line"></div><div class="line"><span class="built_in">print</span> p.name             <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.name        <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.__age            <span class="comment">#错误，不能在类外通过实例对象访问私有的类属性  </span></div><div class="line"><span class="built_in">print</span> people.__age       <span class="comment">#错误，不能在类外通过类对象访问私有的类属性</span></div></pre></td></tr></table></figure></p>
-<h2 id="实例属性"><a href="#实例属性" class="headerlink" title="实例属性"></a>实例属性</h2><p>实例属性是不需要在类中显示定义的，比如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  </div><div class="line"></div><div class="line">p = people()  </div><div class="line">p.age =24  </div><div class="line"><span class="built_in">print</span> p.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.age     <span class="comment">#正确  </span></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.age     <span class="comment">#错误</span></div></pre></td></tr></table></figure></p>
-<p>在类外对类对象people进行实例化之后，产生了一个实例对象p，然后p.age = 24这句给p添加了一个实例属性age，赋值为24。这个实例属性是实例对象p所特有的，<br>注意，类对象people并不拥有它（所以不能通过类对象来访问这个age属性）。当然还可以在实例化对象的时候给age赋值。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">    class people:  </div><div class="line">    name = <span class="string">'Xuanlong'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#__init__()是内置的构造方法，在实例化对象时自动调用  </span></div><div class="line">    def __init__(self,age):  </div><div class="line">        self.age = age  </div><div class="line"></div><div class="line">p = people(12)  </div><div class="line"><span class="built_in">print</span> p.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> p.age     <span class="comment">#正确  </span></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.name    <span class="comment">#正确  </span></div><div class="line"><span class="built_in">print</span> people.age     <span class="comment">#错误</span></div></pre></td></tr></table></figure></p>
-<p>如果需要在类外修改类属性，必须通过类对象去引用然后进行修改。如果通过实例对象去引用，会产生一个同名的实例属性，这种方式修改的是实例属性，不会影响到类属性，并且之后如果通过实例对象去引用该名称的属性，实例属性会强制屏蔽掉类属性，即引用的是实例属性，除非删除了该实例属性。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">print</span> people.country  </div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.country  </div><div class="line">p.country = <span class="string">'Taiwan'</span>   </div><div class="line"><span class="built_in">print</span> p.country      <span class="comment">#实例属性会屏蔽掉同名的类属性  </span></div><div class="line"><span class="built_in">print</span> people.country  </div><div class="line">del p.country    <span class="comment">#删除实例属性  </span></div><div class="line"><span class="built_in">print</span> p.country</div></pre></td></tr></table></figure></p>
-<h1 id="类方法、实例方法和静态方法的区别"><a href="#类方法、实例方法和静态方法的区别" class="headerlink" title="类方法、实例方法和静态方法的区别"></a>类方法、实例方法和静态方法的区别</h1><h2 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h2><p>类方法：是类对象所拥有的方法，需要用修饰器”@classmethod”来标识其为类方法，对于类方法，第一个参数必须是类对象，一般以”cls”作为第一个参数（当然可以用其他名称的变量作为其第一个参数，但是大部分人都习惯以’cls’作为第一个参数的名字，就最好用’cls’了），能够通过实例对象和类对象去访问。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">  class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#类方法，用classmethod来进行修饰  </span></div><div class="line">    @classmethod  </div><div class="line">    def getCountry(cls):  </div><div class="line">        <span class="built_in">return</span> cls.country  </div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()    <span class="comment">#可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#可以通过类对象引用</span></div></pre></td></tr></table></figure></p>
-<p>类方法还有一个用途就是可以对类属性进行修改：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">    class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#类方法，用classmethod来进行修饰  </span></div><div class="line">    @classmethod  </div><div class="line">    def getCountry(cls):  </div><div class="line">        <span class="built_in">return</span> cls.country  </div><div class="line"></div><div class="line">    @classmethod  </div><div class="line">    def setCountry(cls,country):  </div><div class="line">        cls.country = country  </div><div class="line"></div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()    <span class="comment">#可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#可以通过类对象引用  </span></div><div class="line"></div><div class="line">p.setCountry(<span class="string">'Taiwan'</span>)     </div><div class="line"></div><div class="line"><span class="built_in">print</span> p.getCountry()     </div><div class="line"><span class="built_in">print</span> people.getCountry()</div></pre></td></tr></table></figure></p>
-<p>运行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">china  </div><div class="line">china  </div><div class="line">Taiwan  </div><div class="line">Taiwan</div></pre></td></tr></table></figure></p>
-<p>实际上就是调用了类方法p.setCountry（）修改了类属性。在用类方法对类属性修改之后，通过类对象和实例对象访问都发生了改变。 </p>
-<h2 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h2><p>实例方法：在类中最常定义的成员方法，它至少有一个参数并且必须以实例对象作为其第一个参数，一般以名为’self’的变量作为第一个参数（当然可以以其他名称的变量作为第一个参数）。</p>
-<ul>
-<li>在类外实例方法只能通过实例对象去调用，不能通过其他方式去调用。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    <span class="comment">#实例方法  </span></div><div class="line">    def getCountry(self):  </div><div class="line">        <span class="built_in">return</span> self.country  </div><div class="line"></div><div class="line"></div><div class="line">p = people()  </div><div class="line"><span class="built_in">print</span> p.getCountry()         <span class="comment">#正确，可以用过实例对象引用  </span></div><div class="line"><span class="built_in">print</span> people.getCountry()    <span class="comment">#错误，不能通过类对象引用实例方法</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>实例方法在类外和类内不一样，不过我们经常在类内定义方法，在类外实例化进行调用。</p>
-<h2 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h2><p>静态方法：需要通过修饰器”@staticmethod”来进行修饰，静态方法不需要多定义参数。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class people:  </div><div class="line">    country = <span class="string">'china'</span>  </div><div class="line"></div><div class="line">    @staticmethod  </div><div class="line">    <span class="comment">#静态方法  </span></div><div class="line">    def getCountry():  </div><div class="line">        <span class="built_in">return</span> people.country  </div><div class="line"></div><div class="line"><span class="built_in">print</span> people.getCountry()</div></pre></td></tr></table></figure></p>
-<p>总结一下：</p>
-<ul>
-<li><p>对于类属性和实例属性，如果在类方法中引用某个属性，该属性必定是类属性，而如果在实例方法中引用某个属性（不作更改），并且存在同名的类属性，此时若实例对象有该名称的实例属性，则实例属性会屏蔽类属性，即引用的是实例属性，若实例对象没有该名称的实例属性，则引用的是类属性；如果在实例方法更改某个属性，并且存在同名的类属性，此时若实例对象有该名称的实例属性，则修改的是实例属性，若实例对象没有该名称的实例属性，则会创建一个同名称的实例属性。想要修改类属性，如果在类外，可以通过类对象修改，如果在类里面，只有在类方法中进行修改。<br>－ 类外实例做的修改不会影响类本身，要想对类对象修改那就需要在类方法里面改。实例属性调用覆盖类属性，说明实例的优先级高。</p>
-</li>
-<li><p>从类方法和实例方法以及静态方法的定义形式就可以看出来，类方法的第一个参数是类对象cls，那么通过cls引用的必定是类对象的属性和方法；而实例方法的第一个参数是实例对象self，那么通过self引用的可能是类属性、也有可能是实例属性（这个需要具体分析），不过在存在相同名称的类属性和实例属性的情况下，实例属性优先级更高。静态方法中不需要额外定义参数，因此在静态方法中引用类属性的话，必须通过类对象来引用。</p>
-</li>
-<li><p>下一篇要看看继承和多继承</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/python_class/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1201,15 +1217,7 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1217,11 +1225,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
               </li>
             
             <div class="clearfix"></div>

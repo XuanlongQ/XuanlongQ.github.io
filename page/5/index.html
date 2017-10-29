@@ -185,6 +185,99 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ns3_linux" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ns3_linux/">NS-3网络模拟器基础及应用/ns-3内核(对象模型部分 一)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ns3_linux/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.820Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="对象模型"><a href="#对象模型" class="headerlink" title="对象模型"></a>对象模型</h1><p>ns-3 中的变量说明和初始化的语法规则在ns3中同样适用，同时ns3在原有的基础上增加了标准C++的特征，亦即ns3中特有的对象模型。<br>ns-3中使用的设计模式包括经典的面向对象设计、接口与实现分离、非虚拟的公共借口设计模式，对象聚合以及引用计数内存管理模式。</p>
+<h2 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h2><p>这部分请自学= =！</p>
+<h2 id="对象基类"><a href="#对象基类" class="headerlink" title="对象基类"></a>对象基类</h2><p>ns-3中提供了3个对象基类供用户继承，这三个类是：</p>
+<ul>
+<li>Object</li>
+<li>ObjectBase</li>
+<li>SimpleRefCount</li>
+</ul>
+<p>ns-3不强迫每个类都继承这3个类，但是这3各类包含了ns-3的所有特性。</p>
+<h2 id="内存管理与引用计数指针-Ptr"><a href="#内存管理与引用计数指针-Ptr" class="headerlink" title="内存管理与引用计数指针(Ptr)"></a>内存管理与引用计数指针(Ptr)</h2><ul>
+<li>引用计数指针(Ptr)</li>
+<li>CreateObject和Create<br>在ns-3中针对包含引用计数的对象，就是通过模板函数CreateObject和Create来创建。<br>对于基类为Object的类创建对象的方法是：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Ptr&lt;Myobject&gt; mo = CreateObject&lt;Myobject&gt;();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><p>查询接口设计模式，ns-3中类Node是使用聚合的一个很好的例子</p>
+<ul>
+<li>ns-3中没有Node子类，所以任何终端使用相同的Node，但是构建协议则是聚合起来的。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">static void</div><div class="line">AddIpv4Stack(Ptr&lt;Node&gt; Node)</div><div class="line">&#123;</div><div class="line">	Ptr&lt;Ipv4L3Protocol&gt; ipv4 = CreateObject&lt;IPv4L3Protocol&gt; ();</div><div class="line">	/*创建一个IPV4协议的指针独享，接着把IPV4协议聚合到节点中*/</div><div class="line">	ipv4-&gt;SetNode (node);</div><div class="line">	node-&gt;AggregateObject (ipv4);</div><div class="line">	Ptr&lt;IPv4Impl&gt; ipv4Impl = CreateObject&lt;IPv4Impl&gt; ();</div><div class="line">	ipv4Impl-&gt;SetIPv4 (ipv4);</div><div class="line">	node-&gt;AggregateObject (ipv4Impl)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>－－－<br>下一节会介绍ns-3的属性系统</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ns3_linux/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ns_vmmodel_tcp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -962,98 +1055,9 @@
 
 
   
-    <article id="post-leetcode 521520" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 521520/">Leetcode-521/520--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 521520/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.781Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天的OJ我就是按照题目的意思写的，四点半写到五点半就写了两道，我都惊了，要不是第二题我想用ASCII码解估计半小时就做完了，做完我就发现不对了，这就是暴力膜啊，暴力膜不可取，我去看了OJ的答案发现基本上都是用的py的内置函数，很少有用到算法的，时间复杂度都比较靠近，我想着不然自己想想新的方法，这种老方法看看就行。 基本上现在只要能看懂题目基本上都可以暴力膜出来。</p>
-<h1 id="521-Longest-Uncommon-Subsequence-I"><a href="#521-Longest-Uncommon-Subsequence-I" class="headerlink" title="521. Longest Uncommon Subsequence I"></a>521. Longest Uncommon Subsequence I</h1><p>题目大意就是，比较两个字符串的长度，若不相等，则返回长度的较大值，若相等则再判断两个字符串是否相同，若相同则返回-1，否则返回长度。<br>这个我都不知道怎么想算法，需要算法吗？<br>直接贴了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">def findles(a,b):</div><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">    if len(a)!=len(b):</span></div><div class="line"><span class="string">        if len(a) &gt; len(b):</span></div><div class="line"><span class="string">            return len(a)</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return len(b)</span></div><div class="line"><span class="string">    if len(a)==len(b):</span></div><div class="line"><span class="string">        if a == b:</span></div><div class="line"><span class="string">            return -1</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return len(a)</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div><div class="line"><span class="built_in">print</span> (<span class="string">"abc"</span>,<span class="string">"aba"</span>)</div></pre></td></tr></table></figure></p>
-<h1 id="520-Detect-Capital"><a href="#520-Detect-Capital" class="headerlink" title="520. Detect Capital"></a>520. Detect Capital</h1><p>这个题目意思比较简单，如果全是大写，就return True，如果全是小写，就return True,如果第一个字母是大写，其他字母小写也可以return Ture,不然就return False.<br>法一：<br>实际上这道题我知道他有内建的函数isupper()和islower()之类的，但是我想着这么做就没意思了，然后就用ascii码自己写了个。<br>可能有人不知道这两个函数，我就写一下吧。</p>
-<ul>
-<li><p>islower()<br>str.islower()<br>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 True，否则返回 False</p>
-</li>
-<li><p>isupper()<br>str.isupper()<br>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 True，否则返回 False</p>
-</li>
-</ul>
-<p>用这个方法的代码比较没什么创意啦，我还是ac了～但是我第二个也ac了～<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapital(self,word):</div><div class="line">    <span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">        if word.islower() or word.isupper():</span></div><div class="line"><span class="string">            return True</span></div><div class="line"><span class="string">        if word[0].isupper and word[1:].islower():</span></div><div class="line"><span class="string">            return True</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return False</span></div><div class="line"><span class="string">    '</span><span class="string">''</span></div></pre></td></tr></table></figure></p>
-<p>法二：<br>这个是我自己想的，但是也比较傻，就是用ascii码，比较好的是py里面有自带的转换函数。<br>ord()：就是把字符转换成ascii码，比如ord(a)=97.<br>有一点计算机知识的人都了解<br>‘a’ = 97 ‘z’ = 122 ‘A’ ＝ 65 ‘Z’=90</p>
-<p>这个解法就是判别你输入的字符里到底有多少个大写，我增加一个计数的变量，用这个变量来判别是否满足题目要求。代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapital(self,word):</div><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">        cnt =0</span></div><div class="line"><span class="string">        if i in range(0,len(word)):</span></div><div class="line"><span class="string">            if ord(word[i]) &gt;= 65 and ord(word[i] &lt;= 90):</span></div><div class="line"><span class="string">                cnt += 1</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">            return (cnt==0) or (cnt == len(word)) or (cnt ==1 and ord(word[0])&gt;=65 and ord(word[0])&lt;=90)</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div><div class="line">            <span class="comment">#这三个条件就是没有大写字母，全是大写字母，只有第一个是大写字母</span></div></pre></td></tr></table></figure></p>
-<p>法三：<br>这个方法，我实在是饿的不行了，就没细想了，但是是用ascii码暴力膜。<br>就是一次判定题目的条件，但是发现只要一进if循环就直接return了，估摸着逻辑或者缩紧不对，也懒得改了。<br>po一下简单代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapitalUse(self, word):</div><div class="line">        if ord(word[0]) &lt;=90 and ord(word[0]) &gt;=65: #第一个字母为大写</div><div class="line">            for i in word[1:]:</div><div class="line">                if ord(i) &lt;= 122 and ord(i) &gt;=97:</div><div class="line">                    return True</div><div class="line">                if ord(i) &lt;= 90 and ord(i) &gt;= 65:</div><div class="line">                    return True</div><div class="line">        if ord(word[0]) &gt;= 97 and ord(word[0]) &lt;= 122:</div><div class="line">            for i in word[1:]:</div><div class="line">                if ord(i) &lt;= 122 and ord(i) &gt;=97:</div><div class="line">                    return True</div><div class="line">        else:</div><div class="line">            return False</div></pre></td></tr></table></figure></p>
-<p>但是用ascii码去判别大小肯定是没有问题的，因为方法二已经被AC了。</p>
-<p>最近越来越喜欢暴力膜解法了，不行啊，看来得把数据结构拾起来了。吃饭的时候看到彩虹了，难得，风云际会，水木清华…喝茶喝茶</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 521520/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 
@@ -1148,15 +1152,7 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1164,11 +1160,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
+                <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">leetcode</a>
               </li>
             
             <div class="clearfix"></div>
