@@ -185,6 +185,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-beibao" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/beibao/">背包问题 -- 动态规划(Dynamic Programming)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/beibao/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.943Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>先更新背包问题，最长子序列慢慢来吧，还有二叉树的的leetcode没有AC掉。<br>背包问题最简单粗暴的做法就是暴力解法，就是尝试各种可能的商品组合，并找出价值最高的组合。</p>
+<h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><p>在01背包问题中，在选择是否要把一个物品加到背包中，必须把该物品加进去的子问题的解与不取该物品的子问题的解进行比较，这种方式形成的问题导致了许多重叠子问题，使用动态规划来解决。n=5是物品的数量，c=10是书包能承受的重量，w=[2,2,6,5,4]是每个物品的重量，v=[6,3,5,4,6]是每个物品的价值，先把递归的定义写出来：<br><img src="/images/equation1.jpeg" alt="beibao"><br>其实画一个表格就很清晰了，我们假设只有一个物品，那前一栏肯定是最优解，新一栏要么就是上一栏的值，要么就是当前商品价值加上剩余空间的价值，去最大就是了。<br><img src="/images/beibao1.jpeg" alt="beibao1"><br>前面因为背包的容量最大就是填充这么多，直到背包容量更新我们才可以更新新值。<br><img src="/images/beibao2.jpeg" alt="beibao2"><br>其实我们看起来计算更新的值时使用了新的公式，其实是一样的公式，那就是取两者的最大值。<br>max(上一个单元的值，当前物品的价值＋剩余空间的值)<br>上一个单元：就是没有更新容量的最大值，如果容量增加不够，那就是上一个值，如果容量够了那么针对这一行的第二个值就是：当前行的物品值＋剩余空间的值。<br>首先我们要知道为什么要使用(Dynamic programming)dp，我们在选择dp算法的时候，往往是在决策问题上，而且是在如果不使用dp，直接暴力效率会很低的情况下选择使用dp.</p>
+<p>那么问题来了，什么时候会选择使用dp呢，一般情况下，我们能将问题抽象出来，并且问题满足无后效性，满足最优子结构，并且能明确的找出状态转移方程的话，dp无疑是很好的选择。</p>
+<ul>
+<li>无后效性通俗的说就是只要我们得出了当前状态，而不用管这个状态怎么来的，也就是说之前的状态已经用不着了，如果我们抽象出的状态有后效性，很简单，我们只用把这个值加入到状态的表示中。</li>
+<li>最优子结构(自下而上)：在决策问题中，如果，当前问题可以拆分为多个子问题，并且依赖于这些子问题，那么我们称为此问题符合子结构，而若当前状态可以由某个阶段的某个或某些状态直接得到，那么就符合最优子结构</li>
+<li>重叠子问题(自上而下)：动态规划算法总是充分利用重叠子问题，通过每个子问题只解一次，把解保存在一个需要时就可以查看的表中，每次查表的时间为常数，如备忘录的递归方法。斐波那契数列的递归就是个很好的例子</li>
+<li>状态转移：这个概念比较简单，在抽象出上述两点的的状态表示后，每种状态之间转移时值或者参数的变化。<br>代码如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"># gita   1500 1g</div><div class="line"># box    3000 4g</div><div class="line"># mac    2000 3g</div><div class="line"># iphone 2000 1g</div><div class="line"></div><div class="line">weight = [0,1,4,3,1]</div><div class="line">val = [0,1500,3000,2000,2000]</div><div class="line">n = len(weight) - 1   # compute the mount of the commordity</div><div class="line">m = 4 #total weight</div><div class="line"></div><div class="line">x = [] #bags</div><div class="line">v = 0</div><div class="line"></div><div class="line">optp = [[0 for col in range(m + 1)] for raw in range(n + 1)]</div><div class="line">print optp</div><div class="line">def knapsack_dynamic(weight,val,n,m,x):</div><div class="line">    for i in range(1,n+1):</div><div class="line">        for j in range(1,m+1):</div><div class="line">            if (j &gt;= weight[i]):</div><div class="line">                optp[i][j] = max(optp[i-1][j],optp[i-1][j-weight[i]]+val[i])</div><div class="line">            else:</div><div class="line">                optp[i][j] = optp[i-1][j]</div><div class="line">    j = m</div><div class="line">    for i in range(n,0,-1):</div><div class="line">        if optp[i][j] &gt; optp[i-1][j]:</div><div class="line">            x.append(i)</div><div class="line">            j = j - weight[i]</div><div class="line"></div><div class="line">    v = optp[n][m]</div><div class="line">    return v</div><div class="line"></div><div class="line">print &apos;max val:&apos; + str(knapsack_dynamic(weight, val, n, m, x))</div><div class="line">print &apos;commodity index:&apos;,x</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://www.jianshu.com/p/d6efacd8a252" target="_blank" rel="external">动态规划(DP)的整理-Python描述</a>.<br>2.<a href="http://blog.csdn.net/littlethunder/article/details/26575417" target="_blank" rel="external">01背包问题（动态规划）python实现</a>.<br>3.<a href="http://python.jobbole.com/81465/" target="_blank" rel="external">Python算法：动态规划</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/beibao/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-algorithm_list" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -654,7 +738,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Xuanlong-Qin"><a href="#Xuanlong-Qin" class="headerlink" title="Xuanlong Qin"></a>Xuanlong Qin</h1><p><img src="/images/xuanlong.png" alt="Xuanlong"><br>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x71;&#120;&#108;&#112;&#x6b;&#117;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x71;&#120;&#108;&#112;&#x6b;&#117;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a><br><a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x78;&#x75;&#97;&#x6e;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#x75;&#x2e;&#x65;&#100;&#x75;&#x2e;&#x63;&#x6e;">&#x78;&#x75;&#97;&#x6e;&#108;&#111;&#110;&#103;&#64;&#x70;&#107;&#x75;&#x2e;&#x65;&#100;&#x75;&#x2e;&#x63;&#x6e;</a></p>
+<p>E-mail:<br><a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x71;&#120;&#108;&#x70;&#107;&#117;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x71;&#120;&#108;&#x70;&#107;&#117;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a><br><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#120;&#117;&#x61;&#110;&#108;&#x6f;&#x6e;&#103;&#x40;&#112;&#107;&#x75;&#x2e;&#x65;&#100;&#117;&#x2e;&#99;&#x6e;">&#120;&#117;&#x61;&#110;&#108;&#x6f;&#x6e;&#103;&#x40;&#112;&#107;&#x75;&#x2e;&#x65;&#100;&#117;&#x2e;&#99;&#x6e;</a></p>
 <pre><code>- Please pay attention to case sensitive
 </code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
 <p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
@@ -1117,94 +1201,6 @@
 
 
   
-    <article id="post-tcphandsip" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/tcphandsip/">TCP三次握手和四次挥手行为</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/tcphandsip/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.905Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>TCP的报文格式如下图：<br><img src="/images/tcpheader.png" alt="TCP_Header"><br>比较重要的字段有：<br>1.序列号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记。<br>2.确认序号：ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，ack=Seq+1。<br>3.标志位：有6个，URG、ACK、PSH、RST、SYN、FIN。</p>
-<ul>
-<li>URG：紧急指针（urgent pointer）有效。</li>
-<li>ACK：确认序号有效。<br>这个ACK是标志位，ack是确认的序列号不一样！</li>
-<li>PSH：接收方应该尽快将这个报文交给应用层。</li>
-<li>RST：重置连接。</li>
-<li>SYN：发起一个新连接。</li>
-<li>FIN：释放一个连接。</li>
-</ul>
-<p>important:<br>1.不要将确认序号Ack与标志位中的ACK搞混了。<br>2.确认方ack=发起方Seq+1，两端配对。</p>
-<h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><p>所谓三次握手（Three-Way Handshake）即建立TCP连接，就是指建立一个TCP连接时，需要客户端和服务端总共发送3个包以确认连接的建立。在socket编程中，这一过程由客户端执行connect来触发，整个流程如下图所示：<br><img src="/images/threetime.png" alt="TCP_handsup"><br>（1）第一次握手：Client将标志位SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。<br>（2）第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。<br>（3）第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</p>
-<p>SYN攻击：<br>在三次握手过程中，Server发送SYN-ACK之后，收到Client的ACK之前的TCP连接称为半连接（half-open connect），此时Server处于SYN_RCVD状态，当收到ACK后，Server转入ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向Server不断地发送SYN包，Server回复确认包，并等待Client的确认，由于源地址是不存在的，因此，Server需要不断重发直至超时，这些伪造的SYN包将产时间占用未连接队列，导致正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># netstat -nap | grep SYN_RECV</div></pre></td></tr></table></figure></p>
-<h1 id="四次握手"><a href="#四次握手" class="headerlink" title="四次握手"></a>四次握手</h1><p>四次挥手（Four-Way Wavehand）即终止TCP连接，就是指断开一个TCP连接时，需要客户端和服务端总共发送4个包以确认连接的断开。在socket编程中，这一过程由客户端或服务端任一方执行close来触发，整个流程如下图所示：<br><img src="/images/fourtime.png" alt="TCP_handsdown"><br>由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭，上图描述的即是如此。<br>（1）第一次挥手：Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。<br>（2）第二次挥手：Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。<br>（3）第三次挥手：Server发送一个FIN，用来关闭Server到Client的数据传送，Server进入LAST_ACK状态。<br>（4）第四次挥手：Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。<br>上面是一方主动关闭，另一方被动关闭的情况，实际中还会出现同时发起主动关闭的情况，具体流程如下图：<br><img src="/images/fourtimetongshi.png" alt="TCP_handsdown2"></p>
-<p>为什么建立连接是三次握手，而关闭连接却是四次挥手呢？<br>这是因为服务端在LISTEN状态下，收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。而关闭连接时，当收到对方的FIN报文时，仅仅表示对方不再发送数据了但是还能接收数据，己方也未必全部数据都发送给对方了，所以己方可以立即close，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，因此，己方ACK和FIN一般都会分开发送。</p>
-<h1 id="PostMessage-异步-和SendMessage-同步-的区别"><a href="#PostMessage-异步-和SendMessage-同步-的区别" class="headerlink" title="PostMessage(异步)和SendMessage(同步)的区别"></a>PostMessage(异步)和SendMessage(同步)的区别</h1><p>1.PostMessage只把消息放入队列，不管其他程序是否处理都返回，然后继续执行，这是个异步消息投放函数。而SendMessage必须等待其他程序处理消息完了之后才返回，继续执行，这是个同步消息投放函数。而且，PostMessage的返回值表示PostMessage函数执行是否正确；而SendMessage的返回值表示其他程序处理消息后的返回值。<br>2.同一个线程内：<br>SendMessage发送消息时，由USER32.DLL模块调用目标窗口的消息处理程序，并将结果返回，SendMessage 在同一个线程里面发送消息不进入线程消息队列；PostMessage发送的消息要先放到消息队列，然后通过消息循环分派到目标窗口（DispatchMessage）。<br>3.不同线程：<br>SendMessage 发送消息到目标窗口的消息队列，然后发送消息的线程在USER32.DLL模块内监视和等待消息的处理结果，直到目标窗口的才处理返回，SendMessage在返回之前还需要做许多工作，如响应别的线程向它发送的SendMessage().PostMessge() 到别的线程的时候最好使用PostThreadMessage   代替。PostMessage()的HWND 参数可以为NULL，相当于PostThreadMessage() + GetCrrentThreadId.<br>SendMessage函数功能：该函数将指定的消息发送到一个或多个窗口。此函数为指定的窗口调用窗口程序，直到窗口程序处理完消息再返回，是同步消息投放函数。而函数PostMessage不同，将一个消息寄送到一个线程的消息队列后立即返回，是异步消息投放函数。<br>具体参考的blog为<a href="http://blog.csdn.net/xiaodan007/article/details/7681031" target="_blank" rel="external">PostMessage(异步)和SendMessage(同步)的区别</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/tcphandsip/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1302,6 +1298,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
@@ -1315,10 +1315,6 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

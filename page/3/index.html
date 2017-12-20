@@ -185,6 +185,94 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-tcphandsip" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/tcphandsip/">TCP三次握手和四次挥手行为</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/tcphandsip/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.905Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>TCP的报文格式如下图：<br><img src="/images/tcpheader.png" alt="TCP_Header"><br>比较重要的字段有：<br>1.序列号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记。<br>2.确认序号：ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，ack=Seq+1。<br>3.标志位：有6个，URG、ACK、PSH、RST、SYN、FIN。</p>
+<ul>
+<li>URG：紧急指针（urgent pointer）有效。</li>
+<li>ACK：确认序号有效。<br>这个ACK是标志位，ack是确认的序列号不一样！</li>
+<li>PSH：接收方应该尽快将这个报文交给应用层。</li>
+<li>RST：重置连接。</li>
+<li>SYN：发起一个新连接。</li>
+<li>FIN：释放一个连接。</li>
+</ul>
+<p>important:<br>1.不要将确认序号Ack与标志位中的ACK搞混了。<br>2.确认方ack=发起方Seq+1，两端配对。</p>
+<h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><p>所谓三次握手（Three-Way Handshake）即建立TCP连接，就是指建立一个TCP连接时，需要客户端和服务端总共发送3个包以确认连接的建立。在socket编程中，这一过程由客户端执行connect来触发，整个流程如下图所示：<br><img src="/images/threetime.png" alt="TCP_handsup"><br>（1）第一次握手：Client将标志位SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。<br>（2）第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。<br>（3）第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</p>
+<p>SYN攻击：<br>在三次握手过程中，Server发送SYN-ACK之后，收到Client的ACK之前的TCP连接称为半连接（half-open connect），此时Server处于SYN_RCVD状态，当收到ACK后，Server转入ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向Server不断地发送SYN包，Server回复确认包，并等待Client的确认，由于源地址是不存在的，因此，Server需要不断重发直至超时，这些伪造的SYN包将产时间占用未连接队列，导致正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># netstat -nap | grep SYN_RECV</div></pre></td></tr></table></figure></p>
+<h1 id="四次握手"><a href="#四次握手" class="headerlink" title="四次握手"></a>四次握手</h1><p>四次挥手（Four-Way Wavehand）即终止TCP连接，就是指断开一个TCP连接时，需要客户端和服务端总共发送4个包以确认连接的断开。在socket编程中，这一过程由客户端或服务端任一方执行close来触发，整个流程如下图所示：<br><img src="/images/fourtime.png" alt="TCP_handsdown"><br>由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭，上图描述的即是如此。<br>（1）第一次挥手：Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。<br>（2）第二次挥手：Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。<br>（3）第三次挥手：Server发送一个FIN，用来关闭Server到Client的数据传送，Server进入LAST_ACK状态。<br>（4）第四次挥手：Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。<br>上面是一方主动关闭，另一方被动关闭的情况，实际中还会出现同时发起主动关闭的情况，具体流程如下图：<br><img src="/images/fourtimetongshi.png" alt="TCP_handsdown2"></p>
+<p>为什么建立连接是三次握手，而关闭连接却是四次挥手呢？<br>这是因为服务端在LISTEN状态下，收到建立连接请求的SYN报文后，把ACK和SYN放在一个报文里发送给客户端。而关闭连接时，当收到对方的FIN报文时，仅仅表示对方不再发送数据了但是还能接收数据，己方也未必全部数据都发送给对方了，所以己方可以立即close，也可以发送一些数据给对方后，再发送FIN报文给对方来表示同意现在关闭连接，因此，己方ACK和FIN一般都会分开发送。</p>
+<h1 id="PostMessage-异步-和SendMessage-同步-的区别"><a href="#PostMessage-异步-和SendMessage-同步-的区别" class="headerlink" title="PostMessage(异步)和SendMessage(同步)的区别"></a>PostMessage(异步)和SendMessage(同步)的区别</h1><p>1.PostMessage只把消息放入队列，不管其他程序是否处理都返回，然后继续执行，这是个异步消息投放函数。而SendMessage必须等待其他程序处理消息完了之后才返回，继续执行，这是个同步消息投放函数。而且，PostMessage的返回值表示PostMessage函数执行是否正确；而SendMessage的返回值表示其他程序处理消息后的返回值。<br>2.同一个线程内：<br>SendMessage发送消息时，由USER32.DLL模块调用目标窗口的消息处理程序，并将结果返回，SendMessage 在同一个线程里面发送消息不进入线程消息队列；PostMessage发送的消息要先放到消息队列，然后通过消息循环分派到目标窗口（DispatchMessage）。<br>3.不同线程：<br>SendMessage 发送消息到目标窗口的消息队列，然后发送消息的线程在USER32.DLL模块内监视和等待消息的处理结果，直到目标窗口的才处理返回，SendMessage在返回之前还需要做许多工作，如响应别的线程向它发送的SendMessage().PostMessge() 到别的线程的时候最好使用PostThreadMessage   代替。PostMessage()的HWND 参数可以为NULL，相当于PostThreadMessage() + GetCrrentThreadId.<br>SendMessage函数功能：该函数将指定的消息发送到一个或多个窗口。此函数为指定的窗口调用窗口程序，直到窗口程序处理完消息再返回，是同步消息投放函数。而函数PostMessage不同，将一个消息寄送到一个线程的消息队列后立即返回，是异步消息投放函数。<br>具体参考的blog为<a href="http://blog.csdn.net/xiaodan007/article/details/7681031" target="_blank" rel="external">PostMessage(异步)和SendMessage(同步)的区别</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/tcphandsip/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-switching hub" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -995,131 +1083,6 @@
 
 
   
-    <article id="post-python_jinjie" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/python_jinjie/">Intermediate Python(进阶)--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/python_jinjie/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.861Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这个章节里面主要讲一下通过一周的学习了解了python的语法和一些基本的函数面向对象等功能，但是有一些进阶的东西是必备的，主要分为下面这个小节: args和*kwargs,生成器，装饰器，推导式。其余一些小的概念我非常非常建议大家先花3-4的时间去把codecademy的python入门部分学完，因为它里面边讲，边要你自己写代码，所以进展会非常快，当然前提是你有一定的代码基础，不然我还是会推荐python核心入门这本书。由于在我的预算里我要准备动ryu的，所以python在实战中可能会进展的更快，而且picca8我已经从Vicky那里拿到，明天我就准备加入SDN的实战操作，所有的resource我也会进行一个总结，贴到最后。</p>
-<h1 id="args和-kwargs"><a href="#args和-kwargs" class="headerlink" title="args和**kwargs"></a>args和**kwargs</h1><h2 id="args的用法"><a href="#args的用法" class="headerlink" title="*args的用法"></a>*args的用法</h2><p><em>args 和 **kwargs 主要用于函数定义。 你可以将不定数量的参数传递给一个函数。这里的不定的意思是：预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。
-</em>args 是用来发送一个非键值对的可变数量的参数列表给一个函数.<br>随便写一个代码demo：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def test_var_args(f_arg, *argv):</div><div class="line">     <span class="built_in">print</span>(<span class="string">"first normal arg:"</span>, f_arg)</div><div class="line">  <span class="comment">#  for arg in argv:</span></div><div class="line">        <span class="built_in">print</span>(<span class="string">"another arg through *argv:"</span>, arg)</div><div class="line"></div><div class="line">test_var_args(<span class="string">'xuanlong'</span>, <span class="string">'heihei'</span>, <span class="string">'hehe'</span>, <span class="string">'haha'</span>)</div></pre></td></tr></table></figure></p>
-<p>输出是什么呢，明显第一个参数是正常的传参，后面就是你不知道多少个数目的大小。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; first normal arg: xuanlong</div><div class="line">&gt;&gt;&gt; another arg through *argv: heihei</div><div class="line">&gt;&gt;&gt; another arg through *argv: hehe</div><div class="line">&gt;&gt;&gt; another arg through *argv: haha</div></pre></td></tr></table></figure></p>
-<h2 id="kwargs"><a href="#kwargs" class="headerlink" title="**kwargs"></a>**kwargs</h2><p>这这参数也是传不定量参数传递，但是这里传输的是key-value对。<strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def greet_me(**kwargs):</div><div class="line">   <span class="comment"># for key, value in kwargs.items():</span></div><div class="line">        <span class="built_in">print</span>(<span class="string">"&#123;0&#125; == &#123;1&#125;"</span>.format(key, value))</div><div class="line"></div><div class="line"></div><div class="line">&gt;&gt;&gt; greet_me(name=<span class="string">"yasoob"</span>)</div><div class="line">name == yasoob</div></pre></td></tr></table></figure></p>
-<p>关于format(),它通过{}和:来代替%.<br>它可以通过位置，关键字参数，对象属性，下标来进行映射，这部分我觉得不是本文的重点，我会在后面把链接贴出来，你有兴趣的话可以看一下，我在这里旧居一个通过位置映射的例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; &apos;&#123;0&#125;,&#123;1&#125;&apos;.format(&apos;qxl&apos;,24)  </div><div class="line">&gt;&gt;&gt; &apos;qxl,24&apos;  </div><div class="line"></div><div class="line">&gt;&gt;&gt; &apos;&#123;&#125;,&#123;&#125;&apos;.format(&apos;qxl&apos;,24)  </div><div class="line">&gt;&gt;&gt; &apos;qxl,24&apos;  </div><div class="line"></div><div class="line">&gt;&gt;&gt; &apos;&#123;1&#125;,&#123;0&#125;,&#123;1&#125;&apos;.format(&apos;qxl&apos;,24)  </div><div class="line">&gt;&gt;&gt; &apos;24,qxl,24&apos;</div></pre></td></tr></table></figure></p>
-<ul>
-<li>标准参数与<em>args、*</em>kwargs在使用时的顺序顺序是这样的：</li>
-</ul>
-<ul>
-<li>some_func(fargs, <em>args, *</em>kwargs)</li>
-</ul>
-<h1 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h1><h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><p>先了解一下迭代器。<br>迭代器是一个让程序员可以遍历一个容器（特别是列表）的对象。然而，一个迭代器在遍历并读取一个容器的数据元素时，并不会执行一个迭代。你可能有点晕了，那我们来个慢动作。换句话说这里有三个部分：</p>
-<ul>
-<li>可迭代对象(Iterable):可迭代对象就是能提供迭代器的任意对象</li>
-<li>迭代器(Iterator):任意对象，只要定义了next(Python2) 或者<strong>next</strong>方法，它就是一个迭代器.(有next才能进行迭代啊).</li>
-<li>迭代(Iteration):它就是从某个地方（比如一个列表）取出一个元素的过程。当我们使用一个循环来遍历某个东西时，这个过程本身就叫迭代.<h2 id="生成器-1"><a href="#生成器-1" class="headerlink" title="生成器"></a>生成器</h2>生成器也是一种迭代器，但是你只能对其迭代一次。这是因为它们并没有把所有的值存在内存中，而是在运行时生成值。你通过遍历来使用它们，要么用一个“for”循环，要么将它们传递给任意可以进行迭代的函数和结构。大多数时候生成器是以函数来实现的。然而，它们并不返回一个值，而是yield(暂且译作“生出”)一个值。</li>
-<li>划个重点，不返回值，只是产生一个值。</li>
-<li>生成器最佳应用场景是：你不想同一时间将所有计算出来的大量结果集分配到内存当中，特别是结果集里还包含循环。(这样做会消耗大量资源)</li>
-</ul>
-<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>我首先下个定义，什么是装饰器，装饰器就是一个封装好的函数，你使用”@”来调用，可以让你在被装饰函数之前或之后执行代码，而不用修改函数本身。<br>之后我们在讲一下要理解装饰器你可能需要以下的背景。</p>
-<ul>
-<li>实际上这个文章里写的太好了，我只是为了记录一下，我不觉得我自己阐述会有他讲的好，所以我直接把东西贴进来，同时会把链接贴到Resource里面。<h2 id="一切皆对象"><a href="#一切皆对象" class="headerlink" title="一切皆对象"></a>一切皆对象</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">def hi(name=<span class="string">"yasoob"</span>):</div><div class="line">    <span class="built_in">return</span> <span class="string">"hi "</span> + name</div><div class="line"></div><div class="line"><span class="built_in">print</span>(hi())</div><div class="line"><span class="comment"># output: 'hi yasoob'</span></div><div class="line"></div><div class="line"><span class="comment"># 我们甚至可以将一个函数赋值给一个变量，比如</span></div><div class="line">greet = hi</div><div class="line"><span class="comment"># 我们这里没有在使用小括号，因为我们并不是在调用hi函数</span></div><div class="line"><span class="comment"># 而是在将它放在greet变量里头。我们尝试运行下这个</span></div><div class="line"></div><div class="line"><span class="built_in">print</span>(greet())</div><div class="line"><span class="comment"># output: 'hi yasoob'</span></div><div class="line"></div><div class="line"><span class="comment"># 如果我们删掉旧的hi函数，看看会发生什么！</span></div><div class="line">del hi</div><div class="line"><span class="built_in">print</span>(hi())</div><div class="line"><span class="comment">#outputs: NameError</span></div><div class="line"></div><div class="line"><span class="built_in">print</span>(greet())</div><div class="line"><span class="comment">#outputs: 'hi yasoob'</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="在函数中定义函数"><a href="#在函数中定义函数" class="headerlink" title="在函数中定义函数"></a>在函数中定义函数</h2><p>在Python中我们可以在一个函数中定义另一个函数：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">def hi(name=<span class="string">"yasoob"</span>):</div><div class="line">    <span class="built_in">print</span>(<span class="string">"now you are inside the hi() function"</span>)</div><div class="line"></div><div class="line">    def greet():</div><div class="line">        <span class="built_in">return</span> <span class="string">"now you are in the greet() function"</span></div><div class="line"></div><div class="line">    def welcome():</div><div class="line">        <span class="built_in">return</span> <span class="string">"now you are in the welcome() function"</span></div><div class="line"></div><div class="line">    <span class="built_in">print</span>(greet())</div><div class="line">    <span class="built_in">print</span>(welcome())</div><div class="line">    <span class="built_in">print</span>(<span class="string">"now you are back in the hi() function"</span>)</div><div class="line"></div><div class="line">hi()</div><div class="line"><span class="comment">#output:now you are inside the hi() function</span></div><div class="line"><span class="comment">#       now you are in the greet() function</span></div><div class="line"><span class="comment">#       now you are in the welcome() function</span></div><div class="line"><span class="comment">#       now you are back in the hi() function</span></div><div class="line"></div><div class="line"><span class="comment"># 上面展示了无论何时你调用hi(), greet()和welcome()将会同时被调用。</span></div><div class="line"><span class="comment"># 然后greet()和welcome()函数在hi()函数之外是不能访问的，比如：</span></div><div class="line"></div><div class="line">greet()</div><div class="line"><span class="comment">#outputs: NameError: name 'greet' is not defined</span></div></pre></td></tr></table></figure></p>
-<p>那现在我们知道了可以在函数中定义另外的函数。也就是说：我们可以创建嵌套的函数。现在你需要再多学一点，就是函数也能返回函数。</p>
-<h2 id="从函数中返回函数"><a href="#从函数中返回函数" class="headerlink" title="从函数中返回函数"></a>从函数中返回函数</h2><p>其实并不需要在一个函数里去执行另一个函数，我们也可以将其作为输出返回出来：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">def hi(name=<span class="string">"yasoob"</span>):</div><div class="line">    def greet():</div><div class="line">        <span class="built_in">return</span> <span class="string">"now you are in the greet() function"</span></div><div class="line"></div><div class="line">    def welcome():</div><div class="line">        <span class="built_in">return</span> <span class="string">"now you are in the welcome() function"</span></div><div class="line"></div><div class="line"> <span class="comment">#   if name == "yasoob":</span></div><div class="line">        <span class="built_in">return</span> greet</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="built_in">return</span> welcome</div><div class="line"></div><div class="line">a = hi()</div><div class="line"><span class="built_in">print</span>(a)</div><div class="line"><span class="comment">#outputs: &lt;function greet at 0x7f2143c01500&gt;</span></div><div class="line"></div><div class="line"><span class="comment">#上面清晰地展示了`a`现在指向到hi()函数中的greet()函数</span></div><div class="line"><span class="comment">#现在试试这个</span></div><div class="line"></div><div class="line"><span class="built_in">print</span>(a())</div><div class="line"><span class="comment">#outputs: now you are in the greet() function</span></div></pre></td></tr></table></figure></p>
-<p>再次看看这个代码。在if/else语句中我们返回greet和welcome，而不是greet()和welcome()。为什么那样？这是因为当你把一对小括号放在后面，这个函数就会执行；然而如果你不放括号在它后面，那它可以被到处传递，并且可以赋值给别的变量而不去执行它。</p>
-<p>你明白了吗？让我再稍微多解释点细节。(这段请仔细看，我觉得不错–xuanlong)</p>
-<p>当我们写下a = hi()，hi()会被执行，而由于name参数默认是yasoob，所以函数greet被返回了。如果我们把语句改为a = hi(name = “ali”)，那么welcome函数将被返回。我们还可以打印出hi()()，这会输出now you are in the greet() function。</p>
-<h2 id="将函数作为参数传给另一个函数"><a href="#将函数作为参数传给另一个函数" class="headerlink" title="将函数作为参数传给另一个函数"></a>将函数作为参数传给另一个函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">def hi():</div><div class="line">    return &quot;hi yasoob!&quot;</div><div class="line"></div><div class="line">def doSomethingBeforeHi(func):</div><div class="line">    print(&quot;I am doing some boring work before executing hi()&quot;)</div><div class="line">    print(func())</div><div class="line"></div><div class="line">doSomethingBeforeHi(hi)</div><div class="line"># outputs:I am doing some boring work before executing hi()</div><div class="line">#        hi yasoob!</div></pre></td></tr></table></figure>
-<h2 id="你的第一个装饰器"><a href="#你的第一个装饰器" class="headerlink" title="你的第一个装饰器"></a>你的第一个装饰器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">def a_new_decorator(a_func):</div><div class="line"></div><div class="line">    def wrapTheFunction():</div><div class="line">        print(&quot;I am doing some boring work before executing a_func()&quot;)</div><div class="line"></div><div class="line">        a_func()</div><div class="line"></div><div class="line">        print(&quot;I am doing some boring work after executing a_func()&quot;)</div><div class="line"></div><div class="line">    return wrapTheFunction</div><div class="line"></div><div class="line">def a_function_requiring_decoration():</div><div class="line">    print(&quot;I am the function which needs some decoration to remove my foul smell&quot;)</div><div class="line"></div><div class="line">a_function_requiring_decoration()</div><div class="line">#outputs: &quot;I am the function which needs some decoration to remove my foul smell&quot;</div><div class="line"></div><div class="line">a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)</div><div class="line">#now a_function_requiring_decoration is wrapped by wrapTheFunction()</div><div class="line"></div><div class="line">a_function_requiring_decoration()</div><div class="line">#outputs:I am doing some boring work before executing a_func()</div><div class="line">#        I am the function which needs some decoration to remove my foul smell</div><div class="line">#        I am doing some boring work after executing a_func()</div></pre></td></tr></table></figure>
-<p>你看明白了吗？我们刚刚应用了之前学习到的原理。这正是python中装饰器做的事情！它们封装一个函数，并且用这样或者那样的方式来修改它的行为。现在你也许疑惑，我们在代码里并没有使用@符号？那只是一个简短的方式来生成一个被装饰的函数。这里是我们如何使用@来运行之前的代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@a_new_decorator</div><div class="line">def a_function_requiring_decoration():</div><div class="line">    <span class="string">""</span><span class="string">"Hey you! Decorate me!"</span><span class="string">""</span></div><div class="line">    <span class="built_in">print</span>(<span class="string">"I am the function which needs some decoration to "</span></div><div class="line">          <span class="string">"remove my foul smell"</span>)</div><div class="line"></div><div class="line">a_function_requiring_decoration()</div><div class="line"><span class="comment">#outputs: I am doing some boring work before executing a_func()</span></div><div class="line"><span class="comment">#         I am the function which needs some decoration to remove my foul smell</span></div><div class="line"><span class="comment">#         I am doing some boring work after executing a_func()</span></div><div class="line"></div><div class="line"><span class="comment">#the @a_new_decorator is just a short way of saying:</span></div><div class="line">a_function_requiring_decoration = a_new_decorator(a_function_requiring_decoration)</div></pre></td></tr></table></figure></p>
-<p>这样你对装饰器就有一个大致的了解了，同时我也会把里面用到的代码贴到Github里面，但是我还是要说一句，这些代码非常建议初学者自己亲手敲一遍，会理解的更好。</p>
-<h1 id="推导式"><a href="#推导式" class="headerlink" title="推导式"></a>推导式</h1><p>推导式（又称解析式）是Python的一种独有特性，推导式是可以从一个数据序列构建另一个新的数据序列的结构体。总共有三种推导式,会非常大程度简化我们的代码:</p>
-<ul>
-<li>列表(list)推导式</li>
-<li>字典(dict)推导式</li>
-<li>集合(set)推导式</li>
-</ul>
-<h2 id="列表推导式（list-comprehensions）"><a href="#列表推导式（list-comprehensions）" class="headerlink" title="列表推导式（list comprehensions）"></a>列表推导式（list comprehensions）</h2><p>列表推导式（又称列表解析式）提供了一种简明扼要的方法来创建列表。<br>它的结构是在一个中括号里包含一个表达式，然后是一个for语句，然后是0个或多个for或者if语句。那个表达式可以是任意的，意思是你可以在列表中放入任意类型的对象。返回结果将是一个新的列表，在这个以if和for语句为上下文的表达式运行完成之后产生。</p>
-<p>规范：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#variable = [out_exp for out_exp in input_list if out_exp == 2]</span></div></pre></td></tr></table></figure></p>
-<p>这里是另外一个简明例子:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#multiples = [i for i in range(30) if i % 3 is 0]</span></div><div class="line"><span class="built_in">print</span>(multiples)</div><div class="line"><span class="comment"># Output: [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]</span></div></pre></td></tr></table></figure></p>
-<p>这将对快速生成列表非常有用。有些人甚至更喜欢使用它而不是filter函数。<br>列表推导式在有些情况下超赞，特别是当你需要使用for循环来生成一个新列表。</p>
-<h2 id="字典推导式（dict-comprehensions）"><a href="#字典推导式（dict-comprehensions）" class="headerlink" title="字典推导式（dict comprehensions）"></a>字典推导式（dict comprehensions）</h2><p>字典推导和列表推导的使用方法是类似的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mcase = &#123;<span class="string">'a'</span>: 10, <span class="string">'b'</span>: 34, <span class="string">'A'</span>: 7, <span class="string">'Z'</span>: 3&#125;</div><div class="line"></div><div class="line">mcase_frequency = &#123;</div><div class="line">    k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0)</div><div class="line"> <span class="comment">#   for k in mcase.keys()</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># mcase_frequency == &#123;'a': 17, 'z': 3, 'b': 34&#125;</span></div></pre></td></tr></table></figure></p>
-<p>在上面的例子中我们把同一个字母但不同大小写的值合并起来了。<br>实际上这个好像不常用，一般列表推导式比较常用，而且codecademy也只是讲了列表推导式。</p>
-<h2 id="集合推导式（set-comprehensions）"><a href="#集合推导式（set-comprehensions）" class="headerlink" title="集合推导式（set comprehensions）"></a>集合推导式（set comprehensions）</h2><p>它们跟列表推导式也是类似的。 唯一的区别在于它们使用大括号{}。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#squared = &#123;x**2 for x in [1, 1, 2]&#125;</span></div><div class="line"><span class="built_in">print</span>(squared)</div><div class="line"><span class="comment"># Output: &#123;1, 4&#125;</span></div></pre></td></tr></table></figure></p>
-<p>除了上述基本语法以外，我还看到一个比较有意思的特性，就是Python可以通过C扩展，实际上还有一些API供我们使用，我也只是大概瞄了一眼，之后再说吧。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>希望这些资源对看到文章的你有用。<br>1.<a href="https://eastlakeside.gitbooks.io/interpy-zh/content/" target="_blank" rel="external">[Intermediate Python中文译本(Python进阶)]</a>.中间很大一段我都摘自这个文章，非常好的Blog.<br>2.<a href="https://www.codecademy.com/zh/learn" target="_blank" rel="external">[Codecademy-在线学习]</a>. 这个我不多说了，真的好用，而且学起来比较简单.<br>3.<a href="https://docs.python.org/2/c-api/" target="_blank" rel="external">[Python/C API]</a>. 有兴趣选读，暂时我没什么兴趣。<br>4.<a href="http://blog.csdn.net/handsomekang/article/details/9183303" target="_blank" rel="external">[format.()函数]</a>.这里面的例子还不错<br>5.<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.本篇博文的代码为了大家不用自己敲一遍，我已经贴到Github供大家食用。</p>
-<hr>
-<p>不得不说我现在看python的库只有我不知道的，没有没写的，所以说python的库是真的强大，写一些小程序是非常方便的。对于不懂的函数你直接googe一下”python fun()”看看定义去做是一件非常方便的事，明天应该就转到真机host了好激动。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/python_jinjie/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1217,6 +1180,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
@@ -1230,10 +1197,6 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

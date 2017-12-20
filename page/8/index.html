@@ -185,6 +185,101 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-digui" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/digui/">递归和汉尼塔问题 -- Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/digui/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.675Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本来我对递归还是有理解的，但是看了一下反而晕了，实际上还是要有图才行。<br><img src="/images/digui.png" alt="digui"><br>看一下汉尼塔问题</p>
+<h1 id="汉尼塔"><a href="#汉尼塔" class="headerlink" title="汉尼塔"></a>汉尼塔</h1><p>这是个比较常见的问题 我就直接说了，应该都懂。</p>
+<p>我们如何用递归解决这个问题呢?我们又如何完全解决这一类问题?基本情况又是什么?让我 们从递归调用的最底端入手。假设你有一个五个圆盘组成的塔,最开始在一号杆上。如果你已经知 道如何将有四个圆盘的小塔从一号杆移到二号杆,就可以很容易地将第五个圆盘移动到三号杆,然后将 四个圆盘的塔从二号杆移动到三号杆。但是如果你不知道如何移动有四个圆盘的塔呢?这时又假设 你知道如何将有三个圆盘的塔移到三号杆;然后你就可以将第四个圆盘移动到二号杆,然后再将位 于三号杆的有三个圆盘的塔移到其上。但是如果你不知道如何移动有三个圆盘的小塔又怎么办呢? 那考虑先将有两个圆盘的小塔移动到二号杆,再将第三个圆盘移动到三号杆,最后将两个圆盘的小塔移 动到三号杆会如何呢?但如果你连这个也不会,该如何处理?显然你知道将单个圆盘移到三号杆十 分简单甚至可以说无需思考,似乎这就是这一问题最基础的部分。</p>
+<p>下面是关于将塔经由中间杆,从起始杆移到目标杆的抽象概述:<br>1、把圆盘数减一层数的小塔经过目标杆移动到中间杆<br>2、把剩下的圆盘移动到目标杆<br>3、把圆盘数减一层数的小塔从中间杆,经过起始杆移动到目标杆</p>
+<p>只要我们一直遵循大的圆盘保持在底层的规则,我们就能用以上的三步来递归, 很容易地处理任 意多圆盘的问题。上述概要唯一缺少的是对基本情况的识别。最简单的河内塔问题是只有一个圆盘 时的情况,在这种情况下,我们只需要将单个圆盘移动到它的目标杆。所以只有一个圆盘的情况是 我们的基本情况。此外,上述步骤可以通过减少1、3步中小塔的高度使问题向基本情况靠近。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">def moveTower(height,fromPole, toPole, withPole): </div><div class="line">    if height &gt;= 1:</div><div class="line">        moveTower(height-1,fromPole,withPole,toPole) </div><div class="line">        moveDisk(fromPole,toPole) </div><div class="line">        moveTower(height-1,withPole,toPole,fromPole)</div></pre></td></tr></table></figure>
+<p>第三行中,我们把起始杆上的除了最下面的圆盘全部移动到中间杆,下一行 将原来在最底层的最大圆盘移动到目标杆,之后在第五行,我们将位于中间杆的圆盘移动到最大圆 盘的上面。当小塔高度为0即为最简情况,在这种情况下无需继续,函数可以直接返回.</p>
+<ul>
+<li>比较关键的一点是，moveTower的返回是moveDisk被调用的先决条件。就是说movetower执行完之后才执行moveDisk。</li>
+<li>moveDisk函数非常简单,它所做的事情就是输出一个圆盘从一根杆移动到另一根杆的<br>过程。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def moveDisk(fp,tp):</div><div class="line">    print(&quot;moving disk from&quot;,fp,&quot;to&quot;,tp)</div></pre></td></tr></table></figure>
+<p>完整的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">def moveTower(height,fromPole, toPole, withPole): </div><div class="line">    if height &gt;= 1:</div><div class="line">    moveTower(height-1,fromPole,withPole,toPole) </div><div class="line">    moveDisk(fromPole,toPole) </div><div class="line">    moveTower(height-1,withPole,toPole,fromPole)</div><div class="line"></div><div class="line">def moveDisk(fp,tp):</div><div class="line">    print(&quot;moving disk from&quot;,fp,&quot;to&quot;,tp)</div><div class="line">    </div><div class="line">moveTower(3,&quot;A&quot;,&quot;B&quot;,&quot;C&quot;)</div></pre></td></tr></table></figure></p>
+<p>递归的要点如下：</p>
+<ul>
+<li>所有递归算法必须剧本基本结束条件</li>
+<li>递归算法必须要减小规模，改变状态，向基本结束条件演进</li>
+<li>递归算法必须调用自身(递归地)</li>
+<li>某些情况下，递归可以代替循环迭代</li>
+<li>递归算法通常能够跟所要解决的问题的表述很自然的契合</li>
+<li>递归不总是最适合的方法，有时候递归算法肯呢过会引发巨量的重复计算。(比如计算硬币最少数，使用动态规划)</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/digui/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -364,6 +459,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
@@ -377,10 +476,6 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

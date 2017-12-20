@@ -185,6 +185,132 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ns3_linux_5.5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ns3_linux_5.5/">NS-3网络模拟器基础及应用/ns-3内核(属性系统部分 二)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ns3_linux_5.5/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.828Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="属性系统"><a href="#属性系统" class="headerlink" title="属性系统"></a>属性系统</h1><h2 id="对象概述"><a href="#对象概述" class="headerlink" title="对象概述"></a>对象概述</h2><ul>
+<li>对使用的网络构件进行组织和模拟拓扑</li>
+<li>对网络构件中实例化的模型所使用的参数值进行设置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">node.cc</div><div class="line">/*文件对GetTypeId*/</div><div class="line">class Node : public Object</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">	static TypeId GetTypeId (void);</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们去查找一个GetTypeId的定义</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">TypeId </div><div class="line">Node::GetTypeId (void)</div><div class="line">&#123;</div><div class="line">  static TypeId tid = TypeId (<span class="string">"ns3::Node"</span>)</div><div class="line">    .SetParent&lt;Object&gt; ()</div><div class="line">    .SetGroupName(<span class="string">"Network"</span>)</div><div class="line">    .AddConstructor&lt;Node&gt; ()</div><div class="line">    .AddAttribute (<span class="string">"DeviceList"</span>, <span class="string">"The list of devices associated to this Node."</span>,</div><div class="line">                   ObjectVectorValue (),</div><div class="line">                   MakeObjectVectorAccessor (&amp;Node::m_devices),</div><div class="line">                   MakeObjectVectorChecker&lt;NetDevice&gt; ())</div><div class="line">    .AddAttribute (<span class="string">"ApplicationList"</span>, <span class="string">"The list of applications associated to this Node."</span>,</div><div class="line">                   ObjectVectorValue (),</div><div class="line">                   MakeObjectVectorAccessor (&amp;Node::m_applications),</div><div class="line">                   MakeObjectVectorChecker&lt;Application&gt; ())</div><div class="line">    .AddAttribute (<span class="string">"Id"</span>, <span class="string">"The id (unique integer) of this Node."</span>,</div><div class="line">                   TypeId::ATTR_GET, // allow only getting it.</div><div class="line">                   UintegerValue (0),</div><div class="line">                   MakeUintegerAccessor (&amp;Node::m_id),</div><div class="line">                   MakeUintegerChecker&lt;uint32_t&gt; ())</div><div class="line">    .AddAttribute (<span class="string">"SystemId"</span>, <span class="string">"The systemId of this node: a unique integer used for parallel simulations."</span>,</div><div class="line">                   TypeId::ATTR_GET || TypeId::ATTR_SET,</div><div class="line">                   UintegerValue (0),</div><div class="line">                   MakeUintegerAccessor (&amp;Node::m_sid),</div><div class="line">                   MakeUintegerChecker&lt;uint32_t&gt; ())</div><div class="line">  ;</div><div class="line">  <span class="built_in">return</span> tid;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>函数SetParent<object>()为该声明的基类，方便在使用GetObject()函数时安全地进行向上或向下类型转换。</object></p>
+<h2 id="属性系统-1"><a href="#属性系统-1" class="headerlink" title="属性系统"></a>属性系统</h2><p>ns-3提出属性系统的机制的目的就是为了管理和组织仿真中的内部对象。<br>主要原因在于，用户在仿真过程中要不断地修改已经存在的仿真脚本，来跟踪、收集和研究仿真程序中变量或数据的变化，比如</p>
+<ul>
+<li>想要跟踪第一个接入点的无线接口上的分组</li>
+<li>用户想要获取并记录模拟上所有被使用的值<br>分析类DropTailQuenue<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class DropTailQueue : public Queue</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">  static TypeId GetTypeId (void);</div><div class="line">  /**</div><div class="line">   * \brief DropTailQueue Constructor</div><div class="line">   *</div><div class="line">   * Creates a droptail queue with a maximum size of 100 packets by default</div><div class="line">   */</div><div class="line">  DropTailQueue ();</div><div class="line"></div><div class="line">  virtual ~DropTailQueue();</div><div class="line"></div><div class="line">private:</div><div class="line">	std::queue&lt;Ptr&lt;QueueItem&gt; &gt; m_packets; //!&lt; the items <span class="keyword">in</span> the queue</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对于一个已经实例化的对象，设置或获取该对象的值，像上述的情况我们一般用Get()函数来实现，ns-3用TypeId类来实现。</p>
+<ul>
+<li>设置默认值</li>
+<li>通过指针访问属性值</li>
+</ul>
+<hr>
+<h2 id="通过一个脚本例子来说明如何在脚本中操纵属性系统中的数据"><a href="#通过一个脚本例子来说明如何在脚本中操纵属性系统中的数据" class="headerlink" title="通过一个脚本例子来说明如何在脚本中操纵属性系统中的数据"></a>通过一个脚本例子来说明如何在脚本中操纵属性系统中的数据</h2><h1 id="1-设置默认值"><a href="#1-设置默认值" class="headerlink" title="1.设置默认值"></a>1.设置默认值</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Config::SetDefault (<span class="string">"ns3::DropTailQueue::MaxPackets"</span>,StringValue(<span class="string">"80"</span>));</div><div class="line">Config::SetDefault (<span class="string">"ns3::DropTailQueue::MaxPackets"</span>,UintegerValue(80));</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class DropTailQueue : public Queue</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">  static TypeId GetTypeId (void);</div><div class="line">  /**</div><div class="line">   * \brief DropTailQueue Constructor</div><div class="line">   *</div><div class="line">   * Creates a droptail queue with a maximum size of 100 packets by default</div><div class="line">   */</div><div class="line">  DropTailQueue ();</div><div class="line"></div><div class="line">  virtual ~DropTailQueue();</div><div class="line"></div><div class="line">private:</div><div class="line">	std::queue&lt;Ptr&lt;QueueItem&gt; &gt; m_packets; //!&lt; the items <span class="keyword">in</span> the queue</div><div class="line">	uint32_t m_maxPackets;  /*这就是我们下面说到的默认初始值*/ </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Function:将之后将要声明的DropTailQueue类的实例化设置默认值，如果之后生成一个DropTailQueue对象dtq,那么dtq的成员变量m_maxPackets的默认值是80.</p>
+<h1 id="2-设置完默认值以后用户就可以实例化自己的对象"><a href="#2-设置完默认值以后用户就可以实例化自己的对象" class="headerlink" title="2.设置完默认值以后用户就可以实例化自己的对象"></a>2.设置完默认值以后用户就可以实例化自己的对象</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Ptr&lt;Node&gt; n0 = CreateObject&lt;Node&gt; ();</div><div class="line"></div><div class="line">Ptr&lt;PointToPointNetDevice&gt; net0 = CreateObject&lt;PointToPointNetDevice&gt; ();</div><div class="line">n0-&gt;AddDevice (net0);</div><div class="line"></div><div class="line">Ptr&lt;Queue&gt; q = CreateObject&lt;DropTailQueue&gt; ();</div><div class="line">net0-&gt;SetQueue (q);</div></pre></td></tr></table></figure>
+<p>Function: 上述代码创建了一个唯一的节点(Node0),并且在这个节点上创建了一个唯一的PointToPointNetDevice网络设备(NetDevice0),然后为其添加了一个尾部分组丢失队列。</p>
+<ul>
+<li>通过指针访问属性值<br>首先创建一个指针变量(而不是创建一个指针)。</li>
+</ul>
+<ul>
+<li>PointerValue tmp;<br>然后为指针变量赋值：</li>
+<li>net0-&gt;GetAttribure (“TxQueue”,ptr);<br>获取队列：</li>
+<li>Ptr<queue> txQueue = ptr.Get<queue> ();<br>下面通过GetObject函数来安全地把txQueue向下类型转化：</queue></queue></li>
+<li>Ptr<droptailqueue> dtq = txQueue-&gt;GetObject &lt;&gt;(DropTailQueue);</droptailqueue></li>
+</ul>
+<h1 id="3-用户也可以通过基于命名空间的方式访问属性值"><a href="#3-用户也可以通过基于命名空间的方式访问属性值" class="headerlink" title="3.用户也可以通过基于命名空间的方式访问属性值"></a>3.用户也可以通过基于命名空间的方式访问属性值</h1><ul>
+<li>1.一个是通过指针访问属性值的方法</li>
+<li>2.另一个是通过使用配置命名空间的方法来操作属性值</li>
+</ul>
+<hr>
+<h1 id="ns-3的扩展性"><a href="#ns-3的扩展性" class="headerlink" title="ns-3的扩展性"></a>ns-3的扩展性</h1><p>ns-3作为一个开源的系统，可扩展性是系统必须支持的特性</p>
+<ul>
+<li>添加现有类的成员变量到元数据系统中<br>example A：<br>  考虑类TcpSocket的一个成员变量：uint32_tm_cWnd<br>  假设使用TCP模块的某个人想要使用元数据获得或设置该变量的值。如果ns-3还没有提供这个变量，用户可以在元数据系统中添加如下声明：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.AddAttribute (<span class="string">"Congestion window"</span>,<span class="string">"Tcp congestion window (byte)"</span>,UintergerValue(1),MakeUintergerAccessor(&amp;TcpSocket::m_cWnd),MakeUintergerChecker&lt;uint16_t&gt;())</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>现在用户可以使用指向TcpSocket的指针来执行设置和获取操作，而不是显示的添加这些函数。</p>
+<ul>
+<li>向属性系统中添加自定义的类<br>example B:<br>把自定义的类A添加到属性系统中。<br>首先在a.h头文件中声明类A<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class A:public Object &#123;</div><div class="line">public:</div><div class="line">	...</div><div class="line">	static TypeId GetTypeId(void);</div><div class="line">	...</div><div class="line">private:</div><div class="line">	int16_t m_int16;</div><div class="line">	...</div><div class="line">&#125;;</div><div class="line">NS_OBJECT_ENSURE_REGISTERED(A);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上述函数使用了默认构造函数，除了要声明函数GetTypeId和NS_OBJECT_ENSURE_REGISTERED(A)；和标准C++类有区别意外，别的都一样。<br>然后在a.cC文件里定义GetTypeId，如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">static TypeId GetTypeId (void) &#123;</div><div class="line">	static TypeId tid = TypeId(<span class="string">"ns3::A"</span>)</div><div class="line">	.SetParent&lt;object&gt;()</div><div class="line">	.addAttribute(<span class="string">"TestInt16"</span>,<span class="string">"help text"</span>,InterValue(-2),MakeIntergerAccessor(&amp;A::m_int16),MakeInterChecker&lt;int16_t&gt;);</div><div class="line">	<span class="built_in">return</span> tid;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<p>下一节我会记录ns3提供的Tracing系统。</p>
+<p>以下链接或许对你有用：<br>1.<a href="https://www.nsnam.org/" target="_blank" rel="external">[ns-3-dev/API]</a>.<br>2.<a href="https://www.nsnam.org/wiki/Main_Page" target="_blank" rel="external">[Wiki-nsnam]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ns3_linux_5.5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ns3_linux" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -945,116 +1071,6 @@
 
 
   
-    <article id="post-leetcode 557" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 557/">Leetcode-557/500--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 557/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.784Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="557-Reverse-Words-in-a-String-III"><a href="#557-Reverse-Words-in-a-String-III" class="headerlink" title="557. Reverse Words in a String III"></a>557. Reverse Words in a String III</h1><p>给定字符串，将每个单词逐字符逆置，返回新字符串。<br>这个和普通的输出还是有一点差别的，比如我们要输出：<br>“let’s watch tv Eva” 他不是直接输出倒序，而是在里面的单个元素倒叙，输出的是：<br>“s’let hctaw vt avE”,所以当时脑子想过两种方式，要么先全部倒置，然后分割，然后最后一位和第一位换，用append添加进去，要么先分割，再倒置，再用append添加，后来我一写发现第一种方法和第二种是一样的方法，倒叙天假我也不会啊，所以就只写法一了。<br>法一：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def reverseWords(s):</div><div class="line">    new = []</div><div class="line">    <span class="comment">#for word in s.split():</span></div><div class="line">        s= word[::-1]</div><div class="line">        new.append(s)</div><div class="line">    <span class="built_in">print</span> <span class="string">' '</span>.join(new)</div></pre></td></tr></table></figure></p>
-<p>实际上主要是split和join函数的使用：</p>
-<h2 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h2><p>split()通过指定分隔符对字符串进行切片，如果参数num 有指定值，则仅分隔 num 个子字符串.<br>str.split(str=””, num=string.count(str)).</p>
-<ul>
-<li>str – 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。</li>
-<li>num – 分割次数。<br>1.按某一个字符分割，如‘.’<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">str = (<span class="string">'www.google.com'</span>)</div><div class="line"><span class="built_in">print</span> str</div><div class="line">str_split = str.split(<span class="string">'.'</span>)</div><div class="line"><span class="built_in">print</span> str_split</div><div class="line"></div><div class="line">结果：</div><div class="line">［<span class="string">'www'</span>,<span class="string">'google'</span>,<span class="string">'com'</span>］</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>2.按某一个字符分割，且分割n次。如按‘.’分割1次<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">str = (<span class="string">'www.google.com'</span>)</div><div class="line"><span class="built_in">print</span> str</div><div class="line">str_split = str.split(<span class="string">'.'</span>，1)</div><div class="line"><span class="built_in">print</span> str_split</div><div class="line"></div><div class="line">结果：</div><div class="line">[<span class="string">'www'</span>,<span class="string">'google.com'</span>]</div><div class="line">按字符串分割也是同理，也可以把分割后的字符赋给多个变量。</div><div class="line">str1, str2 = url.split(<span class="string">'.'</span>, 1)</div><div class="line"><span class="built_in">print</span> str1</div><div class="line"><span class="built_in">print</span> str2</div><div class="line"></div><div class="line">结果：</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> str1</div><div class="line">&gt;&gt;&gt; www</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> str2</div><div class="line">&gt;&gt;&gt; google.com</div></pre></td></tr></table></figure></p>
-<h2 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h2><p>Python join() 方法用于将序列中的元素以指定的字符连接生成一个新的字符串<br>str.join(sequence)</p>
-<ul>
-<li>sequence – 要连接的元素序列。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">str = <span class="string">"-"</span>;</div><div class="line">seq = (<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>); <span class="comment"># 字符串序列</span></div><div class="line"><span class="built_in">print</span> str.join( seq );</div><div class="line"></div><div class="line">结果：</div><div class="line"><span class="string">"a-b-c"</span></div><div class="line">实际上我们通常用的时候都是直接<span class="built_in">return</span> <span class="string">' '</span>.join(seq).</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这一题没什么好说的。</p>
-<h1 id="500-Keyboard-Row"><a href="#500-Keyboard-Row" class="headerlink" title="500. Keyboard Row"></a>500. Keyboard Row</h1><p>给出n个字符串，从而判断每个字符串中的字符是否来自美式键盘上的同一行，若来自同一行，返回该string。逐个word去比较即可。<br>实际上这题最简单就是看把输入逐个比较看在不在这一行，在的话就输出这个word不在就跳过，主要是用到了set这个函数，用来取交集，另一种方法就是把键盘行第一行的字母用1表示，第二行用2表示，第三行用三表示，再逐个输入自己的input，从第一个开始后面的比较，只要出现和第一个字符不一样的数字，那就说明不在同一行，直接break，进行下一个word的判断。下面将这两个方法。<br>方法一：<br>这个方法先讲两个函数set()和map</p>
-<h2 id="set"><a href="#set" class="headerlink" title="set()"></a>set()</h2><ul>
-<li><p>python的set和其他语言类似, 是一个无序不重复元素集, 基本功能包括关系测试和消除重复元素.<br>输出代码可能会更好理解一点</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; t = <span class="built_in">set</span> (<span class="string">"Hello"</span>)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> t </div><div class="line">&gt;&gt;&gt; <span class="built_in">set</span> ([<span class="string">'H'</span>,<span class="string">'e'</span>,<span class="string">'l'</span>,<span class="string">'o'</span>])</div></pre></td></tr></table></figure>
-</li>
-<li><p>集合对象还支持union(联合), intersection(交), difference(差)和sysmmetric difference(对称差集)等数学运算.<br>只有你先经过set之后才可以使用集合对象功能 “&amp;”交集，”|”并集,”#”差集。<br>举个栗子：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; t = <span class="built_in">set</span> (<span class="string">"hello"</span>)</div><div class="line">&gt;&gt;&gt; b = <span class="built_in">set</span> (<span class="string">"hihi"</span>)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> t &amp; b</div><div class="line">&gt;&gt;&gt; <span class="built_in">set</span> ([<span class="string">'h'</span>])</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这道题就用了这个特性，代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">def findWords(words):</div><div class="line">    a = <span class="built_in">set</span> (<span class="string">"qwertyuiop"</span>)</div><div class="line">    b = <span class="built_in">set</span> (<span class="string">"asdfghjkl"</span>)</div><div class="line">    c = <span class="built_in">set</span> (<span class="string">"zxcvbnm"</span>)</div><div class="line"></div><div class="line">    ans = []</div><div class="line">   <span class="comment"># for word in words:</span></div><div class="line">        <span class="comment"># 这里是为了输入大小写都可以识别，但是注意直接直接赋值和直接.lower()区别，等下再讲</span></div><div class="line">       <span class="comment"># t = set (word.lower())</span></div><div class="line">       <span class="comment"># if (a&amp;t == t) or (b&amp;t == t) or (c&amp;t == t):</span></div><div class="line">            ans.append(word)</div><div class="line">    <span class="built_in">return</span> ans</div><div class="line"><span class="built_in">print</span> findwords(input)</div></pre></td></tr></table></figure></p>
-<p>这个题还有两个扩展一个就是map函数，一个就是.lower()</p>
-<h2 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h2><p>map(function, sequence)：对sequence中的item依次执行function(item)，将执行结果组成一个List返回，测试如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = [1, 2, 3, 4, 5, 6, 7, 8, 9]</div><div class="line">&gt;&gt;&gt; def fn(x):</div><div class="line">...     <span class="built_in">return</span> x*2</div><div class="line">&gt;&gt;&gt; c = map(fn, a)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> c </div><div class="line">&gt;&gt;&gt; [2, 4, 6, 8, 10, 12, 14, 16, 18]</div></pre></td></tr></table></figure></p>
-<h2 id="lower"><a href="#lower" class="headerlink" title=".lower()"></a>.lower()</h2><p>很多题都是需要不区分大小写，或者在找交集的时候无论输出大小写我们都使用小写或者大写匹配。而python的变量是允许存入两个变量的。<br>还是看测试代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def findwords():</div><div class="line">   <span class="comment"># for word in words:</span></div><div class="line">       <span class="variable">$1</span>. word.lower()</div><div class="line">       &gt;&gt;&gt; <span class="built_in">print</span> word</div><div class="line">       &gt;&gt;&gt; XuanLONG</div><div class="line">       <span class="variable">$2</span>. word = word.lower()</div><div class="line">       &gt;&gt;&gt; <span class="built_in">print</span> word</div><div class="line">       &gt;&gt;&gt; xuanlong</div><div class="line"></div><div class="line">findwords(<span class="string">"XuanLONG"</span>)</div><div class="line"><span class="variable">$2</span> 里面相当于直接把所有字符变成小写，进行赋值，所以这个时候word里的值已经变了。</div><div class="line"><span class="variable">$1</span> 里面word却还是XuanLONG。但是这个可以区分大小写</div></pre></td></tr></table></figure></p>
-<p>方法二：<br>这个就是先把某一行里面所有字母用数字代替(字典)，直接比较数字看是否在一行，直接看代码吧。<br><figure class="highlight plain"><figcaption><span>findWords(words):</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">        pattern = &#123;&#125;</div><div class="line">        for i in &quot;qwertyuiop&quot;:</div><div class="line">            List [i] = 1</div><div class="line">        for i in &quot;asdfghjkl&quot;:</div><div class="line">            List [i] = 2</div><div class="line">        for i in &quot;zxcvbnm&quot;:</div><div class="line">            List [i] = 3</div><div class="line">        ans = []</div><div class="line">        for word in words:</div><div class="line">            category = pattern[word.lower(0)]//每个输入的字符串第一个字母置为category</div><div class="line">            is_word = True</div><div class="line">            for w in word://对每个字母迭代</div><div class="line">                if pattern[w] != category:    // w就相当于key值</div><div class="line">                    is_word = False</div><div class="line">                    break</div><div class="line">            if is_word:</div><div class="line">                ans.append(word)</div><div class="line"></div><div class="line">print findwords(input)</div></pre></td></tr></table></figure></p>
-<p>注意的是pattern是一个字典，复习一下字典</p>
-<h2 id="dict"><a href="#dict" class="headerlink" title="dict()"></a>dict()</h2><p>dict = {key1 : value1, key2 : value2 }</p>
-<ul>
-<li>键必须是唯一的，但值则不必。</li>
-<li>值可以取任何数据类型，但键必须是不可变的，如字符串，数字或元组。<br>通过key来访问value的值，如下:<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dict1 = &#123;<span class="string">"xuanlong"</span>:24,<span class="string">"qiu"</span>:23&#125;</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> dict1[<span class="string">"qiu"</span>]</div><div class="line">&gt;&gt;&gt; 23</div><div class="line">del dict[<span class="string">'key1'</span>]; <span class="comment"># 删除键是'key1'的条目</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 557/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1152,6 +1168,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
@@ -1165,10 +1185,6 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

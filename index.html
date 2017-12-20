@@ -185,6 +185,117 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-FCT" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/20/FCT/">FCT的调研文章总结</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/20/FCT/" class="archive-article-date">
+  	<time datetime="2017-12-20T14:46:08.164Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>文章基本上都出自SIGCOMM、NSDI等系列的文章里面</p>
+<h1 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h1><p>1.M. Al-Fares, S. Radhakrishnan, B. Raghavan, N. Huang, and A. Vahdat.</p>
+<p>Hedera: dynamic flow scheduling for data center networks. In Proc. of NSDI,</p>
+<p>2010.</p>
+<p>这篇在专栏里说过很多次了，可以说是开山之作，（探测大流、估计流需求、调度）</p>
+<p>2.M. Alizadeh, A. Greenberg, D. A. Maltz, J. Padhye, P. Patel, B. Prabhakar, S. Sengupta, and M. Sridharan.</p>
+<p>Data center TCP (DCTCP). In Proc. of SIGCOMM, 2010.</p>
+<p>这篇主要通过ECN标记来调控拥塞</p>
+<p>3.M. Alizadeh, A. Kabbani, T. Edsall, B. Prabhakar, A. Vahdat, and M. Yasuda.</p>
+<p>Less is more: trading a little bandwidth for ultra-low latency in the data center.</p>
+<p>In Proc. of NSDI, 2012.</p>
+<p>这篇讲述短流优先级提升整个流性能，做法集合了DCTCP、PQ、Packet Pacing(Hardware pace)</p>
+<p>4.M. Alizadeh, S. Yang, M. Sharif, S. Katti, N. McKeown, B. Prabhakar, and S. Shenker.</p>
+<p>pFabric: Minimal Near-Optimal Datacenter Transport In Proc. of SIGCOMM, 2013.</p>
+<p>这篇主要是在选择端口时不让他产生拥塞，在黑盒内部使用的是贪心算法</p>
+<p>5.C.-Y. Hong, M. Caesar, and P. B. Godfrey.</p>
+<p>Finishing Flows Quickly with Preemptive Scheduling. In Proc. of SIGCOMM, 2012.</p>
+<p>这篇就是论文中常见的PDQ机制，但是对于短流而言一定要回传SYN和FIN是否会影响性能要做不同场景不同的判断</p>
+<p>6.C. Raiciu, S. Barre, C. Pluntke, A. Greenhalgh, D. Wischik, and M. Handley.</p>
+<p>Improving datacenter performance and robustness with multipath TCP. In Proc.</p>
+<p>of the SIGCOMM, 2011.</p>
+<p>这篇是MPTCP的优化</p>
+<p>7.B. Vamanan, J. Hasan, and T. N. Vijaykumar.</p>
+<p>Deadline-Aware Datacenter TCP(D2TCP). In Proc. of SIGCOMM, 2012</p>
+<p>Meet deadline不是很少见，主要是和DCTCP结合起来</p>
+<p>8.V. Vasudevan, A. Phanishayee, H. Shah, E. Krevat, D. G. Andersen, G. R. Ganger, G. A. Gibson, and B. Mueller.</p>
+<p>Safe and effective fine-grained TCP transmissions for datacenter communication. In Proc. of SIGCOMM, 2009.</p>
+<p>这篇我记得主要是讲算法的？（时间太久远了）但是当时看了很久，也是很经典的细粒度流控文章，可以看看。</p>
+<ol>
+<li>C. Wilson, H. Ballani, T. Karagiannis, and A. Rowtron.</li>
+</ol>
+<p>Better never than late: meeting deadlines in datacenter networks. In Proc. of SIGCOMM, 2011.</p>
+<p>首次完整的论证了短流的重要性</p>
+<p>10.D. Zats, T. Das, P. Mohan, D. Borthakur, and R. H. Katz.</p>
+<p>DeTail: Reducing the Flow Completion Time Tail in Datacenter Networks. In Proc. of SIGCOMM, 2012.</p>
+<p>Detail本身是比较难以重复的，他在整个架构的每一个部分都有优化</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>关于短流比较火的时候就在10-12这段时间，疯狂占据NSDI和SIGCOMM，但是很少有人接着做下去的,比如Less is more 后面就没有后续的工作了，单纯的从流量调度想去创新太难了，还是要结合实际场景。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="https://dl.acm.org/" target="_blank" rel="external">ACM Digital Library</a>.<br>2.<a href="http://ieeexplore.ieee.org/Xplore/home.jsp" target="_blank" rel="external">IEEE Xplore Digital Library</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">network</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/20/FCT/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-interesting blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -988,90 +1099,6 @@
 
 
   
-    <article id="post-beibao" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/beibao/">背包问题 -- 动态规划(Dynamic Programming)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/beibao/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.943Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>先更新背包问题，最长子序列慢慢来吧，还有二叉树的的leetcode没有AC掉。<br>背包问题最简单粗暴的做法就是暴力解法，就是尝试各种可能的商品组合，并找出价值最高的组合。</p>
-<h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><p>在01背包问题中，在选择是否要把一个物品加到背包中，必须把该物品加进去的子问题的解与不取该物品的子问题的解进行比较，这种方式形成的问题导致了许多重叠子问题，使用动态规划来解决。n=5是物品的数量，c=10是书包能承受的重量，w=[2,2,6,5,4]是每个物品的重量，v=[6,3,5,4,6]是每个物品的价值，先把递归的定义写出来：<br><img src="/images/equation1.jpeg" alt="beibao"><br>其实画一个表格就很清晰了，我们假设只有一个物品，那前一栏肯定是最优解，新一栏要么就是上一栏的值，要么就是当前商品价值加上剩余空间的价值，去最大就是了。<br><img src="/images/beibao1.jpeg" alt="beibao1"><br>前面因为背包的容量最大就是填充这么多，直到背包容量更新我们才可以更新新值。<br><img src="/images/beibao2.jpeg" alt="beibao2"><br>其实我们看起来计算更新的值时使用了新的公式，其实是一样的公式，那就是取两者的最大值。<br>max(上一个单元的值，当前物品的价值＋剩余空间的值)<br>上一个单元：就是没有更新容量的最大值，如果容量增加不够，那就是上一个值，如果容量够了那么针对这一行的第二个值就是：当前行的物品值＋剩余空间的值。<br>首先我们要知道为什么要使用(Dynamic programming)dp，我们在选择dp算法的时候，往往是在决策问题上，而且是在如果不使用dp，直接暴力效率会很低的情况下选择使用dp.</p>
-<p>那么问题来了，什么时候会选择使用dp呢，一般情况下，我们能将问题抽象出来，并且问题满足无后效性，满足最优子结构，并且能明确的找出状态转移方程的话，dp无疑是很好的选择。</p>
-<ul>
-<li>无后效性通俗的说就是只要我们得出了当前状态，而不用管这个状态怎么来的，也就是说之前的状态已经用不着了，如果我们抽象出的状态有后效性，很简单，我们只用把这个值加入到状态的表示中。</li>
-<li>最优子结构(自下而上)：在决策问题中，如果，当前问题可以拆分为多个子问题，并且依赖于这些子问题，那么我们称为此问题符合子结构，而若当前状态可以由某个阶段的某个或某些状态直接得到，那么就符合最优子结构</li>
-<li>重叠子问题(自上而下)：动态规划算法总是充分利用重叠子问题，通过每个子问题只解一次，把解保存在一个需要时就可以查看的表中，每次查表的时间为常数，如备忘录的递归方法。斐波那契数列的递归就是个很好的例子</li>
-<li>状态转移：这个概念比较简单，在抽象出上述两点的的状态表示后，每种状态之间转移时值或者参数的变化。<br>代码如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"># gita   1500 1g</div><div class="line"># box    3000 4g</div><div class="line"># mac    2000 3g</div><div class="line"># iphone 2000 1g</div><div class="line"></div><div class="line">weight = [0,1,4,3,1]</div><div class="line">val = [0,1500,3000,2000,2000]</div><div class="line">n = len(weight) - 1   # compute the mount of the commordity</div><div class="line">m = 4 #total weight</div><div class="line"></div><div class="line">x = [] #bags</div><div class="line">v = 0</div><div class="line"></div><div class="line">optp = [[0 for col in range(m + 1)] for raw in range(n + 1)]</div><div class="line">print optp</div><div class="line">def knapsack_dynamic(weight,val,n,m,x):</div><div class="line">    for i in range(1,n+1):</div><div class="line">        for j in range(1,m+1):</div><div class="line">            if (j &gt;= weight[i]):</div><div class="line">                optp[i][j] = max(optp[i-1][j],optp[i-1][j-weight[i]]+val[i])</div><div class="line">            else:</div><div class="line">                optp[i][j] = optp[i-1][j]</div><div class="line">    j = m</div><div class="line">    for i in range(n,0,-1):</div><div class="line">        if optp[i][j] &gt; optp[i-1][j]:</div><div class="line">            x.append(i)</div><div class="line">            j = j - weight[i]</div><div class="line"></div><div class="line">    v = optp[n][m]</div><div class="line">    return v</div><div class="line"></div><div class="line">print &apos;max val:&apos; + str(knapsack_dynamic(weight, val, n, m, x))</div><div class="line">print &apos;commodity index:&apos;,x</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://www.jianshu.com/p/d6efacd8a252" target="_blank" rel="external">动态规划(DP)的整理-Python描述</a>.<br>2.<a href="http://blog.csdn.net/littlethunder/article/details/26575417" target="_blank" rel="external">01背包问题（动态规划）python实现</a>.<br>3.<a href="http://python.jobbole.com/81465/" target="_blank" rel="external">Python算法：动态规划</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/beibao/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1169,6 +1196,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
@@ -1182,10 +1213,6 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
