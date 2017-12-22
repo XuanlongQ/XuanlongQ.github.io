@@ -261,16 +261,13 @@
 <p>After these steps, you can now run the ns validation suite with<br>cd ns-2.34; ./validate</p>
 <p>For trouble shooting, please first read ns problems page<br><a href="http://www.isi.edu/nsnam/ns/ns-problems.html" target="_blank" rel="external">http://www.isi.edu/nsnam/ns/ns-problems.html</a>. Also search the ns mailing list archive<br>for related posts.</p>
 <p>至此已经安装完成，下面按照提示要compile your xgraph 并添加环境变量</p>
-<p>环境变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd</div><div class="line">$ sudo gedit .bashrc</div><div class="line">在文件末尾加入</div><div class="line"></div><div class="line">//#ns-2.34</div></pre></td></tr></table></figure></p>
-<p>export PATH=$PATH:/home/qjump/Workdir/ns-allinone-2.34/bin:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/unix:/home/qjump/Workdir/ns-allinone-2.34/tk8.4.18/unix</p>
-<p>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/qjump/Workdir/ns-allinone-2.34/otcl-1.13:/home/qjump/Workdir/ns-allinone-2.34/lib</p>
-<p>export TCL_LIBRARY=$TCL_LIBRARY:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/library<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">然后执行</div></pre></td></tr></table></figure></p>
-<p>$ source .bashrc<br>```</p>
-<p>安装nam<br>　　 cd ns-allinone-2.34/nam-1.14<br>　　 ./configure<br>　　 make<br>　　 sudo make install (至此,nam安装好)在终端中输入nam命令，弹出nam界面则说明nam安装好了</p>
+<p>环境变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd</div><div class="line">$ sudo gedit .bashrc</div></pre></td></tr></table></figure></p>
+<p>在文件末尾加入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//#ns-2.34</div><div class="line">export PATH=$PATH:/home/qjump/Workdir/ns-allinone-2.34/bin:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/unix:/home/qjump/Workdir/ns-allinone-2.34/tk8.4.18/unix</div><div class="line"></div><div class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/qjump/Workdir/ns-allinone-2.34/otcl-1.13:/home/qjump/Workdir/ns-allinone-2.34/lib</div><div class="line"></div><div class="line">export TCL_LIBRARY=$TCL_LIBRARY:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/library</div></pre></td></tr></table></figure></p>
+<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ source .bashrc</div></pre></td></tr></table></figure></p>
+<p>安装nam<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$cd ns-allinone-2.34/nam-1.14</div><div class="line">$./configure</div><div class="line">$make</div><div class="line">$sudo make install (至此,nam安装好)</div></pre></td></tr></table></figure></p>
+<p>在终端中输入nam命令，弹出nam界面则说明nam安装好了</p>
 <p>compile xgraph:</p>
-<p>进入未编译的ns-allinone-2.33/xgraph-12.1目录下</p>
-<p>敲./configrue</p>
-<p>接着make</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$cd/ns-allinone-2.33/xgraph-12.1</div><div class="line"></div><div class="line">$./configrue</div><div class="line"></div><div class="line">$make</div></pre></td></tr></table></figure>
 <p>出现错误：dialog.c:780:5: error: too few arguments to function ‘getline’<br>     while (getline(&amp;lineptr, line)) {<br>     ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: note: declared here<br>extern _IO_ssize_t getline (char <strong><strong>restrict </strong>lineptr,<br>                    ^<br>dialog.c: In function ‘getline’:<br>dialog.c:893:9: error: argument ‘lptr’ doesn’t match prototype<br>char   *lptr;<br>         ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: error: prototype declaration<br>extern _IO_ssize_t getline (char </strong><strong>restrict </strong>lineptr,<br>                    ^<br>dialog.c:899:1: error: number of arguments doesn’t match prototype<br> {<br> ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: error: prototype declaration<br>extern _IO_ssize_t getline (char **<strong>restrict </strong>lineptr,</p>
 <p>解决：</p>
 <p>The standard lib (stdio.h) function getline has been redefined in<installdir>/ns-allinone-2.31/xgraph-12.1/dialog.c. Quick fix:Edit the file and change the two references to getline to somethingelse, e.g. getmyline. Then the program builds…</installdir></p>
@@ -1271,11 +1268,11 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
+                <a href="javascript:void(0)" class="js-tag color2">programming</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">programming</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
