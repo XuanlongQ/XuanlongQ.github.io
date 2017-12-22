@@ -185,6 +185,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-leetcode 566" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/leetcode 566/">Leetcode-566--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/leetcode 566/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.786Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="566-Reshape-the-Matrix"><a href="#566-Reshape-the-Matrix" class="headerlink" title="566. Reshape the Matrix"></a>566. Reshape the Matrix</h1><p>给定二维矩阵nums，将其转化为r行c列的新矩阵。若无法完成转化，返回原矩阵。<br>Note:</p>
+<ul>
+<li>给定矩阵的高度和宽度范围[1, 100]</li>
+<li>r和c都是正数<br>这道题我能想到的就是把输入前的矩阵填到输入后的矩阵，所以方法一就是直接去解，我看了下网上还有别的解法，一个是使用一个公式直接转换，还有一个就是使用numpy模块里面的reshape函数，实际上我觉得，第三种方法才是最常用的吧。<br>法一：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">        <span class="string">""</span><span class="string">"</span></div><div class="line"><span class="string">        :type nums: List[List[int]]</span></div><div class="line"><span class="string">        :type r: int</span></div><div class="line"><span class="string">        :type c: int</span></div><div class="line"><span class="string">        :rtype</span></div><div class="line"><span class="string">        "</span><span class="string">""</span></div><div class="line">       <span class="comment">#if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">    <span class="comment">#        return nums</span></div><div class="line">      <span class="comment">#  result = [[0 for row in range(r)]for col in range(c)]</span></div><div class="line">       temp_row = 0</div><div class="line">        temp_col = 0s</div><div class="line">       <span class="comment"># for i in nums:</span></div><div class="line">        <span class="comment">#    for j in i:</span></div><div class="line">                result[temp_row][temp_col] = j</div><div class="line">                temp_col += 1</div><div class="line">         <span class="comment">#       if temp_col == c:</span></div><div class="line">                temp_row +=1</div><div class="line">                temp_col =0</div><div class="line">            <span class="built_in">return</span> result</div><div class="line">PS:因为排版的问题，所以我在前面加了<span class="string">"＃"</span>号，所以代码不要直接拷贝这个bash里面的代码，去我的github上粘贴复制会比较好，因为python对缩进的要求太严格了，所以粘贴的时候出问题，代码跑不了，我不接锅.</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>法二：<br>这个方法主要就是怎么找到转换后的公式的算法比较难，我没想到，但是验证了发现确实是对的，对于计算机取余”%”和取除”/“有了新的看法。<br>先说一下取余<br>我们知道10％3 ＝ 1，那么3%10 ＝？<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 3%10</div><div class="line">&gt;&gt;&gt; 3</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 0%10</div><div class="line">&gt;&gt;&gt; 0</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 10%10</div><div class="line">&gt;&gt;&gt; 0</div></pre></td></tr></table></figure></p>
+<p>我第一次看这个算法没看明白是因为，不知道当分子％分母，（分子 &lt; 分母）得出的结果是分子本身。所以我在第一行的时候有疑惑。先看下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">      <span class="comment">#  if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="comment">#result = [[0 for row in range(r)] for col in range(c)]</span></div><div class="line">       <span class="comment"># for i in range(r*c):</span></div><div class="line">            result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div><div class="line">            //上面这句大家可能看不懂，实际上他就是现在的矩阵怎么通过原来的矩阵转换得来的算法.</div><div class="line">        <span class="built_in">return</span> result</div></pre></td></tr></table></figure></p>
+<p>我来讲下这一句：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div></pre></td></tr></table></figure></p>
+<p>先看下普通矩阵<br>［1，2］<br>［3，4］这是一个2x2矩阵，我们要变成 ［1，2，3，4］这样的1*4矩阵<br>那第一个矩阵的元素分别是：<br>[(0,0) (0,1)]<br>[(1,0) (1,1)] 转化后的矩阵是 [(0,0),(0,1),(0,2),(0,3)]<br>再看看我们上面的取余，他传进来的参数比如第一行1/12 ＝ 0 (这是因为两个都是整型所以为0)，1%12＝1，所以这样就完成了矩阵的转换。<br>由于是以list的方式传输的，所以用for range的方式。<br>i =0时 ，result[0][0] = nums[0][0]<br>i =1时 ，result[0][1] = nums[0][1]<br>i =2时 ，result[0][2] = nums[1][0]<br>i =3时 ，result[0][3] = nums[0][1]<br>太巧妙了，服气。</p>
+<p>法三：<br>这个方法就是直接使用了numpy模块，直接使用里面的reshape函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import numpy</div><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">    <span class="comment">#    if len(nums)*len(nums[0]) != r*c：</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="built_in">return</span> numpy.reshape(nums,(r,c)).tolist()</div></pre></td></tr></table></figure></p>
+<p>tolist函数用于把一个矩阵转化成为list列表.</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/leetcode 566/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-leetcode 557" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -926,84 +1012,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/leetcode 217/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 189278" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 189278/">Leetcode-278/189--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 189278/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.735Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="278-First-Bad-Version"><a href="#278-First-Bad-Version" class="headerlink" title="278. First Bad Version"></a>278. First Bad Version</h1><p>题目大意就是找一个坏的版本，假设你有n个版本号 [1, 2, …, n]， 其中从某个版本号开始往后的所有版本都是错误版本，你想找到第一个错误的版本号。简单而言就是找一个特殊的数：实际上就是暴力法，一个一个比较，存在就输出，但是这样是AC不了的。<br>法一：或者它是第一个版本号，或者它是错误版本号且它前一个版本号是正确版本号。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def firstBadVersion(self, n):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type n: int</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        left, right = 1, n</div><div class="line">        while True:</div><div class="line">            mid = (left + right) / 2</div><div class="line">            if isBadVersion(mid):</div><div class="line">                if mid == 1 or not isBadVersion(mid - 1):</div><div class="line">                    return mid</div><div class="line">                right = mid - 1</div><div class="line">            else:</div><div class="line">                left = mid + 1</div></pre></td></tr></table></figure></p>
-<p>法二：其实可以不对错误的版本号进行特殊的判断操作，而是在缩小搜索范围时仍将当前错误版本号包含在新的区间内，那么最终区间只有一个元素时即为所求。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def firstBadVersion(self, n):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type n: int</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        left, right = 1, n</div><div class="line">        while left &lt; right:</div><div class="line">            mid = (left + right) / 2</div><div class="line">            if isBadVersion(mid):</div><div class="line">                right = mid</div><div class="line">            else:</div><div class="line">                left = mid + 1</div><div class="line">        return left</div></pre></td></tr></table></figure></p>
-<h1 id="189-Rotate-Array"><a href="#189-Rotate-Array" class="headerlink" title="189. Rotate Array"></a>189. Rotate Array</h1><p>题目大意，就是给一个列表list = [1，2，3，4，5]再给你个数比如2，你把列表下标2之前的数贴到列表后面变成［4，5，1，2，3］<br>法一：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">if k &gt; 0 and n &gt; 1:</div><div class="line">    ans = nums1[k:]</div><div class="line">    for i in nums1[0:k]:</div><div class="line">        ans.append(i)</div><div class="line"># ans.append(new)</div><div class="line">    print ans</div><div class="line">else:</div><div class="line">    return [1]  //判定的时候边界条件显示的</div></pre></td></tr></table></figure></p>
-<p>法二：<br>直接把前面的截了后面的截了，拼成一个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">def rotate(self, nums, k):</div><div class="line">   n = len(nums)</div><div class="line">   if k &gt; 0 and n &gt; 1:</div><div class="line">       nums[:] = nums[n - k:] + nums[:n - k]</div></pre></td></tr></table></figure></p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 189278/">展开全文 >></a>
         </p>
       
 

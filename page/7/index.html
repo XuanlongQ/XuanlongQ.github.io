@@ -185,6 +185,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-leetcode 189278" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/leetcode 189278/">Leetcode-278/189--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/leetcode 189278/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.735Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="278-First-Bad-Version"><a href="#278-First-Bad-Version" class="headerlink" title="278. First Bad Version"></a>278. First Bad Version</h1><p>题目大意就是找一个坏的版本，假设你有n个版本号 [1, 2, …, n]， 其中从某个版本号开始往后的所有版本都是错误版本，你想找到第一个错误的版本号。简单而言就是找一个特殊的数：实际上就是暴力法，一个一个比较，存在就输出，但是这样是AC不了的。<br>法一：或者它是第一个版本号，或者它是错误版本号且它前一个版本号是正确版本号。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def firstBadVersion(self, n):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type n: int</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        left, right = 1, n</div><div class="line">        while True:</div><div class="line">            mid = (left + right) / 2</div><div class="line">            if isBadVersion(mid):</div><div class="line">                if mid == 1 or not isBadVersion(mid - 1):</div><div class="line">                    return mid</div><div class="line">                right = mid - 1</div><div class="line">            else:</div><div class="line">                left = mid + 1</div></pre></td></tr></table></figure></p>
+<p>法二：其实可以不对错误的版本号进行特殊的判断操作，而是在缩小搜索范围时仍将当前错误版本号包含在新的区间内，那么最终区间只有一个元素时即为所求。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def firstBadVersion(self, n):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type n: int</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        left, right = 1, n</div><div class="line">        while left &lt; right:</div><div class="line">            mid = (left + right) / 2</div><div class="line">            if isBadVersion(mid):</div><div class="line">                right = mid</div><div class="line">            else:</div><div class="line">                left = mid + 1</div><div class="line">        return left</div></pre></td></tr></table></figure></p>
+<h1 id="189-Rotate-Array"><a href="#189-Rotate-Array" class="headerlink" title="189. Rotate Array"></a>189. Rotate Array</h1><p>题目大意，就是给一个列表list = [1，2，3，4，5]再给你个数比如2，你把列表下标2之前的数贴到列表后面变成［4，5，1，2，3］<br>法一：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">if k &gt; 0 and n &gt; 1:</div><div class="line">    ans = nums1[k:]</div><div class="line">    for i in nums1[0:k]:</div><div class="line">        ans.append(i)</div><div class="line"># ans.append(new)</div><div class="line">    print ans</div><div class="line">else:</div><div class="line">    return [1]  //判定的时候边界条件显示的</div></pre></td></tr></table></figure></p>
+<p>法二：<br>直接把前面的截了后面的截了，拼成一个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">def rotate(self, nums, k):</div><div class="line">   n = len(nums)</div><div class="line">   if k &gt; 0 and n &gt; 1:</div><div class="line">       nums[:] = nums[n - k:] + nums[:n - k]</div></pre></td></tr></table></figure></p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/leetcode 189278/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-leetcode 168171" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -934,127 +1012,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/heap/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-graph" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/graph/">二叉搜索树＋平衡树＋图算法（广度和深度）</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/graph/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.684Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>基本上python的数据结构，比较基础的就是这么多，大约入学前看过之后基本上都没怎么用到，虽然概念上感觉还挺清晰，但是自己徒手写就觉得不行，大约复习之后，还是把方向放到leetcode，上面的题可能会帮助的理解快一点，基本数据结构的知识就更新这么多，不自己写感觉效率好低，还要穿插着看论文，蓝瘦！</p>
-<h1 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h1><p>左子树中键值key都小于父节点，右子树的键值key都大于父节点称为BST搜索树。<br>因为我们必须能够创建和使用一个空二叉搜索树,所以我们的实现将使用两个类: 第一个类我们称为BinarySearchTree,第二个类我们称之为TreeNode。BinarySearchTree类有一个引用指向TreeNode即二叉搜索树的根。在大多数情况下,外部方法中要定义一个函数, 以便在类外看看子树是否是空的,如果在子树上有节点,要求有基本的方法,在BinarySearchTree类中,把根定义为一个参数。在树是空或者我们想删除根节点键值的情况下, 我们就必须采取特别行动。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class BinarySearchTree:</div><div class="line">    def __init__(self):</div><div class="line">        self.root = None</div><div class="line">        self.size = 0</div><div class="line"></div><div class="line">    def length(self):</div><div class="line">        return self.size</div><div class="line"></div><div class="line">    def __len__(self):</div><div class="line">        return self.size</div><div class="line"></div><div class="line">    def __iter__(self):</div><div class="line">        return self.root__iter__()</div></pre></td></tr></table></figure>
-<p>这些辅助函数,可以根据节点的位置辨别该节点属于何类子节点(左或右),以及该节点的子节点属于何类子节点(左或右)。TreeNode类也将明确地为每个节点追踪对父节点的引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">#TreeNode</div><div class="line">def replaceNodeData(self,key,value,lc,rc):</div><div class="line">    self.key = key</div><div class="line">    self.payload = value</div><div class="line">    self.leftChild = lc</div><div class="line">    self.rightChild = rc</div><div class="line">    if self.hasLeftChild():</div><div class="line">        self.leftChild.parent = self</div><div class="line">    if self.hasRightChild():</div><div class="line">        self.rightChild.parent = self</div><div class="line"></div><div class="line">def isLeftChild(self):</div><div class="line">    return self.parent and self.parent.leftChild == self</div><div class="line">def isRightChild(self):</div><div class="line">    return self.parent and self.parent.rightChild == self</div><div class="line">def isRoot(self):</div><div class="line">    return not self.parent</div><div class="line">def isLeaf(self):</div><div class="line">    return not (self.rightChild or self.leftChild)</div><div class="line">def hasAnyChildren(self):</div><div class="line">    return self.rightChild or self.leftChild</div><div class="line">def hasBothChildren(self):</div><div class="line">    return self.rightChild and self.leftChild</div></pre></td></tr></table></figure>
-<p>Alg:<br>它将检查树是否已经有根节点。如果没有,put将创建一个新的，并把它作为树的根节点,作为子树的根。如果一个根节点已经到位,我们就调用它自 己,进行递归,用辅助功能_put按下列算法来搜索树:</p>
-<ul>
-<li>从树的根开始搜索,比较新的键值,如果新的键值是小于当前节点,搜索左子树.如果新的键值是大于当前节点,搜索右子树。</li>
-<li>当无左(或右)子树的搜索,我们发现的位置就是应该在子树中安装新节点的位置。</li>
-<li>向树添加一个节点,在上一步发现插入对象的位置创建一个新的TreeNode。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">def put(self,key,value):</div><div class="line">    if self.root:</div><div class="line">        self._put(key,val,self.root)</div><div class="line">    else:</div><div class="line">        self.root = TreeNode(key,val)</div><div class="line">        self.size = self.size+1</div><div class="line"></div><div class="line">def _put(self,key,val,currentNode):</div><div class="line">    if key &lt; currentNode.key:</div><div class="line">        if currentNode.hasLeftChild():</div><div class="line">            self._put(key,val,currentNode.leftChild)</div><div class="line">        else:</div><div class="line">            currentNode.leftChild = TreeNode(key,val,parent = currentNode)</div><div class="line">    else:</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="删除二叉搜索树"><a href="#删除二叉搜索树" class="headerlink" title="删除二叉搜索树"></a>删除二叉搜索树</h2><p>如果树有一个以上的节点,我们使用_get方法搜索找到需要删除的TreeNode;如果树只有一个节点,这意味着我们要移除树的根,但是我们仍然必须检查以确保根的键是否匹配要删除的键。在以上两种情况下,如果未发现键值,del操作符就会报错。</p>
-<p>一旦我们发现含有要删除的键的节点,有三种情况,我们必须考虑:</p>
-<ul>
-<li><p>要删除的节点没有子树<br>如果当前节点没有子树,所有我们需要做的是删除该节 点并把指向该节点的引用移动给其父节点</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">if currentNode.isLeaf():</div><div class="line">    if currentNode == currentNode.parent.leftChild:</div><div class="line">        currentNode.parent.leftChild = None </div><div class="line">    else:</div><div class="line">        currentNode.parent.rightChild = None</div></pre></td></tr></table></figure>
-</li>
-<li><p>如果一个节点只有一个子节点,那我们可以􏰀提升子树以代替其父树的位置<br>由于有一个左或右子树的情况是对称的,我们将只讨论在当前节点有左子树的情况下,然后做对称对称。决策过程如下:<br>1.如果当前节点是左子节点,那我们只需要更新当前节点的左子节点指向当前节点的父节点引用,然后将父节点对左子节点的引用更新到当前节点的左子节点。<br>2.如果当前节点是一个右节点,那我们只需要更新当前节点的左子节点指向当前节点的父节点引用,然后将父节点对右子节点的引用更新到当前节点的左子节点。<br>3.如果当前节点没有父树节点,它必须是根节点。在这种情况下,我们只需更换键,有效载荷,左子节点和右子节点,方法是调用根节点的replaceNodeData方法。</p>
-</li>
-<li>如果一个节点有两个子节点,我们不可能简单 地其中一个作为􏰀升至父节点的位置,这就需要寻找一个节点,用来代替一个计划删除的节点,我们需要的这个节点,需要保存现有的左、右子树以及二叉搜索树关系。符合该要求的节点有树中第二大的键。我们称这个节点为继任者,然后我们将一路寻找继任者,继任者保证没有一个以上的子节点,所以我们知道如何用已经知道的两种情况实现它。一旦继任者被移动,我们把它放在将被删除的子节点处。</li>
-</ul>
-<h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><p>当树变得不平衡时 get 和 put 操作会 使二叉搜索树的性能降低到 O(n) 。在这一节中我们将看到一种特殊的二叉搜索树,它可以自动进 行调整,以确保树时时保持平衡。这种树被称为 AVL 树。<br>AVL 树实现图(Map)的抽象数据类型,就像一个普通的二叉搜索树,唯一不同的是这棵树的 工作方式。为实现 AVL 树我们需要在树中的每个节点加入一个平衡因子(balance factor)以跟踪其变化情况。我们通过比较每个节点的左右子树的高度完成比较。更正式的定义是,一个节点的平衡因子定义为左子树的高度和右子树的高度之差。<br>balanceFactor = height(leftSubTree)-height(rightSubTree)<br>利用以上的平衡因子的定义,如果平衡因子小于零,我们称子树“左重” (left-heavy) 。 如果平衡因子小于零,那么子树是“右重” (right-heavy)。如果平衡因子是零,树是完美的平衡。为实现AVL 树的目的,并获得具有平衡的树,我们将定义如果平衡因子是-1,0或1,那么这个树是平衡的。一旦树中的节点的平衡因子超出了这个范围, 我们需要将树恢复平衡。</p>
-<ul>
-<li>旋转二叉树 不会！回头再看</li>
-</ul>
-<h1 id="图和图算法"><a href="#图和图算法" class="headerlink" title="图和图算法"></a>图和图算法</h1><p>图的实现有两个著名的方法,邻接矩阵 adjacency matrix 和邻接表 adjacency list。<br>邻接矩阵,邻接矩阵的优点是简单,对于简单的图来说很容易看出节点之间的联系状态。然而,我们也注意到大部分的矩阵分量是空的,这种情况我们称矩阵是“稀疏”的。矩阵并不是一个储存稀疏数据的有效途径。<br><img src="/images/juzheng.jpeg" alt="juzheng"><br>邻接表,主列表中的每个顶点,再关联一个与自身有边连接的所有 顶点的列表。<br><img src="/images/biao.jpeg" alt="biao"></p>
-<p>邻接表的实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">class Vertex:</div><div class="line">    def __init__ (self,key):</div><div class="line">        self.id = key</div><div class="line">        self.connectedTo = &#123;&#125;</div><div class="line"></div><div class="line">    def addNeighbor(self,nbr,weight = 0):</div><div class="line">        self.connectedTo[nbr] = weight</div><div class="line"></div><div class="line">    def __str__(self):</div><div class="line">        return str(self.id) + &apos;connectedTo:&apos; +str([x.id for x in self.connectedTo])</div><div class="line"></div><div class="line">    def getConnections(self):</div><div class="line">        return self.connectedTo.keys()</div><div class="line"></div><div class="line">    def getID(self):</div><div class="line">        return self.id</div><div class="line"></div><div class="line">    def getWeight(self,nbr):</div><div class="line">        return self.connectedTo[nbr]</div><div class="line"></div><div class="line">class Graph:</div><div class="line">    def __init__(self):</div><div class="line">        self.vertList = &#123;&#125;</div><div class="line">        self.numVertList = 0</div><div class="line"></div><div class="line">    def addVertex(self,key):</div><div class="line">        self.numVertices = self.numVertices + 1</div><div class="line">        newVertex = Vertex(key)</div><div class="line">        self.vertList[key] = newVertex</div><div class="line"></div><div class="line">    def getVertex(self,n):</div><div class="line">        if n in self.vertList:</div><div class="line">            return self.vertList[n]</div><div class="line">        else:</div><div class="line">            return None</div><div class="line"></div><div class="line">    def __contains__(self,n):</div><div class="line">        return n in self.vertList</div><div class="line"></div><div class="line">    def  addEdge(self,f,t,cost = 0):</div><div class="line">        if f not in self.vertList:</div><div class="line">            nv = self.addVertex(f)</div><div class="line">        if t not in self.vertList:</div><div class="line">            nv = self.addVertex(t)</div><div class="line">            self.vertList[f].addNeighbor(self.vertList[t],cost)</div><div class="line">    def getVertices(self):</div><div class="line">        return self.vertList.keys()</div><div class="line"></div><div class="line">    def __iter__(self):</div><div class="line">        return iter(self.vertList.values())</div></pre></td></tr></table></figure></p>
-<h2 id="词梯问题"><a href="#词梯问题" class="headerlink" title="词梯问题"></a>词梯问题</h2><p>如何算出从开始单词到目标单词所需要的最小转换 次数。</p>
-<ul>
-<li>以图的形式􏰁绘出单词之间的关系</li>
-<li>利用被称作广度优先搜索(BFS)的图算法找到一条从开始单词到目标单词的最短路径。<br>假设我们有非常多的桶,每个桶外都贴有一个四个字母的 单词标签,并且标签上有且仅有一个字母被‘ <em>’(通配符)所代替。<br>我们就可能 会将一个桶贴上“ pop</em>”, 当我们处理我们的列表中的每个词,都将其与每个桶比较,使用“<em>”作为一个通配符,那么“pope” 和“ pops” 都与“ pop</em>”匹配。每次我们找到一个匹配的桶,我们把单词放在桶里。一旦我们把所有单词都放在适当的桶里,我们便知道,同一个桶里的所有单词 都是相互连接的。<br><img src="/images/tong.jpeg" alt="tong"></li>
-</ul>
-<h2 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h2><p>（这个代码我明天自己写写看，北大的书上写的感觉好复杂）<br>广度优先搜索算法(Breadth First Search)，又称为”宽度优先搜索”或”横向优先搜索”，简称BFS。</p>
-<p>它的思想是：从图中某顶点v出发，在访问了v之后依次访问v的各个未曾访问过的邻接点，然后分别从这些邻接点出发依次访问它们的邻接点，并使得“先被访问的顶点的邻接点先于后被访问的顶点的邻接点被访问，直至图中所有已被访问的顶点的邻接点都被访问到。如果此时图中尚有顶点未被访问，则需要另选一个未曾被访问过的顶点作为新的起始点，重复上述过程，直至图中所有顶点都被访问到为止。</p>
-<p>换句话说，广度优先搜索遍历图的过程是以v为起点，由近至远，依次访问和v有路径相通且路径长度为1,2…的顶点。</p>
-<h2 id="无向图的广度优先搜索"><a href="#无向图的广度优先搜索" class="headerlink" title="无向图的广度优先搜索"></a>无向图的广度优先搜索</h2><p><img src="/images/wuxiang.jpeg" alt="wuxiang"><br>第1步：访问A。<br>第2步：依次访问C,D,F。<br>    在访问了A之后，接下来访问A的邻接点。前面已经说过，在本文实现中，顶点ABCDEFG按照顺序存储的，C在”D和F”的前面，因此，先访问C。再访问完C之后，再依次访问D,F。<br>第3步：依次访问B,G。<br>    在第2步访问完C,D,F之后，再依次访问它们的邻接点。首先访问C的邻接点B，再访问F的邻接点G。<br>第4步：访问E。<br>    在第3步访问完B,G之后，再依次访问它们的邻接点。只有G有邻接点E，因此访问G的邻接点E。</p>
-<p>因此访问顺序是：A -&gt; C -&gt; D -&gt; F -&gt; B -&gt; G -&gt; E</p>
-<h2 id="有向图的广度优先搜索"><a href="#有向图的广度优先搜索" class="headerlink" title="有向图的广度优先搜索"></a>有向图的广度优先搜索</h2><p><img src="/images/youxiang.jpeg" alt="youxiang"><br>第1步：访问A。<br>第2步：访问B。<br>第3步：依次访问C,E,F。<br>    在访问了B之后，接下来访问B的出边的另一个顶点，即C,E,F。前面已经说过，在本文实现中，顶点ABCDEFG按照顺序存储的，因此会先访问C，再依次访问E,F。<br>第4步：依次访问D,G。<br>    在访问完C,E,F之后，再依次访问它们的出边的另一个顶点。还是按照C,E,F的顺序访问，C的已经全部访问过了，那么就只剩下E,F；先访问E的邻接点D，再访问F的邻接点G。</p>
-<p>因此访问顺序是：A -&gt; B -&gt; C -&gt; E -&gt; F -&gt; D -&gt; G</p>
-<h1 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h1><p>图的深度优先搜索(Depth First Search)，和树的先序遍历比较类似。</p>
-<p>它的思想：假设初始状态是图中所有顶点均未被访问，则从某个顶点v出发，首先访问该顶点，然后依次从它的各个未被访问的邻接点出发深度优先搜索遍历图，直至图中所有和v有路径相通的顶点都被访问到。 若此时尚有其他顶点未被访问到，则另选一个未被访问的顶点作起始点，重复上述过程，直至图中所有顶点都被访问到为止。</p>
-<p>显然，深度优先搜索是一个递归的过程。</p>
-<h2 id="无向图的深度优先搜索"><a href="#无向图的深度优先搜索" class="headerlink" title="无向图的深度优先搜索"></a>无向图的深度优先搜索</h2><p><img src="/images/wuxiangdfs.jpeg" alt="wuxiangdfs"><br>第1步：访问A。<br>第2步：访问(A的邻接点)C。<br>    在第1步访问A之后，接下来应该访问的是A的邻接点，即”C,D,F”中的一个。但在本文的实现中，顶点ABCDEFG是按照顺序存储，C在”D和F”的前面，因此，先访问C。<br>第3步：访问(C的邻接点)B。<br>    在第2步访问C之后，接下来应该访问C的邻接点，即”B和D”中一个(A已经被访问过，就不算在内)。而由于B在D之前，先访问B。<br>第4步：访问(C的邻接点)D。<br>    在第3步访问了C的邻接点B之后，B没有未被访问的邻接点；因此，返回到访问C的另一个邻接点D。<br>第5步：访问(A的邻接点)F。<br>    前面已经访问了A，并且访问完了”A的邻接点B的所有邻接点(包括递归的邻接点在内)”；因此，此时返回到访问A的另一个邻接点F。<br>第6步：访问(F的邻接点)G。<br>第7步：访问(G的邻接点)E。</p>
-<p>因此访问顺序是：A -&gt; C -&gt; B -&gt; D -&gt; F -&gt; G -&gt; E</p>
-<h2 id="有向图的深度优先搜索"><a href="#有向图的深度优先搜索" class="headerlink" title="有向图的深度优先搜索"></a>有向图的深度优先搜索</h2><p><img src="/images/youxiangdfs.jpeg" alt="youxiangdfs"><br>第1步：访问A。<br>第2步：访问B。<br>    在访问了A之后，接下来应该访问的是A的出边的另一个顶点，即顶点B。<br>第3步：访问C。<br>    在访问了B之后，接下来应该访问的是B的出边的另一个顶点，即顶点C,E,F。在本文实现的图中，顶点ABCDEFG按照顺序存储，因此先访问C。<br>第4步：访问E。<br>    接下来访问C的出边的另一个顶点，即顶点E。<br>第5步：访问D。<br>    接下来访问E的出边的另一个顶点，即顶点B,D。顶点B已经被访问过，因此访问顶点D。<br>第6步：访问F。<br>    接下应该回溯”访问A的出边的另一个顶点F”。<br>第7步：访问G。</p>
-<p>因此访问顺序是：A -&gt; B -&gt; C -&gt; E -&gt; D -&gt; F -&gt; G</p>
-<p>代码明天一定会po！！！！</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/graph/">展开全文 >></a>
         </p>
       
 

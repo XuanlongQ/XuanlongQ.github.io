@@ -185,6 +185,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-bianli" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/bianli/">树的遍历方式</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/bianli/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.947Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前序遍历(preorder):在前序遍历中,我们先访问根节点,然后递归地前序遍历访问左子树,再 递归地前序遍历访问右子树。<br>中序遍历(inorder):在中序遍历中,我们递归地中序遍历访问左子树,然后访问根节点,最后 再递归地中序遍历访问右子树。<br>后序遍历(postorder):在后序遍历中,我们先递归地后序遍历访问左子树和右子树,最后访问 根节点。</p>
+<h1 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h1><p>根－左子树－右子树<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def preorder(self):</div><div class="line">    print(self.key)</div><div class="line">    if self.leftChild:</div><div class="line">        self.leftChild.preorder()</div><div class="line">    if self.rightChild:</div><div class="line">        self.rightChild.preoder()</div></pre></td></tr></table></figure></p>
+<p>preorder函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def preorder(self):</div><div class="line">    print(self.key)</div><div class="line">    if self.leftChild:</div><div class="line">        self.leftChild.preorder()</div><div class="line">    if self.rightChild:</div><div class="line">        self.rightChild.preorder()</div></pre></td></tr></table></figure></p>
+<h1 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def inorder(tree): if tree != None:</div><div class="line">inorder(tree.getLeftChild()) print(tree.getRootVal()) inorder(tree.getRightChild())</div></pre></td></tr></table></figure>
+<h1 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def postorder(tree): if tree != None:</div><div class="line">postorder(tree.getLeftChild()) postorder(tree.getRightChild()) print(tree.getRootVal())</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/bianli/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-beibao" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -738,7 +816,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Xuanlong-Qin"><a href="#Xuanlong-Qin" class="headerlink" title="Xuanlong Qin"></a>Xuanlong Qin</h1><p><img src="/images/xuanlong.png" alt="Xuanlong"><br>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x71;&#120;&#108;&#x70;&#107;&#117;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x71;&#120;&#108;&#x70;&#107;&#117;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a><br><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#120;&#117;&#x61;&#110;&#108;&#x6f;&#x6e;&#103;&#x40;&#112;&#107;&#x75;&#x2e;&#x65;&#100;&#117;&#x2e;&#99;&#x6e;">&#120;&#117;&#x61;&#110;&#108;&#x6f;&#x6e;&#103;&#x40;&#112;&#107;&#x75;&#x2e;&#x65;&#100;&#117;&#x2e;&#99;&#x6e;</a></p>
+<p>E-mail:<br><a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x71;&#120;&#108;&#112;&#x6b;&#117;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#109;">&#x71;&#120;&#108;&#112;&#x6b;&#117;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#109;</a><br><a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x78;&#117;&#97;&#110;&#x6c;&#x6f;&#110;&#103;&#x40;&#x70;&#x6b;&#x75;&#x2e;&#101;&#x64;&#117;&#46;&#x63;&#110;">&#x78;&#117;&#97;&#110;&#x6c;&#x6f;&#110;&#103;&#x40;&#x70;&#x6b;&#x75;&#x2e;&#101;&#x64;&#117;&#46;&#x63;&#110;</a></p>
 <pre><code>- Please pay attention to case sensitive
 </code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
 <p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
@@ -1092,86 +1170,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/test/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-test blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/test blog/">Test comment系统</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/test blog/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.907Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>要进入全文才能看到评论系统感觉不科学，要不要调一下web架构呢。蓝瘦</p>
-<p>添加了一晚上的评论系统，使用 “多说 disqus”的评论系统，这个文件用来测试评论系统是否成功。<br>评论系统输入：<br>1.可以选择游客和自己邮箱评论两种方式。<br>2.游客方式 可以自己键入自己的name，邮箱随便填写都行，但是需要满足邮箱格式，比如woshitiancai@gmai.com<br>3.自己的邮箱评论会获得confirm邮件，费时费力不建议使用。</p>
-<h2 id="哈哈哈哈，yoho！！！！！"><a href="#哈哈哈哈，yoho！！！！！" class="headerlink" title="哈哈哈哈，yoho！！！！！"></a>哈哈哈哈，yoho！！！！！</h2><h1 id="测试后台："><a href="#测试后台：" class="headerlink" title="测试后台："></a>测试后台：</h1><p>test/blog/hexo<br>INFO  Deploying: git<br>INFO  Clearing .deploy_git folder…<br>INFO  Copying files from public folder…<br>INFO  Copying files from extend dirs…<br>[master bc16cd8] Site updated: 2017-06-30 22:50:39<br> 59 files changed, 1605 insertions(+), 716 deletions(-)<br> create mode 100644 2017/06/30/test blog/index.html<br> rewrite content.json (97%)<br>To <a href="https://github.com/XuanlongQ/XuanlongQ.github.io.git" target="_blank" rel="external">https://github.com/XuanlongQ/XuanlongQ.github.io.git</a><br>   9b35f86..bc16cd8  HEAD -&gt; master<br>Branch master set up to track remote branch master from <a href="https://github.com/XuanlongQ/XuanlongQ.github.io.git" target="_blank" rel="external">https://github.com/XuanlongQ/XuanlongQ.github.io.git</a>.</p>
-<p>后台没啥问题，测试一下前端。</p>
-<h1 id="测试前端："><a href="#测试前端：" class="headerlink" title="测试前端："></a>测试前端：</h1><h1 id="this-is-a-comment-test"><a href="#this-is-a-comment-test" class="headerlink" title="this is a comment test"></a>this is a comment test</h1><p>要进文章才能评论。</p>
-<p>眼睛要瞎了，学到一句话：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">记得每天都要拉开窗帘 不然会觉得与世隔绝 渐渐封闭</div></pre></td></tr></table></figure></p>
-<p>听起来就很孤独，答主你要学会取悦自己啊。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/test blog/">展开全文 >></a>
         </p>
       
 

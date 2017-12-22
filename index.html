@@ -185,6 +185,157 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-run_ns_2.34_ubuntu_14.04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/22/run_ns_2.34_ubuntu_14.04/">在Ubuntu14.04下搭建NS-2.34</a>
+    </h1>
+  
+
+        
+        <a href="/2017/12/22/run_ns_2.34_ubuntu_14.04/" class="archive-article-date">
+  	<time datetime="2017-12-22T08:44:47.601Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>因为pFrabic是在ns2.34上实现的，所以会出现包的回退。所以写一下搭建的过程。</p>
+<p>ubuntu14.04 不要update！不要update！不要update！</p>
+<p>1.首先去下载<a href="https://sourceforge.net/projects/nsnam/files/allinone/ns-allinone-2.34/ns-allinone-2.34.tar.gz/download" target="_blank" rel="external">ns-2.34</a>. </p>
+<p>2.安装前配置环境<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$sudo</span> apt-get install build－essential</div><div class="line"><span class="variable">$sudo</span> apt-get install tcl8.4 tcl8.4-dev tk8.4 tk8.4-dev</div><div class="line"><span class="variable">$sduo</span> apt-get install libxmu-dev libxmu-headers</div></pre></td></tr></table></figure></p>
+<p>3.在终端进行解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$tar xvfz ns-allinone-2.34.tar.gz</div><div class="line">$cd /ns-allinone-2.34</div><div class="line">$./install</div></pre></td></tr></table></figure></p>
+<p>4.由于ns-2.34会出现报错，按以下逐次解决  </p>
+<h2 id="problem-statement"><a href="#problem-statement" class="headerlink" title="problem statement"></a>problem statement</h2><p>(1) otcl.o：在函数‘Otcl_Init’中：<br>/home/xuanlong/ns-allinone-2.34/otcl-1.13/otcl.c:2284：对‘<strong>stack_chk_fail_local’未定义的引用<br>ld: libotcl.so: hidden symbol `</strong>stack_chk_fail_local’ isn’t defined<br>ld: 最终连接失败: 错误的值<br>make: <em>*</em> [libotcl.so] 错误 1<br>otcl-1.13 make failed! Exiting …</p>
+<p>修改：</p>
+<p>  在终端输入以下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd otcl-1.13</div><div class="line">       $ sudo gedit configure.in</div></pre></td></tr></table></figure></p>
+<p>把77行的SHLIB_LD=”ld -shared”，改为SHLIB_LD=”gcc -shared”，保存退出。</p>
+<p>然后</p>
+<p>$ sudo gedit configure</p>
+<p>在键盘按Ctrl+F，输入SHLIB_LD=”ld -shared”，点击查找，在6300行找到SHLIB_LD=”ld - shared”，改为SHLIB_LD=”gcc -shared”,保存退出。</p>
+<p>(2)tools/ranvar.cc: In member function ‘virtual double GammaRandomVariable::value()’:<br>tools/ranvar.cc:219:70: error: cannot call constructor ‘GammaRandomVariable::GammaRandomVariable’ directly [-fpermissive]<br>   return GammaRandomVariable::GammaRandomVariable(1.0 + alpha<em>, beta</em>).value() <em> pow (u, 1.0 / alpha_);<br>                                                                      ^<br>tools/ranvar.cc:219:70: error:   for a function-style cast, remove the redundant ‘::GammaRandomVariable’ [-fpermissive]<br>make: **</em> [tools/ranvar.o] 错误 1<br>Ns make failed!</p>
+<p>解决：这是由于gcc版本提高后对类内部函数调用的简化造成的不兼容，解决方法如下：</p>
+<p> 在ns-allinone-2.34/ns-2.34/tools文件夹下，找到报错提示中的ranvar.cc文件，打开找到对应的219行删除::GaammaRandomVariable，保存，</p>
+<p>即：将219行的</p>
+<p>return GammaRandomVariable::GammaRandomVariable(1.0 + alpha<em>,beta</em>).value() * pow (u, 1.0 / alpha_);</p>
+<p>改为：</p>
+<p>return GammaRandomVariable(1.0 + alpha<em>, beta</em>).value() * pow(u, 1.0 / alpha_);</p>
+<p> 然后保存退出，重新安装ns2.</p>
+<p>(3)In file included from mac/mac-802_11Ext.cc:66:0:<br>mac/mac-802_11Ext.h: In member function ‘u_int32_t PHY_MIBExt::getHdrLen11()’:<br>mac/mac-802_11Ext.h:175:19: error: expected primary-expression before ‘struct’<br>   return(offsetof(struct hdr_mac802_11, dh_body[0])<br>                   ^<br>mac/mac-802_11Ext.h:175:41: error: ‘dh_body’ was not declared in this scope<br>   return(offsetof(struct hdr_mac802_11, dh_body[0])<br>                                         ^<br>mac/mac-802_11Ext.h:175:51: error: ‘offsetof’ was not declared in this scope<br>   return(offsetof(struct hdr_mac802_11, dh_body[0])<br>                                                   ^<br>mac/mac-802_11Ext.h:177:3: warning: control reaches end of non-void function [-Wreturn-type]<br>   }<br>   ^<br>make: <em>*</em> [mac/mac-802_11Ext.o] 错误 1<br>Ns make failed!</p>
+<p>解决：下面是网上找得关于本问题的解决方案：</p>
+<p>If you get error like:</p>
+<p>mac/mac-802_11Ext.h: In member function ‘u_int32_tPHY_MIBExt::getHdrLen11()’:<br>mac/mac-802_11Ext.h:176:19: error: expected primary-expressionbefore ‘struct’<br>mac/mac-802_11Ext.h:176:41: error: ‘dh_body’ was not declared inthis scope<br>mac/mac-802_11Ext.h:176:51: error: ‘offsetof’ was not declared inthis scope</p>
+<p>open that file and add</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ #include &lt;cstddef&gt;  //只要添加这个头文件就行</div></pre></td></tr></table></figure>
+<p>to the header files.<br>在ns-allinone-2.34\ns-2.34\mac\mac-802_11Ext.h文件添加#include<cstddef><br>然后重新安装，就OK了。</cstddef></p>
+<p>(4)mobile/nakagami.cc:183:73: error:   for a function-style cast, remove the redundant ‘::ErlangRandomVariable’ [-fpermissive]<br>mobile/nakagami.cc:185:67: error: cannot call constructor ‘GammaRandomVariable::GammaRandomVariable’ directly [-fpermissive]<br>     resultPower = GammaRandomVariable::GammaRandomVariable(m, Pr/m).value();<br>                                                                   ^<br>mobile/nakagami.cc:185:67: error:   for a function-style cast, remove the redundant ‘::GammaRandomVariable’ [-fpermissive]<br>make: <em>*</em> [mobile/nakagami.o] 错误 1<br>Ns make failed!</p>
+<p>解决：</p>
+<p>在ns-allinone-2.34/ ns-2.34/mobile文件夹下，找到报错提示中的nakagami.cc文件，打开找到对应的183行删除::ErlangRandomVariable，保存，</p>
+<p>即：将183行的</p>
+<p>resultPower = ErlangRandomVariable::ErlangRandomVariable(Pr/m,int_m).value();</p>
+<p>改为：</p>
+<p>resultPower = ErlangRandomVariable(Pr/m, int_m).value();</p>
+<p>在ns-allinone-2.34/ ns-2.34/mobile文件夹下，找到报错提示中的nakagami.cc文件，打开找到对应的185行删除::GammaRandomVariable，保存，</p>
+<p>即：将185行的</p>
+<p>resultPower = GammaRandomVariable::GammaRandomVariable(m,Pr/m).value();</p>
+<p>改为：</p>
+<p>resultPower = GammaRandomVariable(m, Pr/m).value();</p>
+<p>重新在ns目录下键入$./install安装，再次出现同类问题时，仿照此次解决方法，找到对应的文件和行数，修改即可。直到安装成功。</p>
+<p>(5)linkstate/ls.cc:396:28:   required from here<br>linkstate/ls.h:137:58: error: ‘erase’ was not declared in this scope, and no declarations were found by argument-dependent lookup at the point of instantiation [-fpermissive]<br>  void eraseAll() { erase(baseMap::begin(), baseMap::end()); }<br>                                                          ^<br>linkstate/ls.h:137:58: note: declarations in dependent base ‘std::map<int, lsidseq,="" std::less<int="">, std::allocator<std::pair<const int,="" lsidseq=""> &gt; &gt;’ are not found by unqualified lookup<br>linkstate/ls.h:137:58: note: use ‘this-&gt;erase’ instead<br>make: <em>*</em> [linkstate/ls.o] 错误 1<br>Ns make failed!</std::pair<const></int,></p>
+<p>解决：修改ls文件：<br>ns-2.35/linkstate/ls.h  第137行</p>
+<p>void eraseAll() { erase(baseMap::begin(), baseMap::end()); }</p>
+<p>改为：<br>void eraseAll() { this-&gt;erase(baseMap::begin(), baseMap::end()); }</p>
+<p>然后重新 ./install</p>
+<p>Please compile your xgraph separately.</p>
+<p>Ns-allinone package has been installed successfully.<br>Here are the installation places:<br>tcl8.4.18:    /home/jacob/ns-allinone-2.34/{bin,include,lib}<br>tk8.4.18:        /home/jacob/ns-allinone-2.34/{bin,include,lib}<br>otcl:        /home/jacob/ns-allinone-2.34/otcl-1.13<br>tclcl:        /home/jacob/ns-allinone-2.34/tclcl-1.19<br>ns:        /home/jacob/ns-allinone-2.34/ns-2.34/ns<br>nam:    /home/jacob/ns-allinone-2.34/nam-1.14/nam<br>gt-itm:   /home/jacob/ns-allinone-2.34/itm, edriver, sgb2alt, sgb2ns, sgb2comns, sgb2hierns</p>
+<hr>
+<p>Please put /home/jacob/ns-allinone-2.34/bin:/home/jacob/ns-allinone-2.34/tcl8.4.18/unix:/home/jacob/ns-allinone-2.34/tk8.4.18/unix<br>into your PATH environment; so that you’ll be able to run itm/tclsh/wish/xgraph.</p>
+<p>IMPORTANT NOTICES:</p>
+<p>(1) You MUST put /home/jacob/ns-allinone-2.34/otcl-1.13, /home/jacob/ns-allinone-2.34/lib,<br>    into your LD_LIBRARY_PATH environment variable.<br>    If it complains about X libraries, add path to your X libraries<br>    into LD_LIBRARY_PATH.<br>    If you are using csh, you can set it like:<br>        setenv LD_LIBRARY_PATH <paths><br>    If you are using sh, you can set it like:<br>        export LD_LIBRARY_PATH=<paths></paths></paths></p>
+<p>(2) You MUST put /home/jacob/ns-allinone-2.34/tcl8.4.18/library into your TCL_LIBRARY environmental<br>    variable. Otherwise ns/nam will complain during startup.</p>
+<p>After these steps, you can now run the ns validation suite with<br>cd ns-2.34; ./validate</p>
+<p>For trouble shooting, please first read ns problems page<br><a href="http://www.isi.edu/nsnam/ns/ns-problems.html" target="_blank" rel="external">http://www.isi.edu/nsnam/ns/ns-problems.html</a>. Also search the ns mailing list archive<br>for related posts.</p>
+<p>至此已经安装完成，下面按照提示要compile your xgraph 并添加环境变量</p>
+<p>环境变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd</div><div class="line">$ sudo gedit .bashrc</div><div class="line">在文件末尾加入</div><div class="line"></div><div class="line">//#ns-2.34</div></pre></td></tr></table></figure></p>
+<p>export PATH=$PATH:/home/qjump/Workdir/ns-allinone-2.34/bin:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/unix:/home/qjump/Workdir/ns-allinone-2.34/tk8.4.18/unix</p>
+<p>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/qjump/Workdir/ns-allinone-2.34/otcl-1.13:/home/qjump/Workdir/ns-allinone-2.34/lib</p>
+<p>export TCL_LIBRARY=$TCL_LIBRARY:/home/qjump/Workdir/ns-allinone-2.34/tcl8.4.18/library<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">然后执行</div></pre></td></tr></table></figure></p>
+<p>$ source .bashrc<br>```</p>
+<p>安装nam<br>　　 cd ns-allinone-2.34/nam-1.14<br>　　 ./configure<br>　　 make<br>　　 sudo make install (至此,nam安装好)在终端中输入nam命令，弹出nam界面则说明nam安装好了</p>
+<p>compile xgraph:</p>
+<p>进入未编译的ns-allinone-2.33/xgraph-12.1目录下</p>
+<p>敲./configrue</p>
+<p>接着make</p>
+<p>出现错误：dialog.c:780:5: error: too few arguments to function ‘getline’<br>     while (getline(&amp;lineptr, line)) {<br>     ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: note: declared here<br>extern _IO_ssize_t getline (char <strong><strong>restrict </strong>lineptr,<br>                    ^<br>dialog.c: In function ‘getline’:<br>dialog.c:893:9: error: argument ‘lptr’ doesn’t match prototype<br>char   *lptr;<br>         ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: error: prototype declaration<br>extern _IO_ssize_t getline (char </strong><strong>restrict </strong>lineptr,<br>                    ^<br>dialog.c:899:1: error: number of arguments doesn’t match prototype<br> {<br> ^<br>In file included from xgraph.h:18:0,<br>                 from dialog.c:11:<br>/usr/include/stdio.h:678:20: error: prototype declaration<br>extern _IO_ssize_t getline (char **<strong>restrict </strong>lineptr,</p>
+<p>解决：</p>
+<p>The standard lib (stdio.h) function getline has been redefined in<installdir>/ns-allinone-2.31/xgraph-12.1/dialog.c. Quick fix:Edit the file and change the two references to getline to somethingelse, e.g. getmyline. Then the program builds…</installdir></p>
+<p>就是说，把dialog.c中的 所有geline替换成getmyline</p>
+<p>接着make.</p>
+<p>make完后</p>
+<p>make install</p>
+<p>测试：</p>
+<p>进入ns-allinone-2.33/xgraph-12.1/examples目录下</p>
+<p>敲：</p>
+<p>xgraph bar.xg</p>
+<h1 id="Resouce"><a href="#Resouce" class="headerlink" title="Resouce"></a>Resouce</h1><p>1.<a href="http://jacob01.lofter.com/post/3e6f87_3b94a21" target="_blank" rel="external">ubuntu14.04 安装ns-2.34</a>.原博客<br>2.<a href="https://github.com/XuanlongQ/NS-2.34/tree/master/ns-allinone-2.34" target="_blank" rel="external">修改后的NS-2.34-src包</a>.编译以后pull到Github的包。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">network</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/12/22/run_ns_2.34_ubuntu_14.04/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-FCT" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -319,6 +470,8 @@
         <p>看到几篇不错的TCP数据传输的博文，记录一下。<br>侵权作者可以给我发邮件，我只贴链接。<br>1.<a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="external">TCP 的那些事儿（上）</a>.作者：陈皓<br>2.<a href="http://blog.csdn.net/woxiaozhi/article/details/27328657" target="_blank" rel="external">TCP 的那些事儿（下）</a>.这两篇文章入门挺好但是要想详细了解还是要从TCP/IP 协议这本书开始，然后看看论文。</p>
 <p>3.<a href="http://www.chenshake.com/sflow/" target="_blank" rel="external">学习sFlow–陈沙克日志</a>.作者：陈沙克<br>貌似也是和李呈混SDNAP的，sFlow本身的网络流量监管性能很卓越，但是需要openswitch的支持，NS-3支持sFlow.</p>
 <p>4.<a href="http://csie.nqu.edu.tw/smallko/ns2_old/ns2.htm" target="_blank" rel="external">NS-2教学手册</a>.作者：柯志亨<br>这个已经很全了，(国立)金门大学<a href="http://csie.nqu.edu.tw/smallko/" target="_blank" rel="external">柯志亨</a>自己搞的。</p>
+<p>5.<a href="http://jacob01.lofter.com/post/3e6f87_3b94a21" target="_blank" rel="external">Ubuntu14.04+ns2.34</a>.这个搭配会出现包不匹配情况，按照这个修正我跑通了，我们常见的是14.04+ns2.35除了会出现/linkstate/ls.h的erase问题，其余都是正常的。</p>
+<p>6.<a href="http://blog.csdn.net/tao_627/article/details/44004541" target="_blank" rel="external">在Ubuntu 14.04 64bit上安装numpy和matplotlib库</a>.这个搭配也是跑通的。</p>
 
       
 
@@ -992,84 +1145,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/binaryheap/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-bianli" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/bianli/">树的遍历方式</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/bianli/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.947Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前序遍历(preorder):在前序遍历中,我们先访问根节点,然后递归地前序遍历访问左子树,再 递归地前序遍历访问右子树。<br>中序遍历(inorder):在中序遍历中,我们递归地中序遍历访问左子树,然后访问根节点,最后 再递归地中序遍历访问右子树。<br>后序遍历(postorder):在后序遍历中,我们先递归地后序遍历访问左子树和右子树,最后访问 根节点。</p>
-<h1 id="前序遍历"><a href="#前序遍历" class="headerlink" title="前序遍历"></a>前序遍历</h1><p>根－左子树－右子树<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def preorder(self):</div><div class="line">    print(self.key)</div><div class="line">    if self.leftChild:</div><div class="line">        self.leftChild.preorder()</div><div class="line">    if self.rightChild:</div><div class="line">        self.rightChild.preoder()</div></pre></td></tr></table></figure></p>
-<p>preorder函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def preorder(self):</div><div class="line">    print(self.key)</div><div class="line">    if self.leftChild:</div><div class="line">        self.leftChild.preorder()</div><div class="line">    if self.rightChild:</div><div class="line">        self.rightChild.preorder()</div></pre></td></tr></table></figure></p>
-<h1 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def inorder(tree): if tree != None:</div><div class="line">inorder(tree.getLeftChild()) print(tree.getRootVal()) inorder(tree.getRightChild())</div></pre></td></tr></table></figure>
-<h1 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def postorder(tree): if tree != None:</div><div class="line">postorder(tree.getLeftChild()) postorder(tree.getRightChild()) print(tree.getRootVal())</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/bianli/">展开全文 >></a>
         </p>
       
 

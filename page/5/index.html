@@ -185,6 +185,104 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ns3_linux_5.6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ns3_linux_5.6/">ns-3网络模拟器基础及应用/NS-3内核(Tracing系统部分 三)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ns3_linux_5.6/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在我们以往的调试的时候都是使用cout语句来进行信息的输出。在ns-3中由于里面的块都是独立的，而且信息很庞杂，所以用cout语句信息量太大，难以辨认一般我会在调试的时候使用一下，在ns-3里面比较常用的是日志系统Logging。</p>
+<ul>
+<li>举个栗子：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#include "ns3/core-module.h"</span></div><div class="line">NS_LOG_COMPOENT_DDFINE(ScratchSimultor);</div><div class="line">using namespace ns3;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">	NS_LOG_UNCOND(<span class="string">"Scratch Simulator"</span>);</div><div class="line">	<span class="built_in">return</span> 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Logging系统的等级制度其实会给予很大的帮助常见的INFO和FUNCTION就够了，但是对于小程序用Logging是适用的，但是大型项目会使用Tracing系统。<br>Tracing不会改变内核代码，不用再次编译就可以允许用户进入系统内核来获取所需要的信息。</p>
+<h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h1><p>Tracing 分为Tracing Sources、Tracing Sinks和将Tracing Source和Tracing Sinks关联在一起的3个部分。</p>
+<ul>
+<li>Tracing Sources：是一个实体用来标记仿真中发生的时间，也可以提供一个访问底层数据的方法。</li>
+<li>Tracing Sink：消费信息。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class Myobject:public Object</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">	static TypeId GetTypeId(void);</div><div class="line">	&#123;</div><div class="line">		static TypeId tid = TypeId (<span class="string">"Myobject"</span>)</div><div class="line">		.SetParent (Object::GetTypeId())</div><div class="line">		.AddConstructor&lt;Myobject&gt; ()</div><div class="line">		.AddTraceSource(<span class="string">"Myinteger"</span>,<span class="string">"An integer value to trace."</span>,</div><div class="line">			MakeTraceSourceAccessor(&amp;Myobject::m_myInt));</div><div class="line">		<span class="built_in">return</span> tid;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="title">Myobject</span></span>() &#123;&#125;</div><div class="line">	TraceValue&lt;Uint32_t&gt; m_myInt;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>每一个要追踪的数据都必须属于一个特定的类，这里定义这个类为MyObject,要追踪的数据为m_myInt.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int main(int argc, char *argv[])</div><div class="line">&#123;</div><div class="line">	Ptr&lt;Myobject&gt; myobject = CreateObject&lt;Myobject&gt; ();</div><div class="line">	myobject -&gt; TraceConnectWithoutContext(<span class="string">"Myinteger"</span>,MakeCallback(&amp;IntTtace));</div><div class="line">	myobject -&gt; m_myInt = 1234;</div><div class="line">	<span class="built_in">return</span> 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为就是TraceConnectWithoutContext 这个函数将Tracing Source和Tracing Sinks相关联。<br>只要调用这个函数，当Tracing Source数据m_myInt发生改变的时候，IntTrace函数才会被调用。</p>
+<h1 id="配置系统"><a href="#配置系统" class="headerlink" title="配置系统"></a>配置系统</h1><p>上面的TraceConnectWithoutContext函数比较少用，常见的都是使用”config path”的子系统从系统中选取用户所要使用的Trace Sources.</p>
+<p>下面这个函数CourseChange就是要定义的Trace Sink.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">void CourseChange(string context,Ptr&lt;const MobilityModel&gt; model)</div><div class="line">&#123;</div><div class="line">	Vector position = model-&gt;GetPosition();</div><div class="line">	NS_LOG_UNCOND(context &lt;&lt; <span class="string">" x= "</span> &lt;&lt; position.x &lt;&lt; <span class="string">" y= "</span> &lt;&lt; position.y);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>下面是使source和sink相关联的函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ostringstream oss;</div><div class="line">oss &lt;&lt; <span class="string">"/NodeList"</span> &lt;&lt; wifiStaNodes.Get(nWifi-1)-&gt;GetId() &lt;&lt; <span class="string">"/<span class="variable">$ns3</span>::MobilityModel/CoureChange"</span>;</div><div class="line">Config::Connect(oss.str(),MakeCallback(&amp;CourseChange));</div><div class="line">/*使用了类Config的一个静态函数connect将二者关联系起来*/</div></pre></td></tr></table></figure></p>
+<h1 id="如何确定Trace-Sources"><a href="#如何确定Trace-Sources" class="headerlink" title="如何确定Trace Sources"></a>如何确定Trace Sources</h1><p>ns3中是有定义好的可以直接使用的Trace Sources。<br>路径在：ns3/API/Modules/C++ ConstructsUsed By All Modules/The list of all trace sources.<br>考虑到下辈子美利坚，把链接贴出来<a href="https://www.nsnam.org/docs/release/3.23/doxygen/group__tracing.html" target="_blank" rel="external">[link]</a>.</p>
+<h1 id="如何确定Tace-Sink"><a href="#如何确定Tace-Sink" class="headerlink" title="如何确定Tace Sink"></a>如何确定Tace Sink</h1><p>Tace Sink实际上就是一个函数，所以可以参照系统给出的一些函数去写，比如ns-3/examples/wireless/mixed-wireless.cc 里面的CourseChangeCallback函数。要自己去查询一些文档，提高自己的搜索和提高的能力。</p>
+<hr>
+<p>下一节就会把中心从ns-3内核部分转移到ns-3其他模块部分，因为做科研还是要把重心放到自己作的部分，我比较关心的两部分分别是Application部分和Tcp部分，所以接下来会对这两部分进行记录，同时在Github上po出code,做完这部分我会考虑整理下ns-2部分的入门和模块分析。</p>
+<ul>
+<li>发现ns-3的Modules部分很有意思，查阅起来很方便，也给自己留个<a href="https://www.nsnam.org/docs/release/3.23/doxygen/modules.html" target="_blank" rel="external">[ns-3-modules-link]</a>.</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ns3_linux_5.6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ns3_linux_5.5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -956,92 +1054,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/leetcode 599/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 566" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 566/">Leetcode-566--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 566/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.786Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="566-Reshape-the-Matrix"><a href="#566-Reshape-the-Matrix" class="headerlink" title="566. Reshape the Matrix"></a>566. Reshape the Matrix</h1><p>给定二维矩阵nums，将其转化为r行c列的新矩阵。若无法完成转化，返回原矩阵。<br>Note:</p>
-<ul>
-<li>给定矩阵的高度和宽度范围[1, 100]</li>
-<li>r和c都是正数<br>这道题我能想到的就是把输入前的矩阵填到输入后的矩阵，所以方法一就是直接去解，我看了下网上还有别的解法，一个是使用一个公式直接转换，还有一个就是使用numpy模块里面的reshape函数，实际上我觉得，第三种方法才是最常用的吧。<br>法一：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">        <span class="string">""</span><span class="string">"</span></div><div class="line"><span class="string">        :type nums: List[List[int]]</span></div><div class="line"><span class="string">        :type r: int</span></div><div class="line"><span class="string">        :type c: int</span></div><div class="line"><span class="string">        :rtype</span></div><div class="line"><span class="string">        "</span><span class="string">""</span></div><div class="line">       <span class="comment">#if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">    <span class="comment">#        return nums</span></div><div class="line">      <span class="comment">#  result = [[0 for row in range(r)]for col in range(c)]</span></div><div class="line">       temp_row = 0</div><div class="line">        temp_col = 0s</div><div class="line">       <span class="comment"># for i in nums:</span></div><div class="line">        <span class="comment">#    for j in i:</span></div><div class="line">                result[temp_row][temp_col] = j</div><div class="line">                temp_col += 1</div><div class="line">         <span class="comment">#       if temp_col == c:</span></div><div class="line">                temp_row +=1</div><div class="line">                temp_col =0</div><div class="line">            <span class="built_in">return</span> result</div><div class="line">PS:因为排版的问题，所以我在前面加了<span class="string">"＃"</span>号，所以代码不要直接拷贝这个bash里面的代码，去我的github上粘贴复制会比较好，因为python对缩进的要求太严格了，所以粘贴的时候出问题，代码跑不了，我不接锅.</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>法二：<br>这个方法主要就是怎么找到转换后的公式的算法比较难，我没想到，但是验证了发现确实是对的，对于计算机取余”%”和取除”/“有了新的看法。<br>先说一下取余<br>我们知道10％3 ＝ 1，那么3%10 ＝？<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 3%10</div><div class="line">&gt;&gt;&gt; 3</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 0%10</div><div class="line">&gt;&gt;&gt; 0</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 10%10</div><div class="line">&gt;&gt;&gt; 0</div></pre></td></tr></table></figure></p>
-<p>我第一次看这个算法没看明白是因为，不知道当分子％分母，（分子 &lt; 分母）得出的结果是分子本身。所以我在第一行的时候有疑惑。先看下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">      <span class="comment">#  if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="comment">#result = [[0 for row in range(r)] for col in range(c)]</span></div><div class="line">       <span class="comment"># for i in range(r*c):</span></div><div class="line">            result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div><div class="line">            //上面这句大家可能看不懂，实际上他就是现在的矩阵怎么通过原来的矩阵转换得来的算法.</div><div class="line">        <span class="built_in">return</span> result</div></pre></td></tr></table></figure></p>
-<p>我来讲下这一句：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div></pre></td></tr></table></figure></p>
-<p>先看下普通矩阵<br>［1，2］<br>［3，4］这是一个2x2矩阵，我们要变成 ［1，2，3，4］这样的1*4矩阵<br>那第一个矩阵的元素分别是：<br>[(0,0) (0,1)]<br>[(1,0) (1,1)] 转化后的矩阵是 [(0,0),(0,1),(0,2),(0,3)]<br>再看看我们上面的取余，他传进来的参数比如第一行1/12 ＝ 0 (这是因为两个都是整型所以为0)，1%12＝1，所以这样就完成了矩阵的转换。<br>由于是以list的方式传输的，所以用for range的方式。<br>i =0时 ，result[0][0] = nums[0][0]<br>i =1时 ，result[0][1] = nums[0][1]<br>i =2时 ，result[0][2] = nums[1][0]<br>i =3时 ，result[0][3] = nums[0][1]<br>太巧妙了，服气。</p>
-<p>法三：<br>这个方法就是直接使用了numpy模块，直接使用里面的reshape函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import numpy</div><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">    <span class="comment">#    if len(nums)*len(nums[0]) != r*c：</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="built_in">return</span> numpy.reshape(nums,(r,c)).tolist()</div></pre></td></tr></table></figure></p>
-<p>tolist函数用于把一个矩阵转化成为list列表.</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 566/">展开全文 >></a>
         </p>
       
 

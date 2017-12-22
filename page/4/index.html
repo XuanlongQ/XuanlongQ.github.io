@@ -185,6 +185,96 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python_superclass" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/python_superclass/">继承和多重继承--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/python_superclass/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.863Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><p>在Python中，如果需要的话，可以让一个类去继承一个类，被继承的类称为父类或者超类、也可以称作基类，继承的类称为子类。并且Python支持多继承，能够让一个子类有多个父类。 Python中类的继承定义基本形式如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#父类  </span></div><div class="line">class superClassName:  </div><div class="line">    block  </div><div class="line"></div><div class="line"><span class="comment">#子类  </span></div><div class="line">class subClassName(superClassName):  </div><div class="line">    block</div></pre></td></tr></table></figure></p>
+<p>在定义一个类的时候，可以在类名后面紧跟一对括号，在括号中指定所继承的父类，如果有多个父类，多个父类名之间用逗号隔开。以大学里的学生和老师举例，可以定义一个父类UniversityMember，然后类Student和类Teacher分别继承类UniversityMember：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">class UniversityMember:  </div><div class="line"></div><div class="line">    def __init__(self,name,age):  </div><div class="line">        self.name = name  </div><div class="line">        self.age = age  </div><div class="line"></div><div class="line">    def getName(self):  </div><div class="line">        <span class="built_in">return</span> self.name  </div><div class="line"></div><div class="line">    def getAge(self):  </div><div class="line">        <span class="built_in">return</span> self.age  </div><div class="line"></div><div class="line">class Student(UniversityMember):  </div><div class="line"></div><div class="line">    def __init__(self,name,age,sno,mark):  </div><div class="line">        UniversityMember.__init__(self,name,age)     <span class="comment">#注意要显示调用父类构造方法，并传递参数self  </span></div><div class="line">        self.sno = sno  </div><div class="line">        self.mark = mark  </div><div class="line"></div><div class="line">    def getSno(self):  </div><div class="line">        <span class="built_in">return</span> self.sno  </div><div class="line"></div><div class="line">    def getMark(self):  </div><div class="line">        <span class="built_in">return</span> self.mark  </div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">class Teacher(UniversityMember):  </div><div class="line"></div><div class="line">    def __init__(self,name,age,tno,salary):  </div><div class="line">        UniversityMember.__init__(self,name,age)  </div><div class="line">        self.tno = tno  </div><div class="line">        self.salary = salary  </div><div class="line"></div><div class="line">    def getTno(self):  </div><div class="line">        <span class="built_in">return</span> self.tno  </div><div class="line"></div><div class="line">    def getSalary(self):  </div><div class="line">        <span class="built_in">return</span> self.salary</div></pre></td></tr></table></figure></p>
+<p>在大学中的每个成员都有姓名和年龄，而学生有学号和分数这2个属性，老师有教工号和工资这2个属性，从上面的代码中可以看到:<br>1.在Python中，如果父类和子类都重新定义了构造方法init( ),在进行子类实例化的时候，子类的构造方法不会自动调用父类的构造方法，必须在子类中显示调用。<br>2.如果需要在子类中调用父类的方法，需要以”父类名.方法“这种方式调用，以这种方式调用的时候，注意要传递self参数过去。 </p>
+<ul>
+<li>对于继承关系，子类继承了父类所有的公有属性和方法，可以在子类中通过父类名来调用，而对于私有的属性和方法，子类是不进行继承的，因此在子类中是无法通过父类名来访问的。</li>
+</ul>
+<p>tips:</p>
+<ul>
+<li>Python支持多重继承。对于多重继承，比如 　　class SubClass(SuperClass1,SuperClass2) 　　此时有一个问题就是如果SubClass没有重新定义构造方法，它会自动调用哪个父类的构造方法？这里记住一点：以第一个父类为中心。如果SubClass重新定义了构造方法，需要显示去调用父类的构造方法，此时调用哪个父类的构造方法由你自己决定；若SubClass没有重新定义构造方法，则只会执行第一个父类的构造方法。并且若SuperClass1和SuperClass2中有同名的方法，通过子类的实例化对象去调用该方法时调用的是第一个父类中的方法。</li>
+<li>其实还有一个我觉得刚开始学的时候很多人都不明白怎么继承父类的公有属性，而且子类的初始化函数经常搞混了，不知道该怎么写，我觉得可以这么看，实际上在子类初始化的时候不会调用父类的<strong>init()</strong>函数的，所以你需要自己写一个，那有些变量是你自己增加的，你需要对他初始化，比如上面说的self.tno = tno这个新的属性你需要自己去初始化，但是你还继承了父类的对吧，所以你先把从父类继承过来的元素写上，但是你继承过来你总的定义传过来的参数，子类不知道我要传多少参数，所以这么一看我们的步骤很明显了。<br>step1:<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">def __init__(self,name,age,tno,salary):</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我先确定我要传的参数（有要继承父类的，有要自己初始化的，我都要传参的对吧）<br>step2:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UniversityMember.__init__(self,name,age)</div></pre></td></tr></table></figure></p>
+<p>我们再把父类的继承过来，我们继承的是父类的初始化函数，所以(父类名.方法)没毛病。别忘了self是对象本身所以要传。<br>step3:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">self.tno = tno  </div><div class="line">self.salary = salary</div></pre></td></tr></table></figure></p>
+<p>把自己新增的参数也要初始化对吧，就和父类一样，做完这三步这个新函数就有你需要的参数，其余操作和普通类一样了就。<br>补充一下：实际上上面这个方式是python2.7里面的特性，在python3里面加入了一个super继承的方式，我进行了下测试，先把代码贴出来再解释。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class Person(object):</div><div class="line">    <span class="string">""</span><span class="string">"docstring for ClassName"</span><span class="string">""</span></div><div class="line">    def __init__(self, name,age):</div><div class="line">        self.name = name </div><div class="line">        self.age = age</div><div class="line">        </div><div class="line">xuanlong = Person(<span class="string">"xuanlong"</span>,24)</div><div class="line"></div><div class="line">class student(Person):</div><div class="line">    <span class="string">""</span><span class="string">"docstring for student"</span><span class="string">""</span></div><div class="line">    def __init__(self, name,age,grade):</div><div class="line">        <span class="comment">#super(Person, self).__init__()</span></div><div class="line">        Person.__init__(self,name,age)</div><div class="line">        self.grade = grade</div><div class="line"></div><div class="line">qiu = student(<span class="string">"qiu"</span>,24,15)</div><div class="line"><span class="built_in">print</span> qiu.grade</div></pre></td></tr></table></figure></p>
+<p>这两个方法的区别在于<br>1.传统的继承方式是： 父类名.<strong>init</strong>(self,要继承的父类属性，要继承的父类属性)<br>2.super新式继承：super(Person, self).<strong>init</strong>()<br>实际上！！！<br>super很适合只有一个类的因为他要求最顶层的父类一定要继承于object，这样就可以利用super()函数来调用父类的init()等函数，每个父类都执行且执行一次，并不会出现重复调用的情况。而且在子类的实现中，不用到处写出所有的父类名字。<br>采用super()方式时，会自动找到第一个多继承中的第一个父类，但是如果还想强制调用其他父类的init()函数或两个父类的同名函数时，就要用老办法了。</p>
+<h2 id="还是比较建议使用传统继承方式，简单易懂，新的方法可能之后我学一学会再补充一些。"><a href="#还是比较建议使用传统继承方式，简单易懂，新的方法可能之后我学一学会再补充一些。" class="headerlink" title="* 还是比较建议使用传统继承方式，简单易懂，新的方法可能之后我学一学会再补充一些。"></a>* 还是比较建议使用传统继承方式，简单易懂，新的方法可能之后我学一学会再补充一些。</h2><p>大约花了四天的时间刷完了codecademy里面的python部分，虽然有c++的基础但是在做leetcode的时候还是心有余而力不足，昨天花了那么久才做了两道，算法部分还是蛮难的，希望sdn和ryu部分让我的python代码能力得到质的提升。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/python_superclass/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-python_jinjie" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1060,104 +1150,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/ns3_linux_app/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ns3_linux_5.6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/ns3_linux_5.6/">ns-3网络模拟器基础及应用/NS-3内核(Tracing系统部分 三)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/ns3_linux_5.6/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.830Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在我们以往的调试的时候都是使用cout语句来进行信息的输出。在ns-3中由于里面的块都是独立的，而且信息很庞杂，所以用cout语句信息量太大，难以辨认一般我会在调试的时候使用一下，在ns-3里面比较常用的是日志系统Logging。</p>
-<ul>
-<li>举个栗子：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#include "ns3/core-module.h"</span></div><div class="line">NS_LOG_COMPOENT_DDFINE(ScratchSimultor);</div><div class="line">using namespace ns3;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">	NS_LOG_UNCOND(<span class="string">"Scratch Simulator"</span>);</div><div class="line">	<span class="built_in">return</span> 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>Logging系统的等级制度其实会给予很大的帮助常见的INFO和FUNCTION就够了，但是对于小程序用Logging是适用的，但是大型项目会使用Tracing系统。<br>Tracing不会改变内核代码，不用再次编译就可以允许用户进入系统内核来获取所需要的信息。</p>
-<h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h1><p>Tracing 分为Tracing Sources、Tracing Sinks和将Tracing Source和Tracing Sinks关联在一起的3个部分。</p>
-<ul>
-<li>Tracing Sources：是一个实体用来标记仿真中发生的时间，也可以提供一个访问底层数据的方法。</li>
-<li>Tracing Sink：消费信息。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class Myobject:public Object</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">	static TypeId GetTypeId(void);</div><div class="line">	&#123;</div><div class="line">		static TypeId tid = TypeId (<span class="string">"Myobject"</span>)</div><div class="line">		.SetParent (Object::GetTypeId())</div><div class="line">		.AddConstructor&lt;Myobject&gt; ()</div><div class="line">		.AddTraceSource(<span class="string">"Myinteger"</span>,<span class="string">"An integer value to trace."</span>,</div><div class="line">			MakeTraceSourceAccessor(&amp;Myobject::m_myInt));</div><div class="line">		<span class="built_in">return</span> tid;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="title">Myobject</span></span>() &#123;&#125;</div><div class="line">	TraceValue&lt;Uint32_t&gt; m_myInt;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>每一个要追踪的数据都必须属于一个特定的类，这里定义这个类为MyObject,要追踪的数据为m_myInt.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int main(int argc, char *argv[])</div><div class="line">&#123;</div><div class="line">	Ptr&lt;Myobject&gt; myobject = CreateObject&lt;Myobject&gt; ();</div><div class="line">	myobject -&gt; TraceConnectWithoutContext(<span class="string">"Myinteger"</span>,MakeCallback(&amp;IntTtace));</div><div class="line">	myobject -&gt; m_myInt = 1234;</div><div class="line">	<span class="built_in">return</span> 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>因为就是TraceConnectWithoutContext 这个函数将Tracing Source和Tracing Sinks相关联。<br>只要调用这个函数，当Tracing Source数据m_myInt发生改变的时候，IntTrace函数才会被调用。</p>
-<h1 id="配置系统"><a href="#配置系统" class="headerlink" title="配置系统"></a>配置系统</h1><p>上面的TraceConnectWithoutContext函数比较少用，常见的都是使用”config path”的子系统从系统中选取用户所要使用的Trace Sources.</p>
-<p>下面这个函数CourseChange就是要定义的Trace Sink.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">void CourseChange(string context,Ptr&lt;const MobilityModel&gt; model)</div><div class="line">&#123;</div><div class="line">	Vector position = model-&gt;GetPosition();</div><div class="line">	NS_LOG_UNCOND(context &lt;&lt; <span class="string">" x= "</span> &lt;&lt; position.x &lt;&lt; <span class="string">" y= "</span> &lt;&lt; position.y);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>下面是使source和sink相关联的函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ostringstream oss;</div><div class="line">oss &lt;&lt; <span class="string">"/NodeList"</span> &lt;&lt; wifiStaNodes.Get(nWifi-1)-&gt;GetId() &lt;&lt; <span class="string">"/<span class="variable">$ns3</span>::MobilityModel/CoureChange"</span>;</div><div class="line">Config::Connect(oss.str(),MakeCallback(&amp;CourseChange));</div><div class="line">/*使用了类Config的一个静态函数connect将二者关联系起来*/</div></pre></td></tr></table></figure></p>
-<h1 id="如何确定Trace-Sources"><a href="#如何确定Trace-Sources" class="headerlink" title="如何确定Trace Sources"></a>如何确定Trace Sources</h1><p>ns3中是有定义好的可以直接使用的Trace Sources。<br>路径在：ns3/API/Modules/C++ ConstructsUsed By All Modules/The list of all trace sources.<br>考虑到下辈子美利坚，把链接贴出来<a href="https://www.nsnam.org/docs/release/3.23/doxygen/group__tracing.html" target="_blank" rel="external">[link]</a>.</p>
-<h1 id="如何确定Tace-Sink"><a href="#如何确定Tace-Sink" class="headerlink" title="如何确定Tace Sink"></a>如何确定Tace Sink</h1><p>Tace Sink实际上就是一个函数，所以可以参照系统给出的一些函数去写，比如ns-3/examples/wireless/mixed-wireless.cc 里面的CourseChangeCallback函数。要自己去查询一些文档，提高自己的搜索和提高的能力。</p>
-<hr>
-<p>下一节就会把中心从ns-3内核部分转移到ns-3其他模块部分，因为做科研还是要把重心放到自己作的部分，我比较关心的两部分分别是Application部分和Tcp部分，所以接下来会对这两部分进行记录，同时在Github上po出code,做完这部分我会考虑整理下ns-2部分的入门和模块分析。</p>
-<ul>
-<li>发现ns-3的Modules部分很有意思，查阅起来很方便，也给自己留个<a href="https://www.nsnam.org/docs/release/3.23/doxygen/modules.html" target="_blank" rel="external">[ns-3-modules-link]</a>.</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/ns3_linux_5.6/">展开全文 >></a>
         </p>
       
 
