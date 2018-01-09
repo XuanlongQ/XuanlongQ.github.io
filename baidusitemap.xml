@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/10/11/XuanLong/</loc>
+    <lastmod>2018-01-09T12:53:44.721Z</lastmod>
+    <data>
+        <display>
+        <title>Xuanlong</title>
+        <pubTime>2017-10-11T12:48:39.923Z</pubTime>
+        
+        <tag>Personal</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/12/22/run_ns_2.34_ubuntu_14.04/</loc>
     <lastmod>2017-12-22T11:54:10.426Z</lastmod>
     <data>
@@ -97,23 +114,6 @@
         <pubTime>2017-10-22T05:09:17.552Z</pubTime>
         
         <tag>Bigdata</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/10/11/XuanLONG-%E7%A7%A6%E5%AE%A3%E9%BE%99/</loc>
-    <lastmod>2017-10-11T16:55:36.607Z</lastmod>
-    <data>
-        <display>
-        <title>XuanLONG (秦宣龙)</title>
-        <pubTime>2017-10-11T12:48:39.923Z</pubTime>
-        
-        <tag>Personal</tag>
          
          
            
