@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>浅谈排队轮 | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
+  <meta name="description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章《A Dash of Queueing Theory》,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这">
 <meta name="keywords" content="programming">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈排队轮">
 <meta property="og:url" content="http://yoursite.com/2018/01/12/queue_paidui/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
+<meta property="og:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章《A Dash of Queueing Theory》,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/Merkefu.jpg">
 <meta property="og:image" content="http://yoursite.com/images/Merkefu1.jpg">
@@ -23,10 +23,10 @@
 <meta property="og:image" content="http://yoursite.com/images/queue3.jpg">
 <meta property="og:image" content="http://yoursite.com/images/queue4.jpg">
 <meta property="og:image" content="http://yoursite.com/images/queue5.jpg">
-<meta property="og:updated_time" content="2018-01-12T12:03:42.459Z">
+<meta property="og:updated_time" content="2018-01-12T12:08:09.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈排队轮">
-<meta name="twitter:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
+<meta name="twitter:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章《A Dash of Queueing Theory》,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这">
 <meta name="twitter:image" content="http://yoursite.com/images/Merkefu.jpg">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
@@ -213,7 +213,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="排队论理论概述"><a href="#排队论理论概述" class="headerlink" title="排队论理论概述"></a>排队论理论概述</h1><p>排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章<a dash="" of="" queueing="" theory="">,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。<br>分组交换的另一个核心就是统计复用。事实上，早在分组交换还没有的时候，统计复用早就存在了几千年乃至几千万年。我们生活的世界本身就是统计复用的，道路，土地，公共设施，都是统计复用的。统计复用之所以可被接受，背后的理论依然是排队论，即排队公平性。当然，在历史的早期，由于没有采用统计复用从而导致不公平，最终形成了蝴蝶效应，随之国王，帝国，统治者相继出现…不过，这不是本文讨论的。</a></p>
+        <h1 id="排队论理论概述"><a href="#排队论理论概述" class="headerlink" title="排队论理论概述"></a>排队论理论概述</h1><p>排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章《A Dash of Queueing Theory》,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。<br>分组交换的另一个核心就是统计复用。事实上，早在分组交换还没有的时候，统计复用早就存在了几千年乃至几千万年。我们生活的世界本身就是统计复用的，道路，土地，公共设施，都是统计复用的。统计复用之所以可被接受，背后的理论依然是排队论，即排队公平性。当然，在历史的早期，由于没有采用统计复用从而导致不公平，最终形成了蝴蝶效应，随之国王，帝国，统治者相继出现…不过，这不是本文讨论的。</p>
 <h2 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h2><p>真实世界中产生排队的环境中同样也存在随机性。然而，我们不会讨论关于随机性的内容。在我们推论排队的过程中，所使用的最有用的工具就是基于随机性建模的马尔可夫过程。</p>
 <p>马尔可夫过程是一段时间内随机事件的集合，具有以下两种独特而有趣的属性:</p>
 <ul>
