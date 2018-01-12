@@ -6,18 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>XuanLong&#39;s Blog</title>
+  <title>浅谈排队轮 | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="于我而言，社交生活不是必须的">
-<meta property="og:type" content="website">
-<meta property="og:title" content="XuanLong&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/page/6/index.html">
+  <meta name="description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
+<meta name="keywords" content="programming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈排队轮">
+<meta property="og:url" content="http://yoursite.com/2018/01/12/queue_paidui/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="于我而言，社交生活不是必须的">
+<meta property="og:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/Merkefu.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Merkefu1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/queue1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/queue2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/queue3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/queue4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/queue5.jpg">
+<meta property="og:updated_time" content="2018-01-12T12:03:42.459Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="XuanLong&#39;s Blog">
-<meta name="twitter:description" content="于我而言，社交生活不是必须的">
+<meta name="twitter:title" content="浅谈排队轮">
+<meta name="twitter:description" content="排队论理论概述排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。分组交换的另一">
+<meta name="twitter:image" content="http://yoursite.com/images/Merkefu.jpg">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
   
@@ -183,231 +193,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-leetcode 599" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-queue_paidui" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 599/">Leetcode-599--Python</a>
+    <h1 class="article-title" itemprop="name">
+      浅谈排队轮
     </h1>
   
 
         
-        <a href="/2017/10/11/leetcode 599/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.789Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+        <a href="/2018/01/12/queue_paidui/" class="archive-article-date">
+  	<time datetime="2018-01-12T11:38:04.498Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-12</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="599-minimum-index-sum-of-two-lists"><a href="#599-minimum-index-sum-of-two-lists" class="headerlink" title="599. minimum index sum of two lists"></a>599. minimum index sum of two lists</h1><p>这道题题目就是找出两个list的交集，<br>return type：list[int]<br>这道题看起来不是很难，就是这个测试的时候除了问题，这个能想到的方法还挺多，常见的简单的法一就是取差集，还有一个就是循环找，时间复杂度都比较高，昨天看数据结构的时候有个O(n)的解法，但是写起来比较长，我就贴两个算法就好。<br>法一：<br>使用set求差集<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def intersection(self, nums1, nums2):</div><div class="line">        num1 = <span class="built_in">set</span>(nums1)</div><div class="line">        num2 = <span class="built_in">set</span>(nums2)</div><div class="line">        num = num1 &amp; num2</div><div class="line">        <span class="built_in">return</span> list[num]</div></pre></td></tr></table></figure></p>
-<p>法二：<br>使用循环迭代，但是这里有一个问题，是在测试的时候发现的，就是当nums1 = []和nums2 = []的时候，使用循环迭代，返回的事null而不是[]，也不知为啥。因为我开始初始化的时候就是result=[],而且我return的就是result.所以不知道为啥，我就又写了个分支都为[]返回[]，发现还是返回none。GG<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def intersection(self, nums1, nums2):</div><div class="line">        result = []</div><div class="line">        for num1 in nums1:</div><div class="line">            for num2 in nums2:</div><div class="line">                if num1 == num2 and (1,2非空)：</div><div class="line">                    result.append(num1)</div><div class="line">                    return result</div><div class="line">                elif num1,num2为[]:  //实在懒得写了，代码在github里面</div><div class="line">                    return num1</div></pre></td></tr></table></figure></p>
-<p>这种边界条件还是有意思，反正遇到这种情况转成list()就行。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 599/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 566" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 566/">Leetcode-566--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 566/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.786Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="566-Reshape-the-Matrix"><a href="#566-Reshape-the-Matrix" class="headerlink" title="566. Reshape the Matrix"></a>566. Reshape the Matrix</h1><p>给定二维矩阵nums，将其转化为r行c列的新矩阵。若无法完成转化，返回原矩阵。<br>Note:</p>
+        <h1 id="排队论理论概述"><a href="#排队论理论概述" class="headerlink" title="排队论理论概述"></a>排队论理论概述</h1><p>排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章<a dash="" of="" queueing="" theory="">,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。<br>分组交换的另一个核心就是统计复用。事实上，早在分组交换还没有的时候，统计复用早就存在了几千年乃至几千万年。我们生活的世界本身就是统计复用的，道路，土地，公共设施，都是统计复用的。统计复用之所以可被接受，背后的理论依然是排队论，即排队公平性。当然，在历史的早期，由于没有采用统计复用从而导致不公平，最终形成了蝴蝶效应，随之国王，帝国，统治者相继出现…不过，这不是本文讨论的。</a></p>
+<h2 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h2><p>真实世界中产生排队的环境中同样也存在随机性。然而，我们不会讨论关于随机性的内容。在我们推论排队的过程中，所使用的最有用的工具就是基于随机性建模的马尔可夫过程。</p>
+<p>马尔可夫过程是一段时间内随机事件的集合，具有以下两种独特而有趣的属性:</p>
 <ul>
-<li>给定矩阵的高度和宽度范围[1, 100]</li>
-<li>r和c都是正数<br>这道题我能想到的就是把输入前的矩阵填到输入后的矩阵，所以方法一就是直接去解，我看了下网上还有别的解法，一个是使用一个公式直接转换，还有一个就是使用numpy模块里面的reshape函数，实际上我觉得，第三种方法才是最常用的吧。<br>法一：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">        <span class="string">""</span><span class="string">"</span></div><div class="line"><span class="string">        :type nums: List[List[int]]</span></div><div class="line"><span class="string">        :type r: int</span></div><div class="line"><span class="string">        :type c: int</span></div><div class="line"><span class="string">        :rtype</span></div><div class="line"><span class="string">        "</span><span class="string">""</span></div><div class="line">       <span class="comment">#if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">    <span class="comment">#        return nums</span></div><div class="line">      <span class="comment">#  result = [[0 for row in range(r)]for col in range(c)]</span></div><div class="line">       temp_row = 0</div><div class="line">        temp_col = 0s</div><div class="line">       <span class="comment"># for i in nums:</span></div><div class="line">        <span class="comment">#    for j in i:</span></div><div class="line">                result[temp_row][temp_col] = j</div><div class="line">                temp_col += 1</div><div class="line">         <span class="comment">#       if temp_col == c:</span></div><div class="line">                temp_row +=1</div><div class="line">                temp_col =0</div><div class="line">            <span class="built_in">return</span> result</div><div class="line">PS:因为排版的问题，所以我在前面加了<span class="string">"＃"</span>号，所以代码不要直接拷贝这个bash里面的代码，去我的github上粘贴复制会比较好，因为python对缩进的要求太严格了，所以粘贴的时候出问题，代码跑不了，我不接锅.</div></pre></td></tr></table></figure>
-</li>
+<li>1.下一个事件迟早会发生</li>
+<li>2.将来事件的发生不依赖于之前的事件，即无后效性。 </li>
 </ul>
-<p>法二：<br>这个方法主要就是怎么找到转换后的公式的算法比较难，我没想到，但是验证了发现确实是对的，对于计算机取余”%”和取除”/“有了新的看法。<br>先说一下取余<br>我们知道10％3 ＝ 1，那么3%10 ＝？<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 3%10</div><div class="line">&gt;&gt;&gt; 3</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 0%10</div><div class="line">&gt;&gt;&gt; 0</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> 10%10</div><div class="line">&gt;&gt;&gt; 0</div></pre></td></tr></table></figure></p>
-<p>我第一次看这个算法没看明白是因为，不知道当分子％分母，（分子 &lt; 分母）得出的结果是分子本身。所以我在第一行的时候有疑惑。先看下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">      <span class="comment">#  if len(nums)*len(nums[0]) != r*c:</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="comment">#result = [[0 for row in range(r)] for col in range(c)]</span></div><div class="line">       <span class="comment"># for i in range(r*c):</span></div><div class="line">            result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div><div class="line">            //上面这句大家可能看不懂，实际上他就是现在的矩阵怎么通过原来的矩阵转换得来的算法.</div><div class="line">        <span class="built_in">return</span> result</div></pre></td></tr></table></figure></p>
-<p>我来讲下这一句：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">result [i/c][i%c] = nums[i/len(nums[0])][i%len(nums[0])]</div></pre></td></tr></table></figure></p>
-<p>先看下普通矩阵<br>［1，2］<br>［3，4］这是一个2x2矩阵，我们要变成 ［1，2，3，4］这样的1*4矩阵<br>那第一个矩阵的元素分别是：<br>[(0,0) (0,1)]<br>[(1,0) (1,1)] 转化后的矩阵是 [(0,0),(0,1),(0,2),(0,3)]<br>再看看我们上面的取余，他传进来的参数比如第一行1/12 ＝ 0 (这是因为两个都是整型所以为0)，1%12＝1，所以这样就完成了矩阵的转换。<br>由于是以list的方式传输的，所以用for range的方式。<br>i =0时 ，result[0][0] = nums[0][0]<br>i =1时 ，result[0][1] = nums[0][1]<br>i =2时 ，result[0][2] = nums[1][0]<br>i =3时 ，result[0][3] = nums[0][1]<br>太巧妙了，服气。</p>
-<p>法三：<br>这个方法就是直接使用了numpy模块，直接使用里面的reshape函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import numpy</div><div class="line">class Solution(object):</div><div class="line">    def matrixReshape(self, nums, r, c):</div><div class="line">    <span class="comment">#    if len(nums)*len(nums[0]) != r*c：</span></div><div class="line">            <span class="built_in">return</span> nums</div><div class="line">        <span class="built_in">return</span> numpy.reshape(nums,(r,c)).tolist()</div></pre></td></tr></table></figure></p>
-<p>tolist函数用于把一个矩阵转化成为list列表.</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 566/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 557" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 557/">Leetcode-557/500--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 557/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.784Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="557-Reverse-Words-in-a-String-III"><a href="#557-Reverse-Words-in-a-String-III" class="headerlink" title="557. Reverse Words in a String III"></a>557. Reverse Words in a String III</h1><p>给定字符串，将每个单词逐字符逆置，返回新字符串。<br>这个和普通的输出还是有一点差别的，比如我们要输出：<br>“let’s watch tv Eva” 他不是直接输出倒序，而是在里面的单个元素倒叙，输出的是：<br>“s’let hctaw vt avE”,所以当时脑子想过两种方式，要么先全部倒置，然后分割，然后最后一位和第一位换，用append添加进去，要么先分割，再倒置，再用append添加，后来我一写发现第一种方法和第二种是一样的方法，倒叙天假我也不会啊，所以就只写法一了。<br>法一：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">def reverseWords(s):</div><div class="line">    new = []</div><div class="line">    <span class="comment">#for word in s.split():</span></div><div class="line">        s= word[::-1]</div><div class="line">        new.append(s)</div><div class="line">    <span class="built_in">print</span> <span class="string">' '</span>.join(new)</div></pre></td></tr></table></figure></p>
-<p>实际上主要是split和join函数的使用：</p>
-<h2 id="Split"><a href="#Split" class="headerlink" title="Split"></a>Split</h2><p>split()通过指定分隔符对字符串进行切片，如果参数num 有指定值，则仅分隔 num 个子字符串.<br>str.split(str=””, num=string.count(str)).</p>
+<p>下图描绘出一段时间内的马尔可夫过程：<br><img src="/images/Merkefu.jpg" alt="Merkefu"></p>
+<p>马尔可夫过程和泊松过程都很适合用来给真实世界中的事件建模，其中泊松过程是一种连续时间的特殊马尔可夫过程。 我们可以用它们来模拟事件加入排队队列这一过程。<br>当我们使用马尔可夫过程来给入队事件建模时，比如说上报bug、餐馆的订单、HTTP请求等，都可以通过绘制累积图来表示：<br><img src="/images/Merkefu1.jpg" alt="Merkefu1"></p>
+<h2 id="将任务-数据包，车辆-排队过程和被服务过程按时间分别展开"><a href="#将任务-数据包，车辆-排队过程和被服务过程按时间分别展开" class="headerlink" title="将任务(数据包，车辆)排队过程和被服务过程按时间分别展开"></a>将任务(数据包，车辆)排队过程和被服务过程按时间分别展开</h2><p>我们把一个单独的排队过程按照时间展开，就会得到下面的图示(入队速率固定)：<br><img src="/images/queue1.jpg" alt="queue1"><br>那如果我们把一个消费队列里实体的输出服务消费的过程按照时间展开，就会得到下面的图示：<br><img src="/images/queue2.jpg" alt="queue2"></p>
+<h2 id="任务-数据包，车辆-排队过程和被服务过程合并"><a href="#任务-数据包，车辆-排队过程和被服务过程合并" class="headerlink" title="任务(数据包，车辆)排队过程和被服务过程合并"></a>任务(数据包，车辆)排队过程和被服务过程合并</h2><p>如果任由排队实体持续排队，队列将会变得无限长。事实上，任何队列都不会无限长，否则大家为何在那排队去等待一个永恒不被接受的服务….小说《十年》里的那个废弃火车站等车的并不存在于现实。为什么？因为只要有排队，就会有服务处理队头，即排队在队尾，服务在队头，这是一个简单的先进先出的过程。<br>那么，我们把上面两个图合并，就会发现，合并后的两条曲线中间的带状，就是队列，如下图所示：<br><img src="/images/queue3.jpg" alt="queue3"></p>
+<h1 id="任务在固定速率输入情形下的排队分析"><a href="#任务在固定速率输入情形下的排队分析" class="headerlink" title="任务在固定速率输入情形下的排队分析"></a>任务在固定速率输入情形下的排队分析</h1><h2 id="1-任务输入率和服务的吸收率相等的情形"><a href="#1-任务输入率和服务的吸收率相等的情形" class="headerlink" title="1.任务输入率和服务的吸收率相等的情形"></a>1.任务输入率和服务的吸收率相等的情形</h2><p>这种情况，从初始状态开始，是不会产生排队现象的，比如单位时间到达三个人需要服务，而服务台拥有三个服务员，忽略服务时间的假设下，每单位时间总是会有三个服务员为人民服务。但是一旦加入其它的因素，比如处理某个人的业务过久(服务时间是不能忽略的)，就会产生排队现象，一旦某个服务被延迟，就会总体拖慢服务输出率，这是导致排队的主因。</p>
+<h2 id="2-任务输入率和服务的吸收率不等的情形"><a href="#2-任务输入率和服务的吸收率不等的情形" class="headerlink" title="2.任务输入率和服务的吸收率不等的情形"></a>2.任务输入率和服务的吸收率不等的情形</h2><p>如果服务输出率大于队列输入率且持续大于，那么队列最终会消失，如果持续小于队列输入率，队列会越来越长，这些都是常识，但是这些都是深入分析的基础。</p>
+<h2 id="3-结论"><a href="#3-结论" class="headerlink" title="3.结论"></a>3.结论</h2><p><img src="/images/queue4.jpg" alt="queue4"></p>
+<h1 id="真实情况：输入的泊松分布与输入间隔的指数分布"><a href="#真实情况：输入的泊松分布与输入间隔的指数分布" class="headerlink" title="真实情况：输入的泊松分布与输入间隔的指数分布"></a>真实情况：输入的泊松分布与输入间隔的指数分布</h1><p>前面的分析和图示，让我们感觉到排队系统是多么的不稳定啊，要么队列变为0，要么持续增长。持有这种观点的，一定会质疑路由器的可用性。可是事实上，不管在现实中，比如高速公路拥堵，抢购物品，买票还是网络世界，比如路由器，交换机，服务器，我们都没有看到过队列快速变为0或者持续增长的情况，队列总是在波动，排队的实体除非自己放弃，不然总会得到服务，队列也从来没有无限加长。这是为什么？<br>因为排队的入队率并不是一个常数，而是符合泊松分布的一个范围，说白了就是，入队率有一个平均值，偏离这个平均值越多的入队率，越是不可能看到的。比如说一个入队率平均值是10，那么单位时间排队10个实体是最可能的，排队9个或者11也是次可能的，8个或者12个，7个或者13个，都有可能，…那么1个或者19个相对于前面那些，就显得可能性很小了。<br>由于入队率的泊松分布，相邻两个排队实体的排队间隔也应该有一个分布规律，相邻排队实体的排队间隔符合指数分布，意思是说，下一个排队者最可能会在最短的时间到来，比如1分钟内，如果5分钟还没有来，你指望它15分钟内来的希望也是比较渺茫的，这也叫做“下一个马上到”定律。这是非常符合常识的，比如你在等人的时候，他如果迟到了20分钟，那么他很可能就不会来了，比如面试，如果你面试完还没回到家，刚刚面试的公司就打来电话了，那么你很有可能被录取了。<br>这就是泊松分布和指数分布下真实的排队场景。</p>
+<h1 id="任务输入速率符合泊松分布前提下的排队分析"><a href="#任务输入速率符合泊松分布前提下的排队分析" class="headerlink" title="任务输入速率符合泊松分布前提下的排队分析"></a>任务输入速率符合泊松分布前提下的排队分析</h1><p>真实的排队场景如下图所示：<br><img src="/images/queue5.jpg" alt="queue5"><br>把图放远看，你会忽略些许弯曲的细节，整个输入曲线就是一个直线，实际上服务输出曲线也一样，这正如分形理论阐述的一样。有两点要牢记：</p>
 <ul>
-<li>str – 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。</li>
-<li>num – 分割次数。<br>1.按某一个字符分割，如‘.’<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">str = (<span class="string">'www.google.com'</span>)</div><div class="line"><span class="built_in">print</span> str</div><div class="line">str_split = str.split(<span class="string">'.'</span>)</div><div class="line"><span class="built_in">print</span> str_split</div><div class="line"></div><div class="line">结果：</div><div class="line">［<span class="string">'www'</span>,<span class="string">'google'</span>,<span class="string">'com'</span>］</div></pre></td></tr></table></figure>
-</li>
+<li>a).大部分情形下，输入率都是平均输入率，起码向平均输入率收敛(泊松分布起作用了)；</li>
+<li>b).大部分情形下，在符合a的前提下，下一个排队者马上就到(指数分布起作用了)。</li>
 </ul>
-<p>2.按某一个字符分割，且分割n次。如按‘.’分割1次<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">str = (<span class="string">'www.google.com'</span>)</div><div class="line"><span class="built_in">print</span> str</div><div class="line">str_split = str.split(<span class="string">'.'</span>，1)</div><div class="line"><span class="built_in">print</span> str_split</div><div class="line"></div><div class="line">结果：</div><div class="line">[<span class="string">'www'</span>,<span class="string">'google.com'</span>]</div><div class="line">按字符串分割也是同理，也可以把分割后的字符赋给多个变量。</div><div class="line">str1, str2 = url.split(<span class="string">'.'</span>, 1)</div><div class="line"><span class="built_in">print</span> str1</div><div class="line"><span class="built_in">print</span> str2</div><div class="line"></div><div class="line">结果：</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> str1</div><div class="line">&gt;&gt;&gt; www</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> str2</div><div class="line">&gt;&gt;&gt; google.com</div></pre></td></tr></table></figure></p>
-<h2 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h2><p>Python join() 方法用于将序列中的元素以指定的字符连接生成一个新的字符串<br>str.join(sequence)</p>
-<ul>
-<li>sequence – 要连接的元素序列。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">str = <span class="string">"-"</span>;</div><div class="line">seq = (<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>); <span class="comment"># 字符串序列</span></div><div class="line"><span class="built_in">print</span> str.join( seq );</div><div class="line"></div><div class="line">结果：</div><div class="line"><span class="string">"a-b-c"</span></div><div class="line">实际上我们通常用的时候都是直接<span class="built_in">return</span> <span class="string">' '</span>.join(seq).</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这一题没什么好说的。</p>
-<h1 id="500-Keyboard-Row"><a href="#500-Keyboard-Row" class="headerlink" title="500. Keyboard Row"></a>500. Keyboard Row</h1><p>给出n个字符串，从而判断每个字符串中的字符是否来自美式键盘上的同一行，若来自同一行，返回该string。逐个word去比较即可。<br>实际上这题最简单就是看把输入逐个比较看在不在这一行，在的话就输出这个word不在就跳过，主要是用到了set这个函数，用来取交集，另一种方法就是把键盘行第一行的字母用1表示，第二行用2表示，第三行用三表示，再逐个输入自己的input，从第一个开始后面的比较，只要出现和第一个字符不一样的数字，那就说明不在同一行，直接break，进行下一个word的判断。下面将这两个方法。<br>方法一：<br>这个方法先讲两个函数set()和map</p>
-<h2 id="set"><a href="#set" class="headerlink" title="set()"></a>set()</h2><ul>
-<li><p>python的set和其他语言类似, 是一个无序不重复元素集, 基本功能包括关系测试和消除重复元素.<br>输出代码可能会更好理解一点</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; t = <span class="built_in">set</span> (<span class="string">"Hello"</span>)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> t </div><div class="line">&gt;&gt;&gt; <span class="built_in">set</span> ([<span class="string">'H'</span>,<span class="string">'e'</span>,<span class="string">'l'</span>,<span class="string">'o'</span>])</div></pre></td></tr></table></figure>
-</li>
-<li><p>集合对象还支持union(联合), intersection(交), difference(差)和sysmmetric difference(对称差集)等数学运算.<br>只有你先经过set之后才可以使用集合对象功能 “&amp;”交集，”|”并集,”#”差集。<br>举个栗子：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; t = <span class="built_in">set</span> (<span class="string">"hello"</span>)</div><div class="line">&gt;&gt;&gt; b = <span class="built_in">set</span> (<span class="string">"hihi"</span>)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> t &amp; b</div><div class="line">&gt;&gt;&gt; <span class="built_in">set</span> ([<span class="string">'h'</span>])</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这道题就用了这个特性，代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">def findWords(words):</div><div class="line">    a = <span class="built_in">set</span> (<span class="string">"qwertyuiop"</span>)</div><div class="line">    b = <span class="built_in">set</span> (<span class="string">"asdfghjkl"</span>)</div><div class="line">    c = <span class="built_in">set</span> (<span class="string">"zxcvbnm"</span>)</div><div class="line"></div><div class="line">    ans = []</div><div class="line">   <span class="comment"># for word in words:</span></div><div class="line">        <span class="comment"># 这里是为了输入大小写都可以识别，但是注意直接直接赋值和直接.lower()区别，等下再讲</span></div><div class="line">       <span class="comment"># t = set (word.lower())</span></div><div class="line">       <span class="comment"># if (a&amp;t == t) or (b&amp;t == t) or (c&amp;t == t):</span></div><div class="line">            ans.append(word)</div><div class="line">    <span class="built_in">return</span> ans</div><div class="line"><span class="built_in">print</span> findwords(input)</div></pre></td></tr></table></figure></p>
-<p>这个题还有两个扩展一个就是map函数，一个就是.lower()</p>
-<h2 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h2><p>map(function, sequence)：对sequence中的item依次执行function(item)，将执行结果组成一个List返回，测试如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a = [1, 2, 3, 4, 5, 6, 7, 8, 9]</div><div class="line">&gt;&gt;&gt; def fn(x):</div><div class="line">...     <span class="built_in">return</span> x*2</div><div class="line">&gt;&gt;&gt; c = map(fn, a)</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> c </div><div class="line">&gt;&gt;&gt; [2, 4, 6, 8, 10, 12, 14, 16, 18]</div></pre></td></tr></table></figure></p>
-<h2 id="lower"><a href="#lower" class="headerlink" title=".lower()"></a>.lower()</h2><p>很多题都是需要不区分大小写，或者在找交集的时候无论输出大小写我们都使用小写或者大写匹配。而python的变量是允许存入两个变量的。<br>还是看测试代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def findwords():</div><div class="line">   <span class="comment"># for word in words:</span></div><div class="line">       <span class="variable">$1</span>. word.lower()</div><div class="line">       &gt;&gt;&gt; <span class="built_in">print</span> word</div><div class="line">       &gt;&gt;&gt; XuanLONG</div><div class="line">       <span class="variable">$2</span>. word = word.lower()</div><div class="line">       &gt;&gt;&gt; <span class="built_in">print</span> word</div><div class="line">       &gt;&gt;&gt; xuanlong</div><div class="line"></div><div class="line">findwords(<span class="string">"XuanLONG"</span>)</div><div class="line"><span class="variable">$2</span> 里面相当于直接把所有字符变成小写，进行赋值，所以这个时候word里的值已经变了。</div><div class="line"><span class="variable">$1</span> 里面word却还是XuanLONG。但是这个可以区分大小写</div></pre></td></tr></table></figure></p>
-<p>方法二：<br>这个就是先把某一行里面所有字母用数字代替(字典)，直接比较数字看是否在一行，直接看代码吧。<br><figure class="highlight plain"><figcaption><span>findWords(words):</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">        pattern = &#123;&#125;</div><div class="line">        for i in &quot;qwertyuiop&quot;:</div><div class="line">            List [i] = 1</div><div class="line">        for i in &quot;asdfghjkl&quot;:</div><div class="line">            List [i] = 2</div><div class="line">        for i in &quot;zxcvbnm&quot;:</div><div class="line">            List [i] = 3</div><div class="line">        ans = []</div><div class="line">        for word in words:</div><div class="line">            category = pattern[word.lower(0)]//每个输入的字符串第一个字母置为category</div><div class="line">            is_word = True</div><div class="line">            for w in word://对每个字母迭代</div><div class="line">                if pattern[w] != category:    // w就相当于key值</div><div class="line">                    is_word = False</div><div class="line">                    break</div><div class="line">            if is_word:</div><div class="line">                ans.append(word)</div><div class="line"></div><div class="line">print findwords(input)</div></pre></td></tr></table></figure></p>
-<p>注意的是pattern是一个字典，复习一下字典</p>
-<h2 id="dict"><a href="#dict" class="headerlink" title="dict()"></a>dict()</h2><p>dict = {key1 : value1, key2 : value2 }</p>
-<ul>
-<li>键必须是唯一的，但值则不必。</li>
-<li>值可以取任何数据类型，但键必须是不可变的，如字符串，数字或元组。<br>通过key来访问value的值，如下:<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dict1 = &#123;<span class="string">"xuanlong"</span>:24,<span class="string">"qiu"</span>:23&#125;</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> dict1[<span class="string">"qiu"</span>]</div><div class="line">&gt;&gt;&gt; 23</div><div class="line">del dict[<span class="string">'key1'</span>]; <span class="comment"># 删除键是'key1'的条目</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://blog.csdn.net/dog250/article/details/46753227" target="_blank" rel="external">原博文-根据排队论阐述路由器和高速公路的拥堵以及拥堵缓解问题</a>.<br>2.<a href="http://blog.jobbole.com/87158/" target="_blank" rel="external">排队论-伯乐在线</a>.这个我觉得有点太绝对了。</p>
 
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>点它也没钱啊QAQ<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -418,7 +268,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
         		</li>
       		
 		</ul>
@@ -427,16 +277,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 557/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2018/01/12/queue_paidui/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/12/22/run_ns_2.34_ubuntu_14.04/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在Ubuntu14.04下搭建NS-2.34</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -456,593 +365,34 @@
 
 
 
-
   
-    <article id="post-leetcode 521520" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 521520/">Leetcode-521/520--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 521520/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.781Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天的OJ我就是按照题目的意思写的，四点半写到五点半就写了两道，我都惊了，要不是第二题我想用ASCII码解估计半小时就做完了，做完我就发现不对了，这就是暴力膜啊，暴力膜不可取，我去看了OJ的答案发现基本上都是用的py的内置函数，很少有用到算法的，时间复杂度都比较靠近，我想着不然自己想想新的方法，这种老方法看看就行。 基本上现在只要能看懂题目基本上都可以暴力膜出来。</p>
-<h1 id="521-Longest-Uncommon-Subsequence-I"><a href="#521-Longest-Uncommon-Subsequence-I" class="headerlink" title="521. Longest Uncommon Subsequence I"></a>521. Longest Uncommon Subsequence I</h1><p>题目大意就是，比较两个字符串的长度，若不相等，则返回长度的较大值，若相等则再判断两个字符串是否相同，若相同则返回-1，否则返回长度。<br>这个我都不知道怎么想算法，需要算法吗？<br>直接贴了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">def findles(a,b):</div><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">    if len(a)!=len(b):</span></div><div class="line"><span class="string">        if len(a) &gt; len(b):</span></div><div class="line"><span class="string">            return len(a)</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return len(b)</span></div><div class="line"><span class="string">    if len(a)==len(b):</span></div><div class="line"><span class="string">        if a == b:</span></div><div class="line"><span class="string">            return -1</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return len(a)</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div><div class="line"><span class="built_in">print</span> (<span class="string">"abc"</span>,<span class="string">"aba"</span>)</div></pre></td></tr></table></figure></p>
-<h1 id="520-Detect-Capital"><a href="#520-Detect-Capital" class="headerlink" title="520. Detect Capital"></a>520. Detect Capital</h1><p>这个题目意思比较简单，如果全是大写，就return True，如果全是小写，就return True,如果第一个字母是大写，其他字母小写也可以return Ture,不然就return False.<br>法一：<br>实际上这道题我知道他有内建的函数isupper()和islower()之类的，但是我想着这么做就没意思了，然后就用ascii码自己写了个。<br>可能有人不知道这两个函数，我就写一下吧。</p>
-<ul>
-<li><p>islower()<br>str.islower()<br>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是小写，则返回 True，否则返回 False</p>
-</li>
-<li><p>isupper()<br>str.isupper()<br>如果字符串中包含至少一个区分大小写的字符，并且所有这些(区分大小写的)字符都是大写，则返回 True，否则返回 False</p>
-</li>
-</ul>
-<p>用这个方法的代码比较没什么创意啦，我还是ac了～但是我第二个也ac了～<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapital(self,word):</div><div class="line">    <span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">        if word.islower() or word.isupper():</span></div><div class="line"><span class="string">            return True</span></div><div class="line"><span class="string">        if word[0].isupper and word[1:].islower():</span></div><div class="line"><span class="string">            return True</span></div><div class="line"><span class="string">        else:</span></div><div class="line"><span class="string">            return False</span></div><div class="line"><span class="string">    '</span><span class="string">''</span></div></pre></td></tr></table></figure></p>
-<p>法二：<br>这个是我自己想的，但是也比较傻，就是用ascii码，比较好的是py里面有自带的转换函数。<br>ord()：就是把字符转换成ascii码，比如ord(a)=97.<br>有一点计算机知识的人都了解<br>‘a’ = 97 ‘z’ = 122 ‘A’ ＝ 65 ‘Z’=90</p>
-<p>这个解法就是判别你输入的字符里到底有多少个大写，我增加一个计数的变量，用这个变量来判别是否满足题目要求。代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapital(self,word):</div><div class="line"><span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">        cnt =0</span></div><div class="line"><span class="string">        if i in range(0,len(word)):</span></div><div class="line"><span class="string">            if ord(word[i]) &gt;= 65 and ord(word[i] &lt;= 90):</span></div><div class="line"><span class="string">                cnt += 1</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">            return (cnt==0) or (cnt == len(word)) or (cnt ==1 and ord(word[0])&gt;=65 and ord(word[0])&lt;=90)</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div><div class="line">            <span class="comment">#这三个条件就是没有大写字母，全是大写字母，只有第一个是大写字母</span></div></pre></td></tr></table></figure></p>
-<p>法三：<br>这个方法，我实在是饿的不行了，就没细想了，但是是用ascii码暴力膜。<br>就是一次判定题目的条件，但是发现只要一进if循环就直接return了，估摸着逻辑或者缩紧不对，也懒得改了。<br>po一下简单代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def detectCapitalUse(self, word):</div><div class="line">        if ord(word[0]) &lt;=90 and ord(word[0]) &gt;=65: #第一个字母为大写</div><div class="line">            for i in word[1:]:</div><div class="line">                if ord(i) &lt;= 122 and ord(i) &gt;=97:</div><div class="line">                    return True</div><div class="line">                if ord(i) &lt;= 90 and ord(i) &gt;= 65:</div><div class="line">                    return True</div><div class="line">        if ord(word[0]) &gt;= 97 and ord(word[0]) &lt;= 122:</div><div class="line">            for i in word[1:]:</div><div class="line">                if ord(i) &lt;= 122 and ord(i) &gt;=97:</div><div class="line">                    return True</div><div class="line">        else:</div><div class="line">            return False</div></pre></td></tr></table></figure></p>
-<p>但是用ascii码去判别大小肯定是没有问题的，因为方法二已经被AC了。</p>
-<p>最近越来越喜欢暴力膜解法了，不行啊，看来得把数据结构拾起来了。吃饭的时候看到彩虹了，难得，风云际会，水木清华…喝茶喝茶</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 521520/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 506" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 506/">Leetcode-506--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 506/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.774Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>题目大意：<br>前三名运动员获得前三名，用“金牌”，“银牌”和“铜牌”置换。对于其余运动员，输出相对排名。</p>
-<p>这道题我也懒得想了，复制了一个数组，然后排序，这样就知道了名次index(),然后把前三名用金牌，银牌，铜牌置换了，其余的不变，(AC的时候说要字符串，数字再转一下字符串)。</p>
-<p>直接贴代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def findRelativeRanks(self, nums):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type nums: List[int]</div><div class="line">        :rtype: List[str]</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        list1 = sorted(nums)</div><div class="line">        list1.reverse()</div><div class="line">        result = []</div><div class="line">        for i in nums:</div><div class="line">            result.append(list1.index(i)+1)</div><div class="line">        new_res = []</div><div class="line">        for j in result:</div><div class="line"></div><div class="line">            if j == 1:</div><div class="line">                j = &quot;Gold Medal&quot;</div><div class="line">            elif j == 2:</div><div class="line">                j = &quot;Silver Medal&quot;</div><div class="line">            elif j == 3:</div><div class="line">                j = &quot;Bronze Medal&quot;</div><div class="line">            else:</div><div class="line">                j = str(j)</div><div class="line">            new_res.append(j)</div><div class="line">        return new_res</div><div class="line">        print new_res</div><div class="line"></div><div class="line">        </div><div class="line">        # list1[0] = &quot;Gold Medal&quot;</div><div class="line">        # list1[1] = &quot;Silver Medal&quot;</div><div class="line">        # list1[2] = &quot;Bronze Medal&quot;</div><div class="line"></div><div class="line"></div><div class="line">P = Solution()</div><div class="line">nums = [5,4,3,2,1]</div><div class="line">P.findRelativeRanks(nums)</div></pre></td></tr></table></figure></p>
-<p>也可以考虑拿字典做，我就不写了。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 506/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 476" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 476/">Leetcode-476--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 476/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.768Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="476-Number-Complement"><a href="#476-Number-Complement" class="headerlink" title="476. Number Complement"></a>476. Number Complement</h1><p>给定一个正整数，输出其补数.<br>题目意思就是将10进制转换成2进制，取反，再换为10进制。<br>实际上不能直接用“~”按位取反符号来做，主要原因是他的前缀也会被取反，比如我们是32bit的那么5的二进制是“0000 0000 0000 0000 0000 0000 00000 0101”取反就变成“1111 1111 1111 1111 1111 1111 1111 1010”那就多了29个1，这么做还得把前面的1去掉，所以就衍生出两种做法。</p>
-<p>Note：</p>
-<ul>
-<li>给定正数确保是32位带符号整数。</li>
-<li>可以假设整数的二进制表示不包含前导0。</li>
-</ul>
-<p>法一：<br>这个方法比较笨，我把他按照list的格式输入进去，我一个一个的去读里面的数，那因为是取反，所以我读一个“0”我自己新建一个列表存个1进去，读个“1”我存个“0”进去，遍历完整个列表那我们也得到取反的二进制数，再使用int(arg,x)来转换进制就好。代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def findComplement(num):</div><div class="line">        bn = bin(num[2:]) <span class="comment">#把bin里面的0b去掉</span></div><div class="line">        rlist = list(bn)       //这个地方用的是list（）</div><div class="line">        orilist = []</div><div class="line">    <span class="comment">#for number in rlist:</span></div><div class="line">     <span class="comment">#   if number == "1":</span></div><div class="line">            orilist.append[<span class="string">"0"</span>]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            orilist.append[<span class="string">"1"</span>]</div><div class="line">    r = <span class="string">''</span>.join(orilist)</div><div class="line">    <span class="built_in">return</span> int(r,2)</div><div class="line">P = Solution()</div><div class="line"><span class="built_in">print</span> P.findComplement(5)</div></pre></td></tr></table></figure></p>
-<ul>
-<li>把元组换成list这个用的()不是［］<br>list( seq )<br>seq – This is a tuple to be converted into list.</li>
-<li>append是[]的属性。</li>
-<li>注意区分()和[]</li>
-</ul>
-<p>法二：<br>第二个方法比较巧妙，就是用异或“^”的特性。<br>异或可以看成是将两个值交换。<br>如果两个相应位相同，则结果为0，否则为1。即：0^0=0， 1^0=1， 0^1=1， 1^1=0<br>－ 0异或任何数＝任何数<br>－ 1异或任何数－任何数取反<br>－ 任何数异或自己＝把自己置0</p>
-<p>考虑到这个特性 5 是 “101” ，2 是“010”，1异或任意数等于取反，所以我们要异或111<br>这就是101 ^ 111 = 010这样就代表取反，那我们如何得到111.<br>这就是这个算法的精髓，111是1000 －1 ，就是说所有位都为1时，那么加1，必然会进位，就变成多一位的最小值，我们要做的就是把多一位的最小值－1就能得到少一位的最大值。<br>代码如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">def findComplement(num):</div><div class="line">    value =1</div><div class="line">   <span class="comment"># if num == 1:</span></div><div class="line">        <span class="built_in">return</span> 0</div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="keyword">while</span> value &lt;= num:</div><div class="line">            value &lt;&lt; = 1 //这里就是一直循环，直到我的value的位数大于num，不够的话就一直左移</div><div class="line">        new_value = value - 1  //这里时，已经比num多一位，所以－1就是num位数的1.</div><div class="line">        <span class="built_in">return</span> new_value ^ num</div><div class="line"></div><div class="line"><span class="built_in">print</span> findComplement(5)</div></pre></td></tr></table></figure></p>
-<p>关于value &lt;&lt;= 1其实“&lt;&lt;= ”的操作是等同于 value = value &lt;&lt; 1和 “＋＝”，“－＝”一样<br>通常我们在对单个量才会只用“&lt;&lt;”来看值是否左移。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 476/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 463" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 463/">Leetcode-463--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 463/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.762Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="463-Island-Perimeter"><a href="#463-Island-Perimeter" class="headerlink" title="463. Island Perimeter"></a>463. Island Perimeter</h1><p>题目的意思是求岛的周长，给出一个list，如果a[i][j]== 1则表明他是陆地，然后计算陆地加起来的周长。</p>
-<p>这题我也是用的暴力膜法：<br>主要是下面的边界条件相了很久看了别人的才想出来的。</p>
-<ul>
-<li>如果格子超出边界，则周长+1；</li>
-<li>如果格子是水，则周长+1<br>这样最终得到的周长就是结果了。<br>下面直接po代码了，照旧可以在github上找到我的代码，ac过了。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def islandPerimeter(self, grid):</div><div class="line">        parameters = 0</div><div class="line">        m = len(grid[0])</div><div class="line">        n = len(grid)</div><div class="line"><span class="string">''</span><span class="string">'      </span></div><div class="line"><span class="string">        for i in range(0,len(grid)):</span></div><div class="line"><span class="string">            for j in range(0,len(grid[0]))://这两个语句是用来遍历整个列表，下面是把判断条件加进去。</span></div><div class="line"><span class="string">                if grid[i][j] == 1://首先要是一个海岛</span></div><div class="line"><span class="string">                    if i == 0 or grid[i-1][j] == 0: 第一行，上面是水</span></div><div class="line"><span class="string">                        parameters +=1</span></div><div class="line"><span class="string">                    if i == n-1 or grid[i+1][j] ==0: 最后一行，下面是水</span></div><div class="line"><span class="string">                        paremeters +=1</span></div><div class="line"><span class="string">                    if j == 0 or grid[i][j-1] == 0:第一列，左边是水</span></div><div class="line"><span class="string">                        parameters +=1</span></div><div class="line"><span class="string">                    if j = m-1 or grid[i][j+1] == 0:最后一列，右边是水</span></div><div class="line"><span class="string">                        parameters +=1</span></div><div class="line"><span class="string">        return parameters</span></div><div class="line"><span class="string">'</span><span class="string">''</span></div><div class="line">P = Solution()</div><div class="line"><span class="built_in">test</span> = [[1,0,0,1],[1,1,0,0],[0,0,1,0]]</div><div class="line"><span class="built_in">print</span> P.islandPerimeter(<span class="built_in">test</span>)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>基本上就是一个暴力解法，也懒得想了。</p>
-<p>今天实在没什么尽头了，上午开了paper meeting和sdn meeting下午还有mooc meeting 累的要死，但是基本上把vm migration部分找人接下来了，现在就专心刷刷题，学学sdn，做做毕业设计，如果hpcc中了，加上之前的一篇会议，一篇期刊，和十月在议程上的ICC基本上还是可以申请到一个还不错的博士的，不过既然不准备读了，就反而没有那么大压力了，回头文章让敬轩投了，我挂个2作就行，那我也就不用写文章了，调研的事情反而就不急了，这样子我就在科研上划划水，可以好好学技术啦。</p>
-<p>忽然倦了，唉，炸酱面～～</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 463/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 448" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 448/">Leetcode-448--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 448/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.755Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="448-Find-All-Numbers-Disappeared-in-an-Array"><a href="#448-Find-All-Numbers-Disappeared-in-an-Array" class="headerlink" title="448. Find All Numbers Disappeared in an Array"></a>448. Find All Numbers Disappeared in an Array</h1><p>给定一个长度为n的数组，数组元素是1~n。但是有些元素出现一次，有些元素出现两次，从而也会导致有些元素不出现。现在让我们找到哪些元素没有出现。</p>
-<p>这个我觉得没那么难啊，就两种方法一种直接用差集，一种暴力解，但是看了下top soluation看不太懂，觉得自己是个zz。暴力解超时不可取。</p>
-<p>法一：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def findDisappearedNumbers(nums):</div><div class="line">    result = []</div><div class="line">    list1 =[]</div><div class="line">    for i in range(1,len(nums)+1):</div><div class="line">        result.append(i)</div><div class="line">        #print result</div><div class="line">        if i not in nums and i in result:</div><div class="line">            list1.append(i)</div><div class="line">    return list1</div></pre></td></tr></table></figure></p>
-<p>这个解法没啥说的啊，做一个1-n的数列，在这个数列但是不在nums这个数列就把他添加到result.</p>
-<p>法二：<br>用差集：<br>这个是我ac的答案：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def findDisappearedNumbers(nums):</div><div class="line">    news = xrange(1,len(nums)+1)</div><div class="line">    return list(set(news)-set(nums))</div></pre></td></tr></table></figure></p>
-<p>前面的博客又讲差，并，交，知道这个函数就没什么说的了。</p>
-<p>法三：(top soluation)<br>不懂，丢出来看看<br>将元素对应的位置取负：<br>简单一句话可能不好理解，我们举个例子。假设在位置k放了元素i，则在取负的过程中i的取值有两种可能：为正，表示当前尚未遇到元素k将该位置取负；为负，表示当前已经有元素k出现，并将元素取负。但是我们不关心k，我们关心元素i。元素i既然出现，我们就看一下位置i：为正，表示这是元素i第一次出现，我们将位置i取负；为负，表示元素i已经出现过一次，我们不做任何操作。不管一个元素出现一次还是两次，只要出现它对应的位置就会被取负。当某个元素不出现的时候，该元素对应的位置始终访问不到，所以还是正值，通过这种方法我们就可以找到哪些元素没有出现。<br>通过上面的分析我们也很容易知道，在取负的过程中，如果发现要取负的位置已经为负，说明这个元素已经出现过，也即该元素出现了两次，我们可以将该元素保留下来。 </p>
-<p>实现代码写起来很简单逻辑自己看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">for i in xrange(len(nums)):</div><div class="line">            index = abs(nums[i]) - 1</div><div class="line">            nums[index] = - abs(nums[index])</div><div class="line"></div><div class="line">        return [i + 1 for i in range(len(nums)) if nums[i] &gt; 0]</div></pre></td></tr></table></figure></p>
-<p>Python 4 lines with short explanation牛逼！</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 448/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 283492" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 283492/">Leetcode-283/492--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 283492/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.752Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>刷easy越刷越慌，早上看了下BAT的面经，感觉题目都很难，有些东西都不太会，leetcode上的easy题我也觉得效果不一定有想象中的好，而且自从会用暴力解题法以后，基本上很少动脑子，或者就是直接下笔写，感觉很不好，还是要多复习复习基础的数据结构和算法知识。leetcode做快一点，之前以为刷easy就够了，现在感觉至少要刷到medium。</p>
-<h1 id="283-Move-Zeroes"><a href="#283-Move-Zeroes" class="headerlink" title="283. Move Zeroes"></a>283. Move Zeroes</h1><p>给定一个数字数组，写一个方法将所有的“0”移动到数组尾部，同时保持其余非零元素的相对位置不变。</p>
-<p>例如，给定nums = [0, 1, 0, 3, 12]，在调用你的函数之后，nums应该变为[1, 3, 12, 0, 0]。</p>
-<p>备注：<br>你必须就地完成，不得复制该数组。<br>最小化总共的操作数。</p>
-<p>这道题看他们好像有挺多算法的，我就懒的想了，遇到0，就删掉，同时后面加个0，然后直接return了，比较急着做实验，所以直接ac了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def moveZeroes(self, nums):</div><div class="line">    <span class="string">''</span><span class="string">'</span></div><div class="line"><span class="string">        for num in nums:</span></div><div class="line"><span class="string">            if num == 0:</span></div><div class="line"><span class="string">                nums.remove(num)</span></div><div class="line"><span class="string">                nums.append(0)</span></div><div class="line"><span class="string">        return nums</span></div><div class="line"><span class="string">    '</span><span class="string">''</span></div></pre></td></tr></table></figure></p>
-<h1 id="492-Construct-the-Rectangle"><a href="#492-Construct-the-Rectangle" class="headerlink" title="492. Construct the Rectangle"></a>492. Construct the Rectangle</h1><p>这道题的做法，千篇一律有什么平方根，确实时间上用的比我短，我用的是暴力法，就是从1-area开始算出所有的W和L，虽然可能会出现(1，4)和(4,1)这种情况～但是demo里没出现，也不知为啥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def moveZeroes(self, nums):</div><div class="line">        for W in range(1,area):</div><div class="line">            if area%W == 0 ＃其实是为了保证为int型，不然range里面是浮点数，这也是他们用开方根的原因。</div><div class="line">            L＝ area / W</div><div class="line">            return L,W</div></pre></td></tr></table></figure></p>
-<p>逻辑是这个逻辑，但是具体代码我就扔到github了，太困了 我要回去睡觉了。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 283492/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 268" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 268/">Leetcode-268--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 268/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.745Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="268-Missing-Number"><a href="#268-Missing-Number" class="headerlink" title="268. Missing Number"></a>268. Missing Number</h1><p>题目大意就是找出漏掉的那个数，这道题其实很简单，陷入了思维定势，就是简单的数理统计，而且看他的返回类型：<br>:rtype: int<br>所以就是简单计算出少了那个数就好。<br>那就是n*(n+1) - sum(nums)</p>
-<p>方法一：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def missingNumber(self, nums):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        n = len(nums)</div><div class="line">        return n*(n+1)/2 - sum(nums)</div></pre></td></tr></table></figure></p>
-<p>方法二：<br>这个做法超时了，想法也是比较简单，就是用后一个数减掉前一个数，如果不等于1，如果这个数就漏了，就输出他的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def missingNumber(self, nums):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        nums.sort()</div><div class="line">        for i in range(len(nums)+1):</div><div class="line">            if len(nums) == 1:</div><div class="line">                return 1</div><div class="line">            if nums[i+1] - nums[i] != 1:</div><div class="line">                #print nums[i+1]-1</div><div class="line">                return nums[i+1]-1</div></pre></td></tr></table></figure></p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 268/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="queue_paidui" data-title="浅谈排队轮" data-url="http://yoursite.com/2018/01/12/queue_paidui/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1065,8 +415,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

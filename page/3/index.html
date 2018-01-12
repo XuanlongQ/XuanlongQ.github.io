@@ -185,6 +185,131 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-test" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/test/">面试题 -- Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/test/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.912Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-staticmethod和-classmethod区别？-property是什么？"><a href="#1-staticmethod和-classmethod区别？-property是什么？" class="headerlink" title="1.@staticmethod和@classmethod区别？@property是什么？"></a>1.@staticmethod和@classmethod区别？@property是什么？</h1><p>这道题我知道是装饰器但是有什么区别我还真不知道，我就去查了一下。<br>写一个类，里面包含了普通函数foo，clss_foo和static_foo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class A(object):</div><div class="line">    def foo(self,x):</div><div class="line">        print &quot;exceting foo(%s,%s)&quot;%(self,x)</div><div class="line"></div><div class="line">    @classmethod</div><div class="line">    def class_foo(cls,x):</div><div class="line">        print &quot;exceting foo(%s,%s)&quot;%(cls,x)</div><div class="line"></div><div class="line">    @staticmethod</div><div class="line">    def static_foo(x):</div><div class="line">        print &quot;excuting static_foo(%s)&quot;%x</div><div class="line"></div><div class="line">a = A()</div></pre></td></tr></table></figure></p>
+<p>a.foo(1) 对象实体调用方法，对象实体a被隐藏的传递给了第一个参数self.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; exceting foo(&lt;test3.A object at 0x10a25a290&gt;,1)</div></pre></td></tr></table></figure></p>
+<p>用classmethods装饰,隐藏的传递给第一个参数的是对象实体的类(class A)而不是self.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; exceting foo(&lt;class <span class="string">'test3.A'</span>&gt;,1)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>你也可以用类调用class_foo.实际上,如果你把一些方法定义成classmethod,那么实际上你是希望用类来调用这个方法,而不是用这个类的实例来调用这个方法.<br>这个时候你用A.class_foo(1)，是可以正常运行的。(因为classmethod就是用类来调用，而不是类的实例调用)<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; exceting foo(&lt;class <span class="string">'test3.A'</span>&gt;,1)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>我们用直接用实例调用A.foo(1)是不行的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; TypeError: unbound method foo() must be called with A instance as first argument (got int instance instead)</div><div class="line">&gt;&gt;&gt; 这个错误就是说我们在调用实例的时候没有绑定</div></pre></td></tr></table></figure></p>
+<p>用staticmethods来装饰,不管传递给第一个参数的是self(对象实体)还是cls(类).它们的表现都一样:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; a.static_foo(1)</div><div class="line">&gt;&gt;&gt; excuting static_foo(1)</div><div class="line">&gt;&gt;&gt; A.static_foo(1)</div><div class="line">&gt;&gt;&gt; excuting static_foo(1)</div></pre></td></tr></table></figure></p>
+<p>静态方法被用来组织类之间有逻辑关系的函数.</p>
+<p>foo只是个函数,但是当你调用a.foo的时候你得到的不仅仅是一个函数,你得到的是一个第一个参数绑定到a的”加强版”函数.foo需要两个参数,而a.foo仅仅需要一个参数.</p>
+<ul>
+<li>什么是绑定呢？我们输出一下参数！<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> a.foo</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> a.class_foo</div><div class="line">&gt;&gt;&gt; <span class="built_in">print</span> a.static_foo</div><div class="line"></div><div class="line"><span class="comment"># a绑定了foo. </span></div><div class="line">&gt;&gt;&gt; &lt;bound method A.foo of &lt;test3.A object at 0x1049a8290&gt;&gt;</div><div class="line"></div><div class="line"><span class="comment"># A绑定到了class_foo而不是a.</span></div><div class="line">&gt;&gt;&gt; &lt;bound method type.class_foo of &lt;class <span class="string">'test3.A'</span>&gt;&gt;</div><div class="line"></div><div class="line"><span class="comment"># a.static_foo只是返回一个不带参数绑定的方法.</span></div><div class="line"><span class="comment"># static_foo和a.static_foo只需要一个参数.就是一个方法</span></div><div class="line">&gt;&gt;&gt; &lt;<span class="keyword">function</span> static_foo at 0x10499bf50&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="2-Python可变类型有哪些"><a href="#2-Python可变类型有哪些" class="headerlink" title="2.Python可变类型有哪些"></a>2.Python可变类型有哪些</h1><p>我第一时间想起就是数字，字符串和元组(tuple)不可变，列表和字典是可变的。<br>对不可变类型的变量重新赋值，实际上是重新创建一个不可变类型的对象，并将原来的变量重新指向新创建的对象（如果没有其他变量引用原有对象的话（即引用计数为0），原有对象就会被回收）。</p>
+<p>这个也没啥好补充的</p>
+<h1 id="3-用numpy生成一个1-9的3-3的数组"><a href="#3-用numpy生成一个1-9的3-3的数组" class="headerlink" title="3.用numpy生成一个1-9的3*3的数组"></a>3.用numpy生成一个1-9的3*3的数组</h1><p>这个就直接调用内置函数就行，我做leetcode有一道就是把矩阵重新定向，里面有一个求除和求余的过程，但是用numpy的reshape()函数特别简单，所以记得比较清楚。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import numpy as np</div><div class="line">a = np.arange(1,10).reshape(3,3)</div><div class="line">print a</div><div class="line"></div><div class="line">&gt;&gt;&gt; [[1 2 3]</div><div class="line">&gt;&gt;&gt; [4 5 6]</div><div class="line">&gt;&gt;&gt; [7 8 9]]</div></pre></td></tr></table></figure></p>
+<h1 id="4-如何判断一个字符串str的编码方式，打印出编码方式的名字"><a href="#4-如何判断一个字符串str的编码方式，打印出编码方式的名字" class="headerlink" title="4.如何判断一个字符串str的编码方式，打印出编码方式的名字"></a>4.如何判断一个字符串str的编码方式，打印出编码方式的名字</h1><p>这题我虽然不会，但是shangru之前帮我改一个代码的时候有提到字符编码导致编译不通过的问题，今天又被提起来就去查一下好了。<br>查到一个博客讲<a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="external">字符编码笔记：ASCII，Unicode和UTF-8</a>.<br>str和unicode都是basestring的子类,所以有判断是否是字符串的方法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">def is_str(s):</div><div class="line">    <span class="built_in">return</span> isinstance(s,basestring)</div></pre></td></tr></table></figure></p>
+<p>str是字节串，由unicode经过编码(encode)后的字节组成的,unicode才是真正意义上的字符串，由字符组成<br>判断是否是字符串方法如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; isinstance(u<span class="string">'中文'</span>, unicode)</div><div class="line">True</div><div class="line">&gt;&gt;&gt; isinstance(<span class="string">'中文'</span>, unicode)</div><div class="line">False</div><div class="line"></div><div class="line">&gt;&gt;&gt; isinstance(<span class="string">'中文'</span>, str)</div><div class="line">True</div><div class="line">&gt;&gt;&gt; isinstance(u<span class="string">'中文'</span>, str)</div><div class="line">False</div></pre></td></tr></table></figure></p>
+<h1 id="5-＊args和＊＊kwargs是什么意思，为什么要用他们？"><a href="#5-＊args和＊＊kwargs是什么意思，为什么要用他们？" class="headerlink" title="5.＊args和＊＊kwargs是什么意思，为什么要用他们？"></a>5.＊args和＊＊kwargs是什么意思，为什么要用他们？</h1><p>这个就是不知道参数的个数时候用的，<em>*kwargs是传不确定的键值对的数量。<br>但是具体为什么要用我也不知道啊。<br>当你不确定你的函数里将要传递多少参数时你可以用</em>args.例如,它可以传递任意数量的参数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def print_everything(*args):</div><div class="line">        for count, thing in enumerate(args):</div><div class="line">...         print &apos;&#123;0&#125;. &#123;1&#125;&apos;.format(count, thing)</div><div class="line">...</div><div class="line">&gt;&gt;&gt; print_everything(&apos;apple&apos;, &apos;banana&apos;, &apos;cabbage&apos;)</div><div class="line">0. apple</div><div class="line">1. banana</div><div class="line">2. cabbage</div></pre></td></tr></table></figure></p>
+<p>相似的,**kwargs允许你使用没有事先定义的参数名:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def table_things(**kwargs):</div><div class="line">...     for name, value in kwargs.items():</div><div class="line">...         print &apos;&#123;0&#125; = &#123;1&#125;&apos;.format(name, value)</div><div class="line">...</div><div class="line">&gt;&gt;&gt; table_things(apple = &apos;fruit&apos;, cabbage = &apos;vegetable&apos;)</div><div class="line">cabbage = vegetable</div><div class="line">apple = fruit</div></pre></td></tr></table></figure></p>
+<p>你也可以混着用.命名参数首先获得参数值然后所有的其他参数都传递给<em>args和*</em>kwargs.命名参数在列表的最前端.例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">def table_things(titlestring, **kwargs)</div></pre></td></tr></table></figure></p>
+<p>＊args和＊＊kwargs可以同时在函数的定义中,但是<em>args必须在*</em>kwargs前面..</p>
+<p>当调用函数时你也可以用<em>和*</em>语法.例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def print_three_things(a, b, c):</div><div class="line">...     print &apos;a = &#123;0&#125;, b = &#123;1&#125;, c = &#123;2&#125;&apos;.format(a,b,c)</div><div class="line">...</div><div class="line">&gt;&gt;&gt; mylist = [&apos;aardvark&apos;, &apos;baboon&apos;, &apos;cat&apos;]</div><div class="line">&gt;&gt;&gt; print_three_things(*mylist)</div><div class="line">a = aardvark, b = baboon, c = cat</div></pre></td></tr></table></figure></p>
+<p>就像你看到的一样,它可以传递列表(或者元组)的每一项并把它们解包.注意必须与它们在函数里的参数相吻合.</p>
+<h1 id="6-对一个字符串进行多次替换"><a href="#6-对一个字符串进行多次替换" class="headerlink" title="6.对一个字符串进行多次替换"></a>6.对一个字符串进行多次替换</h1><p>例如：给定sent = “1232gawg”,rep = {“1”:”a”,”2”,”b”,”3”:”c”}<br>将sent进行rep替换，结果是”abcbagawg”<br>这题不难啊，就是字符串替换啊。<br>自己写的时候还写懵了，可能没睡醒。。。。代码有点冗余，把key和value拆开了。。我一定是个菜鸡，才写出这种菜鸡代码～～～～～<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">rep = &#123;&quot;1&quot;:&quot;a&quot;,&quot;2&quot;:&quot;b&quot;,&quot;3&quot;:&quot;c&quot;&#125;</div><div class="line"></div><div class="line">def Morechange(list1):</div><div class="line">    key1 = []</div><div class="line">    value1 = []</div><div class="line">    for key, value in rep.items():</div><div class="line">        key1.append(key)</div><div class="line">        value1.append(value)</div><div class="line"></div><div class="line">    result = []</div><div class="line">    for i in list1:</div><div class="line">        if i in key1:</div><div class="line">            p = key1.index(i)</div><div class="line">            #print p</div><div class="line">            #print value1[p]</div><div class="line">            result.append(value1[p])</div><div class="line">        else:</div><div class="line">            result.append(i)</div><div class="line">    print list(result)</div><div class="line">list1 = &quot;1232gwag&quot;</div><div class="line">Morechange(list1)</div></pre></td></tr></table></figure></p>
+<h1 id="7-range和xrange的区别"><a href="#7-range和xrange的区别" class="headerlink" title="7.range和xrange的区别"></a>7.range和xrange的区别</h1><p>这个我倒是知道，因为当时看生成器的时候，知道range是产生一个列表要分配空间，但是xrange是一个生成器就是调用的时候返回一个值，大概是这样，我去查了一下网上的答案。<br>range函数说明：range([start,] stop[, step])<br>根据start与stop指定的范围以及step设定的步长，生成一个序列。<br>xrange<br>函数说明：用法与range完全相同，所不同的是生成的不是一个数组，而是一个生成器。</p>
+<p>要生成很大的数字序列的时候，用xrange会比range性能优很多，因为不需要一上来就开辟一块很大的内存空间，这两个基本上都是在循环的时候用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for i in range(0, 100):</div><div class="line">print i</div><div class="line">for i in xrange(0, 100):</div><div class="line">print i</div></pre></td></tr></table></figure></p>
+<p>这两个输出的结果都是一样的，实际上有很多不同，range会直接生成一个list对象：<br>输出结果：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; &lt;<span class="built_in">type</span> <span class="string">'list'</span>&gt;</div><div class="line">&gt;&gt;&gt; [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</div><div class="line">&gt;&gt;&gt; 0 1</div></pre></td></tr></table></figure></p>
+<p>而xrange则不会直接生成一个list，而是每次调用返回其中的一个值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a = xrange(0,100)</div><div class="line">print type(a)</div><div class="line">print a</div><div class="line">print a[0], a[1]</div></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; &lt;<span class="built_in">type</span> <span class="string">'xrange'</span>&gt;</div><div class="line">&gt;&gt;&gt; xrange(100)</div><div class="line">&gt;&gt;&gt; 0 1</div></pre></td></tr></table></figure></p>
+<p>所以xrange做循环的性能比range好，尤其是返回很大的时候，尽量用xrange吧，除非你是要返回一个列表。</p>
+<h1 id="8-copy和deepcopy区别"><a href="#8-copy和deepcopy区别" class="headerlink" title="8.copy和deepcopy区别"></a>8.copy和deepcopy区别</h1><p>描述：<br>origin = [1,2,[3,4]]<br>cop1 = copy.copy(origin)<br>cop2 = copy.deepcopy(origin)</p>
+<p>1.print cop1,cop2<br>origin[2][0] = “hey!”</p>
+<p>2.print cop1,cop2</p>
+<p>这道题不查还真不知道，copy和deepcopy区别<a href="http://blog.csdn.net/celte/article/details/38983133" target="_blank" rel="external">从python中copy与deepcopy的区别看python引用</a>.<br>copy拷贝一个对象，但是对象的属性还是引用原来的，deepcopy拷贝一个对象，把对象里面的属性也做了拷贝，deepcopy之后完全是另一个对象了.</p>
+<ul>
+<li>copy时可变类型和不可变类型也会影响结果！</li>
+</ul>
+<h1 id="9-yield实现非波那契数列"><a href="#9-yield实现非波那契数列" class="headerlink" title="9.yield实现非波那契数列"></a>9.yield实现非波那契数列</h1><p>一个带有 yield 的函数就是一个 generator，它和普通函数不同，生成一个generator看起来像函数调用，但不会执行任何函数代码，直到对其调用 next()（在 for 循环中会自动调用 next()）才开始执行。虽然执行流程仍按函数的流程执行，但每执行到一个 yield语句就会中断，并返回一个迭代值，下次执行时从yield的下一个语句继续执行。看起来就好像一个函数在正常执行的过程中被yield中断了数次，每次中断都会通过 yield 返回当前的迭代值。<br>yield 的好处是显而易见的，把一个函数改写为一个generator就获得了迭代能力，比起用类的实例保存状态来计算下一个 next()的值，不仅代码简洁，而且执行流程异常清晰。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def fab(max):</div><div class="line">    n = 0</div><div class="line">    a = 0</div><div class="line">    b = 1</div><div class="line">    while n &lt; max:</div><div class="line">        yield b </div><div class="line">        #print b</div><div class="line">        (a,b) = (b,a+b)</div><div class="line">        n+=1</div></pre></td></tr></table></figure></p>
+<p>这个博客讲的不能再仔细了。<a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-python-yield/index.html" target="_blank" rel="external"><br>Python yield 使用浅析-廖雪峰</a>.</p>
+<h1 id="10-python的garbage-collection机制"><a href="#10-python的garbage-collection机制" class="headerlink" title="10.python的garbage collection机制"></a>10.python的garbage collection机制</h1><p>python采用的是引用计数机制为主，标记-清除和分代收集两种机制为辅的策略<br>引用计数机制：<br>python里每一个东西都是对象，它们的核心就是一个结构体：PyObject<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> typedef struct_object &#123;</div><div class="line"> int ob_refcnt;</div><div class="line"> struct_typeobject *ob_type;</div><div class="line">&#125; PyObject;</div></pre></td></tr></table></figure></p>
+<p>PyObject是每个对象必有的内容，其中ob_refcnt就是做为引用计数。当一个对象有新的引用时，它的ob_refcnt就会增加，当引用它的对象被删除，它的ob_refcnt就会减少.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#define Py_INCREF(op)   ((op)-&gt;ob_refcnt++) //增加计数</div><div class="line">#define Py_DECREF(op) \ //减少计数</div><div class="line">    if (--(op)-&gt;ob_refcnt != 0) \</div><div class="line">        ; \</div><div class="line">    else \</div><div class="line">        __Py_Dealloc((PyObject *)(op))</div></pre></td></tr></table></figure></p>
+<p>当引用计数为0时，该对象生命就结束了。</p>
+<p>引用计数机制的优点：</p>
+<p>1.简单<br>2.实时性：一旦没有引用，内存就直接释放了。不用像其他机制等到特定时机。实时性还带来一个好处：处理回收内存的时间分摊到了平时。</p>
+<p>引用计数机制的缺点：</p>
+<p>1.维护引用计数消耗资源<br>2.循环引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">list1 = []</div><div class="line">list2 = []</div><div class="line">list1.append(list2)</div><div class="line">list2.append(list1)</div></pre></td></tr></table></figure></p>
+<p>list1与list2相互引用，如果不存在其他对象对它们的引用，list1与list2的引用计数也仍然为1，所占用的内存永远无法被回收，这将是致命的。<br>对于如今的强大硬件，缺点1尚可接受，但是循环引用导致内存泄露，注定python还将引入新的回收机制。(标记清除和分代收集)<br>资料收集全靠博客<a href="http://hbprotoss.github.io/posts/pythonla-ji-hui-shou-ji-zhi.html" target="_blank" rel="external">Python垃圾回收机制</a>.</p>
+<p>呼～总算做完了，得知尚儒也没收到华为的短信，也是一件很开心的事了，难兄难弟，一起打出GG！</p>
+<p>顺手看到一个大神博客贴上，万一以后要用，写的挺好的。<br><a href="https://taizilongxu.gitbooks.io/stackoverflow-about-python/content/index.html" target="_blank" rel="external">Stackoverflow about Python</a>.这个资源还可以的！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/test/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-test blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -965,85 +1090,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/RAID/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-quicksort" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/quicksort/">快速排序和归并排序</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/quicksort/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.865Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>归并排序（MERGE-SORT）是利用归并的思想实现的排序方法，该算法采用经典的分治（divide-and-conquer）策略（分治法将问题分(divide)成一些小的问题然后递归求解，而治(conquer)的阶段则将分的阶段得到的各答案”修补”在一起，即分而治之)。</p>
-<p><img src="/images/fenzhi.png" alt="fenzhi"></p>
-<h2 id="合并相邻有序子序列"><a href="#合并相邻有序子序列" class="headerlink" title="合并相邻有序子序列"></a>合并相邻有序子序列</h2><p>step1:<br><img src="/images/14.png" alt="14"><br>step2:<br><img src="/images/64.png" alt="64"><br>归并排序是稳定排序，它也是一种十分高效的排序，能利用完全二叉树特性的排序一般性能都不会太差。java中Arrays.sort()采用了一种名为TimSort的排序算法，就是归并排序的优化版本。从上文的图中可看出，每次合并操作的平均时间复杂度为O(n)，而完全二叉树的深度为|log2n|。总的平均时间复杂度为O(nlogn)。而且，归并排序的最好，最坏，平均时间复杂度均为O(nlogn)。</p>
-<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。<br><img src="/images/kuaipai.png" alt="kuaipai"></p>
-<p>考虑到在blog里面讲代码太费时间，直接丢到github。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/quicksort/">展开全文 >></a>
         </p>
       
 

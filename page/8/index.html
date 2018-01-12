@@ -185,6 +185,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-heap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/heap/">栈内存和堆内存的一点小结</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/heap/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.688Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="栈内存和堆内存"><a href="#栈内存和堆内存" class="headerlink" title="栈内存和堆内存"></a>栈内存和堆内存</h1><ul>
+<li>形象化的理解：<br>Object obj = new Object();<br>以上这句话,会把obj这个引用放进栈内存,再说白一点,就是这个对象的名字obj放进栈内存,栈内存运行速度较快,用于查找索引(也就是名字)<br>  而new Object()会在堆内存中开辟一块空间给这个对象,对象几乎所有的属性啊,方法啊,全都在里面了,也就是对象的实体都在堆内存中,堆内存速度慢但是成本低,空间较大,用以存放程序</li>
+<li>具体分析</li>
+</ul>
+<ul>
+<li><p>内存分配策略<br>按照编译原理的观点,程序运行时的内存分配有三种策略,分别是静态的,栈式的,和堆式的。如下：<br>1.静态存储分配是指在编译时就能确定每个数据目标在运行时刻的存储空间需求,因而在编译时就可以给他们分配固定的内存空间.这种分配策略要求程序代码中不允许有可变数据结构(比如可变数组)的存在,也不允许有嵌套或者递归的结构出现,因为它们都会导致编译程序无法计算准确的存储空间需求。<br>2.栈式存储分配也可称为动态存储分配,是由一个类似于堆栈的运行栈来实现的.和静态存储分配相反,在栈式存储方案中,程序对数据区的需求在编译时是完全未知的,只有到运行的时候才能够知道,但是规定在运行中进入一个程序模块时,必须知道该程序模块所需的数据区大小才能够为其分配内存.和我们在数据结构所熟知的栈一样,栈式存储分配按照先进后出的原则进行分配。<br>3.堆式存储(Heap)分配则专门负责在编译时或运行时模块入口处都无法确定存储要求的数据结构的内存分配,比如可变长度串和对象实例.堆由大片的可利用块或空闲块组成,堆中的内存可以按照任意顺序分配和释放。</p>
+</li>
+<li><p>举例分析<br>当编译一个C++程序时，计算机的内存被分成了4个区域，一个包括程序的代码，一个包括所有的全局变量，一个是堆栈（Stack），还有一个是堆（Heap）<br>  全局变量是静态存储的（但不是静态的，不能用static进行修饰）。用static声明局部变量“的目的是使局部变量在调用完函数后仍不释放空间，而全局变量完全能做到这点。（当然，能不用试最好不要去用全局变量，它会造成很多干扰）<br>  栈的概念是从日常生活中货物在货栈种的存取过程抽象出来的，即最后存放入栈的货物（堆在靠出口处）先被提取出去，符合“先进后出，后进先出”的原则。这种结构犹如子弹夹。<br>  堆是自由的内存区域，我们可以通过new和delete把对象放在这个区域。你可以在任何地方分配和释放自由存储区。</p>
+</li>
+<li><p>总结<br>从堆和栈的功能和作用来通俗的比较,堆主要用来存放对象的，栈主要是用来执行程序的.而这种不同又主要是由于堆和栈的特点决定的:<br>  在编程中，例如C/C++中，所有的方法调用都是通过栈来进行的,所有的局部变量,形式参数都是从栈中分配内存空间的。实际上也不是什么分配,只是从栈顶向上用就行,就好像工厂中的传送带(conveyor belt)一样,Stack Pointer会自动指引你到放东西的位置,你所要做的只是把东西放下来就行.退出函数的时候，修改栈指针就可以把栈中的内容销毁.这样的模式速度最快,当然要用来运行程序了.需要注意的是,在分配的时候,比如为一个即将要调用的程序模块分配数据区时,应事先知道这个数据区的大小,也就说是虽然分配是在程序运行时进行的,但是分配的大小多少是确定的,不变的,而这个”大小多少”是在编译时确定的,不是在运行时。<br>  堆是应用程序在运行的时候请求操作系统分配给自己内存，由于从操作系统管理的内存分配,所以在分配和销毁时都要占用时间，因此用堆的效率非常低.但是堆的优点在于,编译器不必知道要从堆里分配多少存储空间，也不必知道存储的数据要在堆里停留多长的时间,因此,用堆保存数据时会得到更大的灵活性。事实上,面向对象的多态性,堆内存分配是必不可少的,因为多态变量所需的存储空间只有在运行时创建了对象之后才能确定.在C++中，要求创建一个对象时，只需用new命令编制相关的代码即可。执行这些代码时，会在堆里自动进行数据的保存.当然，为达到这种灵活性，必然会付出一定的代价:在堆里分配存储空间时会花掉更长的时间！这也正是导致我们刚才所说的效率低的原因。</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/heap/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-graph" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

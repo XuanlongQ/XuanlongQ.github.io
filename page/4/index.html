@@ -185,6 +185,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-quicksort" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/quicksort/">快速排序和归并排序</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/quicksort/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.865Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>归并排序（MERGE-SORT）是利用归并的思想实现的排序方法，该算法采用经典的分治（divide-and-conquer）策略（分治法将问题分(divide)成一些小的问题然后递归求解，而治(conquer)的阶段则将分的阶段得到的各答案”修补”在一起，即分而治之)。</p>
+<p><img src="/images/fenzhi.png" alt="fenzhi"></p>
+<h2 id="合并相邻有序子序列"><a href="#合并相邻有序子序列" class="headerlink" title="合并相邻有序子序列"></a>合并相邻有序子序列</h2><p>step1:<br><img src="/images/14.png" alt="14"><br>step2:<br><img src="/images/64.png" alt="64"><br>归并排序是稳定排序，它也是一种十分高效的排序，能利用完全二叉树特性的排序一般性能都不会太差。java中Arrays.sort()采用了一种名为TimSort的排序算法，就是归并排序的优化版本。从上文的图中可看出，每次合并操作的平均时间复杂度为O(n)，而完全二叉树的深度为|log2n|。总的平均时间复杂度为O(nlogn)。而且，归并排序的最好，最坏，平均时间复杂度均为O(nlogn)。</p>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。<br><img src="/images/kuaipai.png" alt="kuaipai"></p>
+<p>考虑到在blog里面讲代码太费时间，直接丢到github。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/quicksort/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-python_superclass" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1051,105 +1130,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/ns3_linux_tcp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ns3_linux_app" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/ns3_linux_app/">ns-3网络模拟器基础及应用/NS-3其他模块(应用层模块 五)</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/ns3_linux_app/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.835Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Application类"><a href="#Application类" class="headerlink" title="Application类"></a>Application类</h1><p>Application类是所有应用程序的基类，Application类提供了一些行为的基本原型，SetStartTime()、SetStopTime()、GetNode()、SetNode()等。<br>ns-3为用户提供了多种网络应用模型，如下：</p>
-<ul>
-<li>UdpClientServer;</li>
-<li>UdpEcho;</li>
-<li>Radvd;</li>
-<li>Ping6;</li>
-<li>PacketSink;</li>
-<li>OnOffApplication;</li>
-<li>BulkSendliction;</li>
-</ul>
-<hr>
-<ul>
-<li>我们所做的改进都是基于TCP的，所以前面的四个对我现在研究的方向没什么太大帮助，先扔掉，登什么时候我心情好了再写，麻蛋，大家都去California享受阳光了，而我还在划水，说好的California Dreaming呢，蓝瘦，继续写！</li>
-</ul>
-<p>后面的三个中PacketSink这个应用模块的目的是接收远端发来的数据分组，因此大多数情况下是配合其他模块使用，比如OnOffApplication、BulkSendliction等。<br>相关类的API是：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">class PacketSink:public Application &#123; &#125;;</div><div class="line">class PacketSinkHelpe &#123; &#125;;</div><div class="line">class OnOffHelper &#123; &#125;;</div><div class="line">class BulkHelper &#123; &#125;;</div></pre></td></tr></table></figure></p>
-<p>上面是主要用到的API。</p>
-<h1 id="举两个栗子"><a href="#举两个栗子" class="headerlink" title="举两个栗子"></a>举两个栗子</h1><ul>
-<li><p>example1：<br>tcp-star-server.cc(星型网络结构的脚本) ns-3/examples/tcp<br>创建应用程序，OnOffApplication和PacketSink模块。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">PacketSinkHelper sinkHelper(<span class="string">"ns::TcpSocketFactory"</span>,sinkLocalAddress);</div><div class="line">ApplicationContainer sinkApp = sinkHelper.Install(serverNode);</div><div class="line">sinkApp.Start (Seconds(1.0));</div><div class="line">sinkApp.Stop (Seconds(10.0));</div><div class="line"></div><div class="line">OnOffHelper clientHelper (<span class="string">"ns::TcpSocketFactory"</span>,Address());</div><div class="line">clientHelper.SetAttribute(<span class="string">"OnTime"</span>,StringValue(<span class="string">"ns3::ConstantRandomVarible[Constant=1]"</span>));</div><div class="line">clientHelper.SetAttribute(<span class="string">"OffTime"</span>,StringValue(<span class="string">"ns3::ConstantRandomVarible[Constant=0]"</span>));</div><div class="line">...</div><div class="line">这部分是常规的节点属性配置，不会的话自己翻书，或者弃疗，反正要GG，不如不学。</div></pre></td></tr></table></figure>
-</li>
-<li><p>example2<br>tcp-bulk-send.cc ns-3/examples/tcp<br>创建应用程序，BulkSendliction和PacketSink模块。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">在节点0创建BulkSendliction应用程序</div><div class="line">uint16_t port = 9;</div><div class="line">BulkSenderHelper soure(<span class="string">"ns::TcpSocketFactory"</span>,InetSocketAddress(i.GetAddress(1),port));</div><div class="line">source.SetAttribute(<span class="string">"MaxBytes"</span>,UintegerValue(maxBytes));</div><div class="line">ApplicationContainer sourceApps = source.Install (nodes.Get(0));</div><div class="line">source.Start (Seconds(1.0));</div><div class="line">source.Stop (Seconds(10.0));</div><div class="line">在节点1创建PacketSinkApplication应用程序</div><div class="line">PacketSinkHelper sink (<span class="string">"ns::TcpSocketFactory"</span>,InetSocketAddress(Ipv4Address::GetAny(),port))</div><div class="line">ApplicationContainer sinkApps = source.Install (nodes.Get(1));</div><div class="line">sinkApps.Start (Seconds(1.0));</div><div class="line">sinkApps.Stop (Seconds(10.0));</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<p>比较可惜这里面也没有讲具体的Application架构，但是基本的构建方式我已经懂了，明天我会去看源码，早日把Vm migration model写出来。<br>关于其他模块的记录可能要做完实验了，之后应该更新的都是代码部分了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/ns3_linux_app/">展开全文 >></a>
         </p>
       
 

@@ -185,6 +185,100 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-queue_paidui" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/12/queue_paidui/">浅谈排队轮</a>
+    </h1>
+  
+
+        
+        <a href="/2018/01/12/queue_paidui/" class="archive-article-date">
+  	<time datetime="2018-01-12T11:38:04.498Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="排队论理论概述"><a href="#排队论理论概述" class="headerlink" title="排队论理论概述"></a>排队论理论概述</h1><p>排队背后的理论就是排队论…而排队论是分组交换的核心。不光如此，它也是高速公路建设等所有涉及到排队的场景(缴费，银行服务等)的核心。不管怎么说，它非常重要。事实上它也非常简单。参考了一篇很好的文章<a dash="" of="" queueing="" theory="">,  分组交换之所以可行，背后的理论就是排队论。事实上，早在分组交换还没有的时候，排队论早就应用了好几百年乃至上千年，分组交换网络只是在这个事实被理论化的同时恰逢网络发展的春天。<br>分组交换的另一个核心就是统计复用。事实上，早在分组交换还没有的时候，统计复用早就存在了几千年乃至几千万年。我们生活的世界本身就是统计复用的，道路，土地，公共设施，都是统计复用的。统计复用之所以可被接受，背后的理论依然是排队论，即排队公平性。当然，在历史的早期，由于没有采用统计复用从而导致不公平，最终形成了蝴蝶效应，随之国王，帝国，统治者相继出现…不过，这不是本文讨论的。</a></p>
+<h2 id="马尔可夫过程"><a href="#马尔可夫过程" class="headerlink" title="马尔可夫过程"></a>马尔可夫过程</h2><p>真实世界中产生排队的环境中同样也存在随机性。然而，我们不会讨论关于随机性的内容。在我们推论排队的过程中，所使用的最有用的工具就是基于随机性建模的马尔可夫过程。</p>
+<p>马尔可夫过程是一段时间内随机事件的集合，具有以下两种独特而有趣的属性:</p>
+<ul>
+<li>1.下一个事件迟早会发生</li>
+<li>2.将来事件的发生不依赖于之前的事件，即无后效性。 </li>
+</ul>
+<p>下图描绘出一段时间内的马尔可夫过程：<br><img src="/images/Merkefu.jpg" alt="Merkefu"></p>
+<p>马尔可夫过程和泊松过程都很适合用来给真实世界中的事件建模，其中泊松过程是一种连续时间的特殊马尔可夫过程。 我们可以用它们来模拟事件加入排队队列这一过程。<br>当我们使用马尔可夫过程来给入队事件建模时，比如说上报bug、餐馆的订单、HTTP请求等，都可以通过绘制累积图来表示：<br><img src="/images/Merkefu1.jpg" alt="Merkefu1"></p>
+<h2 id="将任务-数据包，车辆-排队过程和被服务过程按时间分别展开"><a href="#将任务-数据包，车辆-排队过程和被服务过程按时间分别展开" class="headerlink" title="将任务(数据包，车辆)排队过程和被服务过程按时间分别展开"></a>将任务(数据包，车辆)排队过程和被服务过程按时间分别展开</h2><p>我们把一个单独的排队过程按照时间展开，就会得到下面的图示(入队速率固定)：<br><img src="/images/queue1.jpg" alt="queue1"><br>那如果我们把一个消费队列里实体的输出服务消费的过程按照时间展开，就会得到下面的图示：<br><img src="/images/queue2.jpg" alt="queue2"></p>
+<h2 id="任务-数据包，车辆-排队过程和被服务过程合并"><a href="#任务-数据包，车辆-排队过程和被服务过程合并" class="headerlink" title="任务(数据包，车辆)排队过程和被服务过程合并"></a>任务(数据包，车辆)排队过程和被服务过程合并</h2><p>如果任由排队实体持续排队，队列将会变得无限长。事实上，任何队列都不会无限长，否则大家为何在那排队去等待一个永恒不被接受的服务….小说《十年》里的那个废弃火车站等车的并不存在于现实。为什么？因为只要有排队，就会有服务处理队头，即排队在队尾，服务在队头，这是一个简单的先进先出的过程。<br>那么，我们把上面两个图合并，就会发现，合并后的两条曲线中间的带状，就是队列，如下图所示：<br><img src="/images/queue3.jpg" alt="queue3"></p>
+<h1 id="任务在固定速率输入情形下的排队分析"><a href="#任务在固定速率输入情形下的排队分析" class="headerlink" title="任务在固定速率输入情形下的排队分析"></a>任务在固定速率输入情形下的排队分析</h1><h2 id="1-任务输入率和服务的吸收率相等的情形"><a href="#1-任务输入率和服务的吸收率相等的情形" class="headerlink" title="1.任务输入率和服务的吸收率相等的情形"></a>1.任务输入率和服务的吸收率相等的情形</h2><p>这种情况，从初始状态开始，是不会产生排队现象的，比如单位时间到达三个人需要服务，而服务台拥有三个服务员，忽略服务时间的假设下，每单位时间总是会有三个服务员为人民服务。但是一旦加入其它的因素，比如处理某个人的业务过久(服务时间是不能忽略的)，就会产生排队现象，一旦某个服务被延迟，就会总体拖慢服务输出率，这是导致排队的主因。</p>
+<h2 id="2-任务输入率和服务的吸收率不等的情形"><a href="#2-任务输入率和服务的吸收率不等的情形" class="headerlink" title="2.任务输入率和服务的吸收率不等的情形"></a>2.任务输入率和服务的吸收率不等的情形</h2><p>如果服务输出率大于队列输入率且持续大于，那么队列最终会消失，如果持续小于队列输入率，队列会越来越长，这些都是常识，但是这些都是深入分析的基础。</p>
+<h2 id="3-结论"><a href="#3-结论" class="headerlink" title="3.结论"></a>3.结论</h2><p><img src="/images/queue4.jpg" alt="queue4"></p>
+<h1 id="真实情况：输入的泊松分布与输入间隔的指数分布"><a href="#真实情况：输入的泊松分布与输入间隔的指数分布" class="headerlink" title="真实情况：输入的泊松分布与输入间隔的指数分布"></a>真实情况：输入的泊松分布与输入间隔的指数分布</h1><p>前面的分析和图示，让我们感觉到排队系统是多么的不稳定啊，要么队列变为0，要么持续增长。持有这种观点的，一定会质疑路由器的可用性。可是事实上，不管在现实中，比如高速公路拥堵，抢购物品，买票还是网络世界，比如路由器，交换机，服务器，我们都没有看到过队列快速变为0或者持续增长的情况，队列总是在波动，排队的实体除非自己放弃，不然总会得到服务，队列也从来没有无限加长。这是为什么？<br>因为排队的入队率并不是一个常数，而是符合泊松分布的一个范围，说白了就是，入队率有一个平均值，偏离这个平均值越多的入队率，越是不可能看到的。比如说一个入队率平均值是10，那么单位时间排队10个实体是最可能的，排队9个或者11也是次可能的，8个或者12个，7个或者13个，都有可能，…那么1个或者19个相对于前面那些，就显得可能性很小了。<br>由于入队率的泊松分布，相邻两个排队实体的排队间隔也应该有一个分布规律，相邻排队实体的排队间隔符合指数分布，意思是说，下一个排队者最可能会在最短的时间到来，比如1分钟内，如果5分钟还没有来，你指望它15分钟内来的希望也是比较渺茫的，这也叫做“下一个马上到”定律。这是非常符合常识的，比如你在等人的时候，他如果迟到了20分钟，那么他很可能就不会来了，比如面试，如果你面试完还没回到家，刚刚面试的公司就打来电话了，那么你很有可能被录取了。<br>这就是泊松分布和指数分布下真实的排队场景。</p>
+<h1 id="任务输入速率符合泊松分布前提下的排队分析"><a href="#任务输入速率符合泊松分布前提下的排队分析" class="headerlink" title="任务输入速率符合泊松分布前提下的排队分析"></a>任务输入速率符合泊松分布前提下的排队分析</h1><p>真实的排队场景如下图所示：<br><img src="/images/queue5.jpg" alt="queue5"><br>把图放远看，你会忽略些许弯曲的细节，整个输入曲线就是一个直线，实际上服务输出曲线也一样，这正如分形理论阐述的一样。有两点要牢记：</p>
+<ul>
+<li>a).大部分情形下，输入率都是平均输入率，起码向平均输入率收敛(泊松分布起作用了)；</li>
+<li>b).大部分情形下，在符合a的前提下，下一个排队者马上就到(指数分布起作用了)。</li>
+</ul>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://blog.csdn.net/dog250/article/details/46753227" target="_blank" rel="external">原博文-根据排队论阐述路由器和高速公路的拥堵以及拥堵缓解问题</a>.<br>2.<a href="http://blog.jobbole.com/87158/" target="_blank" rel="external">排队论-伯乐在线</a>.这个我觉得有点太绝对了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/12/queue_paidui/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-run_ns_2.34_ubuntu_14.04" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1058,90 +1152,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/binaryorder/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-binaryheap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/binaryheap/">二叉堆 BinaryHeap实现及回顾--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/binaryheap/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.953Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>数据结构二叉堆能够很好地实现优先队列的基本操作。在二叉堆的数组中，每个元素都要保证大于等于另两个特定位置的元素。相应地，这些位置的元素又至少要大于等于数组中的另两个元素，以此类推。如果我们将所有元素画成一棵二叉树，将每个较大元素和两个较小的元素用边连接就可以很容易看出这种结构。</p>
-<p>查了一下堆的定义，当一颗二叉树的每个结点都大雨等于它的两个子结点时，它被称为堆有序。</p>
-<p>二叉堆的逻辑结构用图形表示很像二叉树,但我们却可以仅仅用一个列表来 实现它。二叉堆通常有两种:最小成员 key 排在队首的称为“最小堆(min heap)”,反之,最大 key 排在队首的是“最大堆(max heap)”。</p>
-<h1 id="二叉堆的实现"><a href="#二叉堆的实现" class="headerlink" title="二叉堆的实现"></a>二叉堆的实现</h1><p>使用“完全二叉树”来简化问题，减少复杂度，平衡的二 叉树树根左右子树有着相同数量的节点。<br>使用完全二叉树的特性，对于完全树，如果节点在列表中的位置为 p,那么其左子节点的位置为 2p,其 右子节点的位置为 2p+1。当我们要找任意节点的父节点时,可以直接利用 python 的整数除法。若节点在列表中的位置为 n,那么父节点的位置是 n//2。(之后上浮或者下沉都可以利用这一特性，来寻找嵌套的列表)</p>
-<h2 id="二叉堆操作的实现"><a href="#二叉堆操作的实现" class="headerlink" title="二叉堆操作的实现"></a>二叉堆操作的实现</h2><p>采用一个列表来保存堆数据,构造函数 仅仅需要初始化一个列表和一个 currentSize 来跟踪记录堆当前的大小。<br>1.插入key值<br>往列表中添加数据项最简单也最高效的方式是直接将数据项添加到列表末尾。这样做虽然保持了完全树的性质,但无法保持堆的次序性。不过,我们可以通过比较新加入的数据项和父节点的方法来恢复堆的次序性。如果新加入的数据项比父节点要小,可以把它与父节点互换位置。<br>使用“up”操作就可以保证堆次序，不停交换位置即可。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">def precUp(self,i):</div><div class="line">    while i // 2 &gt; 0:</div><div class="line">        if self.heapList[i] &lt; self.heapList[i//2]:</div><div class="line">            tmp = self.heapList[i//2]</div><div class="line">            self.heapList[i//2] = self.heapList[i]</div><div class="line">            self.heapList[i] = tmp</div><div class="line">        i = i //2</div><div class="line"></div><div class="line">def insert(self,k):</div><div class="line">    self.heapList.append(k)  //先插在列表最后面</div><div class="line">    self.currentSize = self.currentSize+1</div><div class="line">    self.precUp(self.currentSize)</div></pre></td></tr></table></figure></p>
-<p>2.delmin()<br>堆次序要求根节点是树中最小的数据项,因此很容易找到最小项。比较困难的是移走根节点的数据项后如何恢复堆结构和堆次序。<br>分成两步，首先,用最后一个节点来代替根节点。移走最后一个节点维持了堆结构的性质。但是经过简单的替换,可能导致直接破坏堆次序。这就要用到第二步:将新节点“下沉”来恢复堆次序。”down”操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">def percDown(self,i):</div><div class="line">    while(i*2) &lt;= self.currentSize:</div><div class="line">        mc = self.minChild(i)</div><div class="line">        if self.heapList[i] &gt; self.heapList[mc]:</div><div class="line">            tmp = self.heapList[i]</div><div class="line">            self.heapList[i] = self.heapList[mc]</div><div class="line">            self.heapList[mc] = tmp</div><div class="line"></div><div class="line">        i = mc</div><div class="line"></div><div class="line">def minChild(self,i):</div><div class="line">    if i*2 + 1 &gt; self.currentSize:</div><div class="line">        return i *2</div><div class="line">    else:</div><div class="line">        if self.heapList[i*2] &lt; self.heapList[i*2+1]:</div><div class="line">            return i *2</div><div class="line">        else:</div><div class="line">            return i*2 +1</div><div class="line"></div><div class="line">def delMin(self):</div><div class="line">    retval = self.heapList[1] </div><div class="line">    self.heapList.pop() </div><div class="line">    self.percDown(1)</div><div class="line">    self.heapList[1] = self.heapList[self.currentSize]</div><div class="line">    self.currentSize = self.currentSize -1</div></pre></td></tr></table></figure></p>
-<h1 id="无序表生成堆"><a href="#无序表生成堆" class="headerlink" title="无序表生成堆"></a>无序表生成堆</h1><p>最简单易想的方法，用insert (key)方法,将无序表中的数据项逐个插入到堆中。对于一个排好序的列表,我们可以用二分搜索找到合适的位置来插入下一个 key,操作复杂度是 O(logn).然而插入一个数据项到列表中间需要将列表其他数据项移动为新节点腾出位置,操作复杂度是 O(n).因此用insert(key)方法的总代价是 O(nlogn)。其实,我们能直接将整个列表生成堆,将总代价控制在 O(n)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">def buildHeap(self,alist): </div><div class="line">    i = len(alist) // 2</div><div class="line">    self.currentSize = len(alist) </div><div class="line">    self.heapList = [0] + alist[:] </div><div class="line">    while (i &gt; 0):</div><div class="line">        self.percDown(i) </div><div class="line">        i = i -1</div></pre></td></tr></table></figure>
-<p>这个图其实挺能说明问题，我贴一下</p>
-<p><img src="/images/binary.png" alt="Binary"></p>
-<p>最右边的两颗树,首先 9 从 根节点的位置上移走,移到下一层级之后,percDown进一步检查它此时的子节点,保证它下降到不能下降为止,即下降到正确的位置。这就导致了第二次交换:9和3的交换。由于9已经移到了树的 最底层,便无法进一步交换了。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/binaryheap/">展开全文 >></a>
         </p>
       
 

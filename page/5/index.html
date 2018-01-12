@@ -185,6 +185,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ns3_linux_app" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ns3_linux_app/">ns-3网络模拟器基础及应用/NS-3其他模块(应用层模块 五)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ns3_linux_app/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.835Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Application类"><a href="#Application类" class="headerlink" title="Application类"></a>Application类</h1><p>Application类是所有应用程序的基类，Application类提供了一些行为的基本原型，SetStartTime()、SetStopTime()、GetNode()、SetNode()等。<br>ns-3为用户提供了多种网络应用模型，如下：</p>
+<ul>
+<li>UdpClientServer;</li>
+<li>UdpEcho;</li>
+<li>Radvd;</li>
+<li>Ping6;</li>
+<li>PacketSink;</li>
+<li>OnOffApplication;</li>
+<li>BulkSendliction;</li>
+</ul>
+<hr>
+<ul>
+<li>我们所做的改进都是基于TCP的，所以前面的四个对我现在研究的方向没什么太大帮助，先扔掉，登什么时候我心情好了再写，麻蛋，大家都去California享受阳光了，而我还在划水，说好的California Dreaming呢，蓝瘦，继续写！</li>
+</ul>
+<p>后面的三个中PacketSink这个应用模块的目的是接收远端发来的数据分组，因此大多数情况下是配合其他模块使用，比如OnOffApplication、BulkSendliction等。<br>相关类的API是：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">class PacketSink:public Application &#123; &#125;;</div><div class="line">class PacketSinkHelpe &#123; &#125;;</div><div class="line">class OnOffHelper &#123; &#125;;</div><div class="line">class BulkHelper &#123; &#125;;</div></pre></td></tr></table></figure></p>
+<p>上面是主要用到的API。</p>
+<h1 id="举两个栗子"><a href="#举两个栗子" class="headerlink" title="举两个栗子"></a>举两个栗子</h1><ul>
+<li><p>example1：<br>tcp-star-server.cc(星型网络结构的脚本) ns-3/examples/tcp<br>创建应用程序，OnOffApplication和PacketSink模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">PacketSinkHelper sinkHelper(<span class="string">"ns::TcpSocketFactory"</span>,sinkLocalAddress);</div><div class="line">ApplicationContainer sinkApp = sinkHelper.Install(serverNode);</div><div class="line">sinkApp.Start (Seconds(1.0));</div><div class="line">sinkApp.Stop (Seconds(10.0));</div><div class="line"></div><div class="line">OnOffHelper clientHelper (<span class="string">"ns::TcpSocketFactory"</span>,Address());</div><div class="line">clientHelper.SetAttribute(<span class="string">"OnTime"</span>,StringValue(<span class="string">"ns3::ConstantRandomVarible[Constant=1]"</span>));</div><div class="line">clientHelper.SetAttribute(<span class="string">"OffTime"</span>,StringValue(<span class="string">"ns3::ConstantRandomVarible[Constant=0]"</span>));</div><div class="line">...</div><div class="line">这部分是常规的节点属性配置，不会的话自己翻书，或者弃疗，反正要GG，不如不学。</div></pre></td></tr></table></figure>
+</li>
+<li><p>example2<br>tcp-bulk-send.cc ns-3/examples/tcp<br>创建应用程序，BulkSendliction和PacketSink模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">在节点0创建BulkSendliction应用程序</div><div class="line">uint16_t port = 9;</div><div class="line">BulkSenderHelper soure(<span class="string">"ns::TcpSocketFactory"</span>,InetSocketAddress(i.GetAddress(1),port));</div><div class="line">source.SetAttribute(<span class="string">"MaxBytes"</span>,UintegerValue(maxBytes));</div><div class="line">ApplicationContainer sourceApps = source.Install (nodes.Get(0));</div><div class="line">source.Start (Seconds(1.0));</div><div class="line">source.Stop (Seconds(10.0));</div><div class="line">在节点1创建PacketSinkApplication应用程序</div><div class="line">PacketSinkHelper sink (<span class="string">"ns::TcpSocketFactory"</span>,InetSocketAddress(Ipv4Address::GetAny(),port))</div><div class="line">ApplicationContainer sinkApps = source.Install (nodes.Get(1));</div><div class="line">sinkApps.Start (Seconds(1.0));</div><div class="line">sinkApps.Stop (Seconds(10.0));</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p>比较可惜这里面也没有讲具体的Application架构，但是基本的构建方式我已经懂了，明天我会去看源码，早日把Vm migration model写出来。<br>关于其他模块的记录可能要做完实验了，之后应该更新的都是代码部分了。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ns3_linux_app/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ns3_linux_5.6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -977,83 +1076,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/leetcode 617/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-leetcode 599" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 599/">Leetcode-599--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 599/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.789Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="599-minimum-index-sum-of-two-lists"><a href="#599-minimum-index-sum-of-two-lists" class="headerlink" title="599. minimum index sum of two lists"></a>599. minimum index sum of two lists</h1><p>这道题题目就是找出两个list的交集，<br>return type：list[int]<br>这道题看起来不是很难，就是这个测试的时候除了问题，这个能想到的方法还挺多，常见的简单的法一就是取差集，还有一个就是循环找，时间复杂度都比较高，昨天看数据结构的时候有个O(n)的解法，但是写起来比较长，我就贴两个算法就好。<br>法一：<br>使用set求差集<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def intersection(self, nums1, nums2):</div><div class="line">        num1 = <span class="built_in">set</span>(nums1)</div><div class="line">        num2 = <span class="built_in">set</span>(nums2)</div><div class="line">        num = num1 &amp; num2</div><div class="line">        <span class="built_in">return</span> list[num]</div></pre></td></tr></table></figure></p>
-<p>法二：<br>使用循环迭代，但是这里有一个问题，是在测试的时候发现的，就是当nums1 = []和nums2 = []的时候，使用循环迭代，返回的事null而不是[]，也不知为啥。因为我开始初始化的时候就是result=[],而且我return的就是result.所以不知道为啥，我就又写了个分支都为[]返回[]，发现还是返回none。GG<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def intersection(self, nums1, nums2):</div><div class="line">        result = []</div><div class="line">        for num1 in nums1:</div><div class="line">            for num2 in nums2:</div><div class="line">                if num1 == num2 and (1,2非空)：</div><div class="line">                    result.append(num1)</div><div class="line">                    return result</div><div class="line">                elif num1,num2为[]:  //实在懒得写了，代码在github里面</div><div class="line">                    return num1</div></pre></td></tr></table></figure></p>
-<p>这种边界条件还是有意思，反正遇到这种情况转成list()就行。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 599/">展开全文 >></a>
         </p>
       
 
