@@ -6,22 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Xuanlong_Simple_introduction | XuanLong&#39;s Blog</title>
+  <title>B树--动态索引 | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Xuanlong Qin(秦宣龙)Master of Science, Candidate,Computer Science,School of Electronics &amp;amp; Computer Engineering,Peking University (PKU) E-mail:&amp;#x71;&amp;#120;&amp;#x6c;&amp;#112;&amp;#107;&amp;#117;&amp;#64;&amp;#x67;&amp;#x6d;&amp;#x6">
-<meta name="keywords" content="Personal">
+  <meta name="description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
+<meta name="keywords" content="programming">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Xuanlong_Simple_introduction">
-<meta property="og:url" content="http://yoursite.com/2017/10/11/XuanLong/index.html">
+<meta property="og:title" content="B树--动态索引">
+<meta property="og:url" content="http://yoursite.com/2018/01/15/B_tree/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="Xuanlong Qin(秦宣龙)Master of Science, Candidate,Computer Science,School of Electronics &amp;amp; Computer Engineering,Peking University (PKU) E-mail:&amp;#x71;&amp;#120;&amp;#x6c;&amp;#112;&amp;#107;&amp;#117;&amp;#64;&amp;#x67;&amp;#x6d;&amp;#x6">
+<meta property="og:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/xuanlong1.png">
-<meta property="og:updated_time" content="2018-01-09T13:32:59.138Z">
+<meta property="og:image" content="http://yoursite.com/images/fenlie_before.png">
+<meta property="og:image" content="http://yoursite.com/images/fenlie_after.png">
+<meta property="og:image" content="http://yoursite.com/images/B_plus_tree.png">
+<meta property="og:updated_time" content="2018-01-15T13:40:50.445Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Xuanlong_Simple_introduction">
-<meta name="twitter:description" content="Xuanlong Qin(秦宣龙)Master of Science, Candidate,Computer Science,School of Electronics &amp;amp; Computer Engineering,Peking University (PKU) E-mail:&amp;#x71;&amp;#120;&amp;#x6c;&amp;#112;&amp;#107;&amp;#117;&amp;#64;&amp;#x67;&amp;#x6d;&amp;#x6">
-<meta name="twitter:image" content="http://yoursite.com/images/xuanlong1.png">
+<meta name="twitter:title" content="B树--动态索引">
+<meta name="twitter:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
+<meta name="twitter:image" content="http://yoursite.com/images/fenlie_before.png">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
   
@@ -187,78 +189,48 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-XuanLong" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-B_tree" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Xuanlong_Simple_introduction
+      B树--动态索引
     </h1>
   
 
         
-        <a href="/2017/10/11/XuanLong/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.923Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+        <a href="/2018/01/15/B_tree/" class="archive-article-date">
+  	<time datetime="2018-01-15T13:34:49.835Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Xuanlong-Qin-秦宣龙"><a href="#Xuanlong-Qin-秦宣龙" class="headerlink" title="Xuanlong Qin(秦宣龙)"></a>Xuanlong Qin(秦宣龙)</h1><p>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#x71;&#120;&#x6c;&#112;&#107;&#117;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x71;&#120;&#x6c;&#112;&#107;&#117;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a><br><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#120;&#x75;&#97;&#x6e;&#108;&#x6f;&#110;&#x67;&#64;&#x70;&#x6b;&#x75;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#x6e;">&#120;&#x75;&#97;&#x6e;&#108;&#x6f;&#110;&#x67;&#64;&#x70;&#x6b;&#x75;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#x6e;</a></p>
-<pre><code>- Please pay attention to case sensitive
-</code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
-<p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
-<h2 id="Education"><a href="#Education" class="headerlink" title="Education"></a>Education</h2><ul>
-<li><p>Peking University (PKU)<br>– M.Sc. candidate in Computer Science<br>– GPA: 87.13 / 100<br>– Adviser: Dr. Li<br>– Focus: Datacenter, VM migration, flow scheduling , congestion control ,etc.</p>
-</li>
-<li><p>China University of Mining and Technology (CUMT)<br>– B.E. in  Electronic Enginnering<br>– RANK: 7 / 150<br>– Cumulative GPA: 81 / 100</p>
-</li>
-<li><p>National Tsing Hua University (NTHU)<br>– Non-degree student (Exchange)<br>– Computer Science and Information Engineering<br>– Adviser: Dr. Huang<br>– Focus: SDN, flow scheduling, openflow, etc.</p>
-</li>
+        <h1 id="动态索引结构"><a href="#动态索引结构" class="headerlink" title="动态索引结构"></a>动态索引结构</h1><ul>
+<li>索引结构本身也可能发生改变</li>
+<li>在系统运行过程中插入和删除</li>
 </ul>
-<h2 id="Publications"><a href="#Publications" class="headerlink" title="Publications"></a>Publications</h2><ul>
-<li><p>JOURNALS</p>
+<h2 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h2><p>一种平衡的多分树，</p>
 <ul>
-<li>[1] X. Qin, D. Li, “ High Speed Data Transport Technology for Datacenter Networks,” Computer<br>engineering and Software, vol. 37, no. 9, pp. 1–8, Sep 2016.</li>
+<li>子节点个数</li>
+<li>根节点至少有两个子节点</li>
+<li>叶节点在同一层</li>
+<li>子节点的非根接待你恰好包含k-1关键</li>
 </ul>
-</li>
-<li><p>CONFERENCES</p>
+<h3 id="B树的性质"><a href="#B树的性质" class="headerlink" title="B树的性质"></a>B树的性质</h3><p>1.树高平衡<br>2.关键码没有重复，父节点中的关键码是其子节点的分界<br>3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理<br>4.B树保证树中至少有一定比例的节点是满的</p>
+<p>2-3树<br>1-2个关键码，子节点2-3，等高</p>
+<p>###B树的结点结构<br>关键码有序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">template&lt;class Key&gt;</div><div class="line"></div><div class="line">class BNode&#123;</div><div class="line">	int n ;</div><div class="line">	BNode&lt;key&gt;* parent;</div><div class="line">	Key key[MAXREC]; //最多有MAXREC个关键码</div><div class="line">	BNode&lt;key&gt;* ptr[MAXREC+1]//最多有MAXREC+1个指针</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>B树的查找：<br>索引和主文件（关键码有指针指向主文件）。<br>B树的插入：<br>上下界，不能把节点塞爆了。<br>超过关键码数码，插入可能会导致分裂。分裂时取中间的键码做分界点。<br>插入引起3阶B树节点连续分裂。<br>如图<br><img src="/images/fenlie_before.png" alt="fenlie_before"><br><img src="/images/fenlie_after.png" alt="fenlie_after"><br>注意保持性质，特别是等高和阶的限制<br>1.找最底层，插入<br>2.若溢出，则节点分裂，中间关键码联通新指针插入父节点<br>3.若父节点也溢出，则继续分裂<br>4.分裂过程可能传达到根节点（则树升高一层）</p>
+<h3 id="B树操作的访外次数"><a href="#B树操作的访外次数" class="headerlink" title="B树操作的访外次数"></a>B树操作的访外次数</h3><h3 id="B树的删除"><a href="#B树的删除" class="headerlink" title="B树的删除"></a>B树的删除</h3><p>保证不要下溢出，关键码个数不足，左右节点借（要把父节点的分界一起拿下来，去父节点分界）<br>一般只借左右兄弟，都不够的话，合并（合并左和右都可以）。</p>
 <ul>
-<li>[1] X. Qin, D. li, “High Speed Data Transport Technology for Datacenter Networks,” in NCCA 2016,<br>Tangshan, Hebei, China, Apr 2016.</li>
-<li>[2] X. Qin, D. Li, C. Chen, and N. Huang “ Early Notification and Dynamic Routing: An Improved<br>SDN-based Optimization Mechanism for VM Migration,” in CollaborateCom 2017, Edingurgh,<br>UK, Dec 2017.</li>
+<li>保持性质：等高、阶（上下界）</li>
+<li>交换–删除–借关键码–合并<br>不是叶节点不能直接删，交换到叶节点，（左子节点最大，右子节点最小）</li>
 </ul>
-</li>
-</ul>
-<h2 id="Awards"><a href="#Awards" class="headerlink" title="Awards"></a>Awards</h2><ul>
-<li>The first scholarship, Peking University</li>
-<li>Individual scholarships, China University of Mining and Technology</li>
-<li>The third scholarships,  China University of Mining and Technology</li>
-<li>The Second Prize of Physics Olympic</li>
-</ul>
-<h2 id="Additional-Comments"><a href="#Additional-Comments" class="headerlink" title="Additional Comments"></a>Additional Comments</h2><ul>
-<li><p>Dr. Li(Dagang Li)<a href="http://www.ece.pku.edu.cn/index.php?a=show&amp;catid=507&amp;id=50" target="_blank" rel="external">[DgLi-link]</a>.<br>– Assistant Professor in Peking University<br>– Postdoctorate, University of Leuven<br>– Research Area: Communication systems and computer networks</p>
-<ul>
-<li>Laboratory: Center for Internet Research and Engineering (CIRE)  2015-2018</li>
-</ul>
-</li>
-<li><p>Dr. Huang(Nen-fu Huang)<a href="http://www.cs.nthu.edu.tw/~nfhuang/" target="_blank" rel="external">[NfHuang-link]</a>.<br>– Distinguished Professor in Nation Tsing Hua University<br>– PhD, Nation Tsing Hua University<br>– Research Area: IoT Networks and Applications, MOOCs Learning Data Analysis, Network Security,<br>SDN/NFV Network, High-performance Switches/Routers, Network Flow Classification Technologies</p>
-<ul>
-<li>Laboratory: High-Speed Networks Labtory (HSNL)    April.2017-Oct.2017</li>
-</ul>
-</li>
-</ul>
-<h2 id="Resouce"><a href="#Resouce" class="headerlink" title="Resouce"></a>Resouce</h2><ul>
-<li>VM live migration.<a href="https://en.wikipedia.org/wiki/Live_migration" target="_blank" rel="external">[link]</a>.</li>
-<li>Network Congestion.<a href="https://en.wikipedia.org/wiki/Network_congestion" target="_blank" rel="external">[link]</a>.</li>
-<li>Software-defined networking.<a href="https://en.wikipedia.org/wiki/Software-defined_networking" target="_blank" rel="external">[link]</a>.</li>
-</ul>
-<p>More details about me see <a href="https://github.com/XuanlongQ/Resume" target="_blank" rel="external">Resume</a>.</p>
-<p>Just feel free to contact me if you have any interests on my research ^_^.</p>
-<p><img src="/images/xuanlong1.png" alt="Xuanlong"> </p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B树的变形<br>结构定义，前3点和B树一样，第四点不一样，有K个子节点的节点必有K个关键码。<br>下图是2阶B+树的例子（最大关键码复写）<br><img src="/images/B_plus_tree.png" alt="B_plus_tree"><br>叶节点就是一级线性索引，在一级线性索引上建立树形索引。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://qianmingxs.com/2017/06/24/[%E6%95%B0%E6%8D%AE%E5%BA%93]5%E3%80%81B%E6%95%B0%E3%80%81B+%E6%95%B0%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91/" target="_blank" rel="external">B数、B+数、红黑树</a>.<br>2.<a href="https://zh.wikipedia.org/zh-cn/B%2B%E6%A0%91" target="_blank" rel="external">B+树-Wiki</a>.<br>3.<a href="https://www.youtube.com/watch?v=TOb1tuEZ2X4" target="_blank" rel="external">2-3 Trees and B-Trees-Youtube</a>.2-3树</p>
 
       
 
@@ -293,7 +265,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Personal</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
         		</li>
       		
 		</ul>
@@ -349,7 +321,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/10/11/XuanLong/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2018/01/15/B_tree/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -363,18 +335,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/10/11/常用的知识点/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          常用知识点
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/10/11/vm_migration/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">HPCC-Based_SDN的老板的审核意见及问题</div>
+    <a href="/2018/01/12/queue_paidui/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">浅谈排队轮</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -402,7 +365,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="XuanLong" data-title="Xuanlong_Simple_introduction" data-url="http://yoursite.com/2017/10/11/XuanLong/"></div>
+	<div class="ds-thread" data-thread-key="B_tree" data-title="B树--动态索引" data-url="http://yoursite.com/2018/01/15/B_tree/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

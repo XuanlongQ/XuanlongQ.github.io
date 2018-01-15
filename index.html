@@ -185,6 +185,101 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-B_tree" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/15/B_tree/">B树--动态索引</a>
+    </h1>
+  
+
+        
+        <a href="/2018/01/15/B_tree/" class="archive-article-date">
+  	<time datetime="2018-01-15T13:34:49.835Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="动态索引结构"><a href="#动态索引结构" class="headerlink" title="动态索引结构"></a>动态索引结构</h1><ul>
+<li>索引结构本身也可能发生改变</li>
+<li>在系统运行过程中插入和删除</li>
+</ul>
+<h2 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h2><p>一种平衡的多分树，</p>
+<ul>
+<li>子节点个数</li>
+<li>根节点至少有两个子节点</li>
+<li>叶节点在同一层</li>
+<li>子节点的非根接待你恰好包含k-1关键</li>
+</ul>
+<h3 id="B树的性质"><a href="#B树的性质" class="headerlink" title="B树的性质"></a>B树的性质</h3><p>1.树高平衡<br>2.关键码没有重复，父节点中的关键码是其子节点的分界<br>3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理<br>4.B树保证树中至少有一定比例的节点是满的</p>
+<p>2-3树<br>1-2个关键码，子节点2-3，等高</p>
+<p>###B树的结点结构<br>关键码有序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">template&lt;class Key&gt;</div><div class="line"></div><div class="line">class BNode&#123;</div><div class="line">	int n ;</div><div class="line">	BNode&lt;key&gt;* parent;</div><div class="line">	Key key[MAXREC]; //最多有MAXREC个关键码</div><div class="line">	BNode&lt;key&gt;* ptr[MAXREC+1]//最多有MAXREC+1个指针</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>B树的查找：<br>索引和主文件（关键码有指针指向主文件）。<br>B树的插入：<br>上下界，不能把节点塞爆了。<br>超过关键码数码，插入可能会导致分裂。分裂时取中间的键码做分界点。<br>插入引起3阶B树节点连续分裂。<br>如图<br><img src="/images/fenlie_before.png" alt="fenlie_before"><br><img src="/images/fenlie_after.png" alt="fenlie_after"><br>注意保持性质，特别是等高和阶的限制<br>1.找最底层，插入<br>2.若溢出，则节点分裂，中间关键码联通新指针插入父节点<br>3.若父节点也溢出，则继续分裂<br>4.分裂过程可能传达到根节点（则树升高一层）</p>
+<h3 id="B树操作的访外次数"><a href="#B树操作的访外次数" class="headerlink" title="B树操作的访外次数"></a>B树操作的访外次数</h3><h3 id="B树的删除"><a href="#B树的删除" class="headerlink" title="B树的删除"></a>B树的删除</h3><p>保证不要下溢出，关键码个数不足，左右节点借（要把父节点的分界一起拿下来，去父节点分界）<br>一般只借左右兄弟，都不够的话，合并（合并左和右都可以）。</p>
+<ul>
+<li>保持性质：等高、阶（上下界）</li>
+<li>交换–删除–借关键码–合并<br>不是叶节点不能直接删，交换到叶节点，（左子节点最大，右子节点最小）</li>
+</ul>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B树的变形<br>结构定义，前3点和B树一样，第四点不一样，有K个子节点的节点必有K个关键码。<br>下图是2阶B+树的例子（最大关键码复写）<br><img src="/images/B_plus_tree.png" alt="B_plus_tree"><br>叶节点就是一级线性索引，在一级线性索引上建立树形索引。</p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://qianmingxs.com/2017/06/24/[%E6%95%B0%E6%8D%AE%E5%BA%93]5%E3%80%81B%E6%95%B0%E3%80%81B+%E6%95%B0%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91/" target="_blank" rel="external">B数、B+数、红黑树</a>.<br>2.<a href="https://zh.wikipedia.org/zh-cn/B%2B%E6%A0%91" target="_blank" rel="external">B+树-Wiki</a>.<br>3.<a href="https://www.youtube.com/watch?v=TOb1tuEZ2X4" target="_blank" rel="external">2-3 Trees and B-Trees-Youtube</a>.2-3树</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/15/B_tree/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-queue_paidui" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1092,95 +1187,6 @@
 
 
   
-    <article id="post-binaryorder" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/binaryorder/">二叉树的遍历总结--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/binaryorder/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.957Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>还是要自己动手写才知道有什么问题 ＝＝！，大约看了很久视频讲解，自己终于也算写出来了，做个大概的总结，明天可能会考虑把leetcode里面所有easy的二叉树的题做一下。</p>
-<p>主要实现了生成树，怎么把节点添加进去然后用递归的方式实现了前序，后序，中序遍历（就是node在前中后的遍历），非递归的方式（用栈实现，其实差不多），层序遍历（广度优先，队列）的实现。想了下还是把函数分段，建议把函数先拉到最后看一下函数的输入是什么。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">class Node(object):</div><div class="line">	def __init__ (self,elem = -1,lchild = None,rchild = None):</div><div class="line">		self.elem = elem</div><div class="line">		self.lchild = lchild</div><div class="line">		self.rchild = rchild</div><div class="line"></div><div class="line">class Tree(object):</div><div class="line">	def __init__(self):</div><div class="line">		self.root = Node()   ＃这里实例化</div><div class="line">		self.myQueue = []</div><div class="line"></div><div class="line">	def add(self,elem):</div><div class="line">		node = Node(elem)   ＃ 把参数传进来，那node每个循环就是 1，2，3，4，5，6，7，8，9</div><div class="line">		# what is Node</div><div class="line">		# print node</div><div class="line">		if self.root.elem == -1:</div><div class="line">			self.root = node</div><div class="line">			self.myQueue.append(self.root)  #没有节点就设为根节点，然后放到队列里面（这个出队列的时间要看下）</div><div class="line">		else:</div><div class="line">			treeNode = self.myQueue[0]   # 把队列第一个数输出作为根节点</div><div class="line">			#what is treeNode</div><div class="line">			# print treeNode</div><div class="line">			if treeNode.lchild == None:</div><div class="line">				treeNode.lchild = node</div><div class="line">				self.myQueue.append(treeNode.lchild)</div><div class="line">			else:</div><div class="line">				treeNode.rchild = node</div><div class="line">				self.myQueue.append(treeNode.rchild)</div><div class="line">				self.myQueue.pop(0) #在这里出队列</div><div class="line">				print myQueue</div><div class="line"></div><div class="line">                1        1        1</div><div class="line">                        2       2   3</div><div class="line">    que = [1 2 3] －&gt;这个时候把1 pop出去根节点就变成2 3</div><div class="line">    que = [2 3]</div></pre></td></tr></table></figure>
-<p>下面是递归的三种遍历方式,这个有个小哥的视频讲的很清楚，我贴一下吧，虽然讲到最后自己也讲蒙蔽了，笑死了。</p>
-<p>Yu Zhou-Youtube<br><a href="https://www.youtube.com/watch?v=FMq4jWXaTOI" target="_blank" rel="external">二叉搜索树(Binary Search Tree) in Python Part 1</a>. (Insert)<br><a href="https://www.youtube.com/watch?v=oJ6WFNsuuB4&amp;t=6s" target="_blank" rel="external">二叉搜索树(Binary Search Tree) in Python Part 2</a>. (Find value)<br><a href="https://www.youtube.com/watch?v=s-bsf4WnsRE&amp;t=219s" target="_blank" rel="external">二叉搜索树(Binary Search Tree) in Python Part 3</a>. (Traverse)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">def front_digui(self,root):</div><div class="line">	if root == None:</div><div class="line">		return </div><div class="line">	else:</div><div class="line">		print root.elem</div><div class="line">		self.front_digui(root.lchild)</div><div class="line">		self.front_digui(root.rchild)</div><div class="line"></div><div class="line">def middle_digui(self,root):</div><div class="line">	if root == None:</div><div class="line">		return </div><div class="line">	else:</div><div class="line">		self.middle_digui(root.lchild)</div><div class="line">		print root.elem</div><div class="line">		self.middle_digui(root.rchild)</div><div class="line"></div><div class="line">def later_digui(self,root):</div><div class="line">	if root == None:</div><div class="line">		return </div><div class="line">	else:</div><div class="line">		self.later_digui(root.lchild)</div><div class="line">		self.later_digui(root.rchild)</div><div class="line">		print root.elem</div></pre></td></tr></table></figure>
-<p>下面是非递归的方式就是用了栈，其实逻辑是一样的，栈就是先入后出嘛<br>所以前序的时候，先访问根节点node.elem，如果有子树就入栈并且输出，如果没有子节点就出栈（出栈但是不输出），我后面看到一个不错的博客逻辑比较清晰，我贴出来，看完我的代码在看会清晰很多。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">#非递归的方式</div><div class="line">def front_stack(self,root):</div><div class="line">	if root == None:</div><div class="line">		return </div><div class="line">	myStack = []</div><div class="line">	node = root</div><div class="line">	while node or myStack:</div><div class="line">		while node:</div><div class="line">			#从根节点一直找左子树</div><div class="line">			print node.elem</div><div class="line">			myStack.append(node)</div><div class="line">			node = node.lchild</div><div class="line">		node = myStack.pop()</div><div class="line">		#pop()完node就空了跳出循环</div><div class="line">		node = node.rchild</div><div class="line">		#node.elem 左子树 右子树</div><div class="line"></div><div class="line">def middle_stack(self,root):</div><div class="line">	if root == None:</div><div class="line">		return </div><div class="line">	myStack = []</div><div class="line">	node = root</div><div class="line">	while node or myStack:</div><div class="line">		while node:</div><div class="line">			myStack.append(node)</div><div class="line">			node = node.lchild</div><div class="line">		node = myStack.pop()</div><div class="line">		print node.elem</div><div class="line">		node = node.rchild </div><div class="line"></div><div class="line">def later_stack(self,root):</div><div class="line">	if root == None:</div><div class="line">		return</div><div class="line">	myStack1 = []</div><div class="line">	myStack2 = []</div><div class="line">	node = root</div><div class="line">	myStack1.append(node)</div><div class="line">	while myStack1:</div><div class="line">		#找出后序遍历的逆序，存在myStack2里面</div><div class="line">		node = myStack1.pop()</div><div class="line">		if node.lchild:</div><div class="line">			myStack1.append(node.lchild)</div><div class="line">		if node.rchild:</div><div class="line">			myStack1.append(node.rchild)</div><div class="line">		myStack2.append(node)</div><div class="line">	while myStack2:</div><div class="line">		#将myStack2中的元素出栈，即为后序遍历次序</div><div class="line">		print myStack2.pop().elem</div></pre></td></tr></table></figure></p>
-<p><img src="/images/feidiguiqianxu.jpeg" alt="feidiguiqianxu"></p>
-<ul>
-<li>根据先序遍历的顺序，先访问根节点，再访问左子树，后访问右子树，而对于每个子树来说，又按照同样的访问顺序进行遍历，上图的先序遍历顺序为：ABDECF。非递归的实现思路如下：<br>对于任一节点P，<br>1）输出节点P，然后将其入栈，再看P的左孩子是否为空；<br>2）若P的左孩子不为空，则置P的左孩子为当前节点，重复1）的操作；<br>3）若P的左孩子为空，则将栈顶节点出栈，但不输出，并将出栈节点的右孩子置为当前节点，看其是否为空；<br>4）若不为空，则循环至1）操作；<br>5）如果为空，则继续出栈，但不输出，同时将出栈节点的右孩子置为当前节点，看其是否为空，重复4）和5）操作；<br>6）直到当前节点P为NULL并且栈空，遍历结束。</li>
-</ul>
-<p>下面以上图为例详细分析其先序遍历的非递归实现过程：<br>首先，从根节点A开始，根据操作1），输出A，并将其入栈，由于A的左孩子不为空，根据操作2），将B置为当前节点，再根据操作1），将B输出，并将其入栈，由于B的左孩子也不为空，根据操作2），将D置为当前节点，再根据操作1），输出D，并将其入栈，此时输出序列为ABD；<br>由于D的左孩子为空，根据操作3），将栈顶节点D出栈，但不输出，并将其右孩子置为当前节点；<br>由于D的右孩子为空，根据操作5），继续将栈顶节点B出栈，但不输出，并将其右孩子置为当前节点；<br>由于B的右孩子E不为空，根据操作1），输出E，并将其入栈，此时输出序列为：ABDE；<br>由于E的左孩子为空，根据操作3），将栈顶节点E出栈，但不输出，并将其右孩子置为当前节点；<br>由于E的右孩子为空，根据操作5），继续将栈顶节点A出栈，但不输出，并将其右孩子置为当前节点；<br>由于A的右孩子C不为空，根据操作1），输出C，并将其入栈，此时输出序列为：ABDEC；<br>由于A的左孩子F不为空，根据操作2），则将F置为当前节点，再根据操作1），输出F，并将其入栈，此时输出序列为：ABDECF；<br>由于F的左孩子为空，根据操作3），将栈顶节点F出栈，但不输出，并将其右孩子置为当前节点；<br>由于F的右孩子为空，根据操作5），继续将栈顶元素C出栈，但不输出，并将其右孩子置为当前节点；<br>此时栈空，且C的右孩子为NULL，因此遍历结束。</p>
-<p>层序遍历其实逻辑和add子树是一样的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">def level_queue(self,root):</div><div class="line">	if root == None:</div><div class="line">		return</div><div class="line">	myQueue = []</div><div class="line">	node = root</div><div class="line">	myQueue.append(node)</div><div class="line">	while myQueue:</div><div class="line">		node =myQueue.pop(0)</div><div class="line">		print node.elem</div><div class="line">		if node.lchild != None:</div><div class="line">			myQueue.append(node.lchild)</div><div class="line">		if node.rchild != None:</div><div class="line">			myQueue.append(node.rchild)</div><div class="line"></div><div class="line">if  __name__ == &apos;__main__&apos;:</div><div class="line">	elems = range(10)</div><div class="line">	tree = Tree()</div><div class="line">	for elem in elems:</div><div class="line">		tree.add(elem)</div><div class="line"></div><div class="line">    tree.level_queue(tree.root)</div><div class="line">    tree.front_digui(tree.root)</div><div class="line">    tree.middle_digui(tree.root)</div><div class="line">    tree.later_digui(tree.root)</div><div class="line">    tree.front_stack(tree.root)</div><div class="line">    tree.middle_stack(tree.root)</div><div class="line">    tree.later_stack(tree.root)</div></pre></td></tr></table></figure></p>
-<p>这个代码还是有点长的，逻辑很清晰，我放到github里面了。</p>
-<p>话说，虽然不写大括号让人不舒服，但是sublime换个背景会让人的效率大大的提升啊！！安利一下Dawn的主题，稳得要死。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/binaryorder/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1282,19 +1288,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">

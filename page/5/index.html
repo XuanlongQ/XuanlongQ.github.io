@@ -185,6 +185,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ns3_linux_tcp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/ns3_linux_tcp/">ns-3网络模拟器基础及应用/NS-3其他模块(TCP 四)</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/ns3_linux_tcp/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.837Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="TCP协议分析"><a href="#TCP协议分析" class="headerlink" title="TCP协议分析"></a>TCP协议分析</h1><h2 id="1-对TCP协议的一般性支持。代码存放在src-network中，主要有两个抽象类。"><a href="#1-对TCP协议的一般性支持。代码存放在src-network中，主要有两个抽象类。" class="headerlink" title="1.对TCP协议的一般性支持。代码存放在src/network中，主要有两个抽象类。"></a>1.对TCP协议的一般性支持。代码存放在src/network中，主要有两个抽象类。</h2><ul>
+<li>TcpSocket:这个类定义在src/internet/model/tcp-socket.{cc,h}中，这个类的主要作用是用成员变量保存TCP套接字的属性，这样就能保证这些属性的可重用性(虚函数的主要特点)，例如成员变量InitialCwnd可以被每一个从该类继承的任何子类调用。</li>
+<li>TcpSocketFactory: 这个类的作用是被later-4 protocal对象用来创建TCP套接字<br>ns-3中有两个版本的TCP：<br>－ 1.TCP<br>－ 2.network simulation cradle(NSC)TCP</li>
+</ul>
+<h2 id="2-ns-3-TCP"><a href="#2-ns-3-TCP" class="headerlink" title="2.ns-3 TCP"></a>2.ns-3 TCP</h2><p>ns-3里面有很多tcp类型，但是都是基类为TcpSocketBase，现在的默认版本是TCP NewReno。<br>下面还是举个栗子，如何创建一个TCP接收器：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">uint16_t port =50000;</div><div class="line">Address sinkLocalAddress(InetSocketAddress (Ipv4Adress::GetAny(),port));</div><div class="line">PacketSinkHelper sinkHelper(<span class="string">"ns::TcpSocketFactory"</span>,sinkLocalAddress);</div><div class="line">ApplicationContainer sinkApp = sinkHelper.Install(serverNode);</div><div class="line">sinkApp.Start (Seconds(1.0));</div><div class="line">sinkApp.Stop (Seconds(10.0));</div></pre></td></tr></table></figure></p>
+<p>同样地，创建为服务器端OnOff应用程序发送的TCP数据：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">OnOffHelper clientHelper (<span class="string">"ns3::TcpSocketFactory"</span>,Address()); </div><div class="line">/*这里没有特殊的要求factory创建的就是默认的TCP*/</div></pre></td></tr></table></figure></p>
+<p>如果用户想要一个套接字的指针以方便设置套接字的属性，那么可以通过Socket::CreateSocket()函数创建套接字，他的返回值就是一个套接字指针，通常会通过配置系统函数Config::Set()把属性和TcpL4Protocol对象相关联。</p>
+<hr>
+<p>TCP部分具体的表现形式其实没有太大的意义，主要是这边模块分的很清晰，所以在连接套接字的时候应该不会很难，主要是Cwnd的窗口这么改会比较，这就又牵扯到序列号了和三次握手了。<br>下一篇我想了很久暂时先跳过网络设备模块，直接去看Application是怎么实现的，怎么去实现一个based-sdn的虚拟机模型。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/ns3_linux_tcp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ns3_linux_app" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1024,87 +1106,6 @@
 
 
   
-    <article id="post-leetcode 617" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/leetcode 617/">Leetcode-617/561--Python</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/leetcode 617/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.795Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="617-Merge-Two-Binary-Trees"><a href="#617-Merge-Two-Binary-Trees" class="headerlink" title="617.Merge Two Binary Trees"></a>617.Merge Two Binary Trees</h1><p>给出两个二叉树想要合并，有一些结点会重叠而有一些不会，现在想把重叠的结点值变为两者值相加，不重叠的直接用，构建出新的树。<br>Note:合并都从两个二叉树根部开始</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>考察的就是二叉树的遍历，遍历每个结点然后如果重叠（两个二叉树结点都不为空）新结点值便为两者和，不重叠（只有一个结点为空）新结点值为不为空的值，全为空到达底部返跳出。按照这个逻辑进行迭代</p>
-<p>联想：二叉树遍历方式有深度优先和广度优先，深度（纵向）优先在Python中一般使用列表，广度优先（横向）一般使用迭代。 //注意深度优先和广度优先的区别</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Definition for a binary tree node.</span></div><div class="line"><span class="comment"># class TreeNode(object):</span></div><div class="line"><span class="comment">#     def __init__(self, x):</span></div><div class="line"><span class="comment">#         self.val = x</span></div><div class="line"><span class="comment">#         self.left = None</span></div><div class="line"><span class="comment">#         self.right = None</span></div><div class="line"></div><div class="line">class Solution(object):</div><div class="line">    def mergeTrees(self, t1, t2):</div><div class="line">        </div><div class="line">        <span class="comment">#:type t1: TreeNode</span></div><div class="line">        <span class="comment">#:type t2: TreeNode</span></div><div class="line">        <span class="comment">#:rtype: TreeNode</span></div><div class="line">        </div><div class="line">       <span class="comment">#t1和t2是代表两颗树，先对根节点进行运算</span></div><div class="line">        <span class="comment">#两个都节点都是空</span></div><div class="line">        <span class="comment">#if t1 is None and t2 is None: (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> None</div><div class="line">        <span class="comment">#只有一个节点为空</span></div><div class="line">        <span class="comment">#if t1 is None:  (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> t2</div><div class="line">        <span class="comment">#if t2 is None: (把这行注释去了)</span></div><div class="line">            <span class="built_in">return</span> t1</div><div class="line">        </div><div class="line">        <span class="comment">#结点重叠时    </span></div><div class="line">        t1.val += t2.val</div><div class="line">        <span class="comment">#进行迭代</span></div><div class="line">        t1.right = self.mergeTrees(t1.right, t2.right)</div><div class="line">        t1.left = self.mergeTrees(t1.left,t2.left)</div><div class="line">        <span class="built_in">return</span> t1</div><div class="line"></div><div class="line">注：这个题主要是用了广度优先遍历，所以使用了迭代，一颗树做完之后，可以迭代左子树和右子树。</div></pre></td></tr></table></figure>
-<h1 id="561-Array-Partition-I"><a href="#561-Array-Partition-I" class="headerlink" title="561. Array Partition I"></a>561. Array Partition I</h1><p>对数组排序，两两一组，取每组的第一个数求和<br>Note：实际上题目不是说要对数组排序而是要求最小值的最大和，看不太懂什么意思，看他的示例似乎是要先排序，我查了了下其他博客主的文章都是先排序，然后去小的值，而且judge后发现accepted所以应该是要先排序。<br>用了两种方法。<br>法一：<br>先排序，然后每隔2个值就输出一下加到sum里，代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def arrayPairSum(self, nums):</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        :<span class="built_in">type</span> nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        nums.sort()</div><div class="line">        i = 0</div><div class="line">        sum = 0</div><div class="line">        <span class="keyword">while</span> i &lt; len(nums):</div><div class="line">            sum += nums[i]</div><div class="line">            i += 2</div><div class="line">        <span class="built_in">return</span> sum</div></pre></td></tr></table></figure></p>
-<p>法二：<br>这个方法比较取巧就是，看出规律输出偶数个位就行，因为是从0开始计算的，所以2就是第三个，输出的就相当于第二组数的第一个。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def arrayPairSum(self, nums):</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        :<span class="built_in">type</span> nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        <span class="comment">#"""</span></div><div class="line">        nums.sort()</div><div class="line">        <span class="built_in">return</span> sum(nums[::2])</div></pre></td></tr></table></figure></p>
-<p>法二就两行比较取巧，但是你要对python内置函数要熟一些。<br>今天先刷两道题。考虑到ryu就是拿python写的，所以项目可能要偏python一些，所以leetcode拿py刷，c++刷了30道还是太难了。</p>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/leetcode 617/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1206,19 +1207,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">

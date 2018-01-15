@@ -185,6 +185,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-leetcode 268" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/leetcode 268/">Leetcode-268--Python</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/leetcode 268/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.745Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="268-Missing-Number"><a href="#268-Missing-Number" class="headerlink" title="268. Missing Number"></a>268. Missing Number</h1><p>题目大意就是找出漏掉的那个数，这道题其实很简单，陷入了思维定势，就是简单的数理统计，而且看他的返回类型：<br>:rtype: int<br>所以就是简单计算出少了那个数就好。<br>那就是n*(n+1) - sum(nums)</p>
+<p>方法一：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def missingNumber(self, nums):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        n = len(nums)</div><div class="line">        return n*(n+1)/2 - sum(nums)</div></pre></td></tr></table></figure></p>
+<p>方法二：<br>这个做法超时了，想法也是比较简单，就是用后一个数减掉前一个数，如果不等于1，如果这个数就漏了，就输出他的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class Solution(object):</div><div class="line">    def missingNumber(self, nums):</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        :type nums: List[int]</div><div class="line">        :rtype: int</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        nums.sort()</div><div class="line">        for i in range(len(nums)+1):</div><div class="line">            if len(nums) == 1:</div><div class="line">                return 1</div><div class="line">            if nums[i+1] - nums[i] != 1:</div><div class="line">                #print nums[i+1]-1</div><div class="line">                return nums[i+1]-1</div></pre></td></tr></table></figure></p>
+<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>代码还是会扔到<a href="https://github.com/XuanlongQ/Leetcode" target="_blank" rel="external">[Github-link]</a>.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/leetcode 268/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-leetcode 217" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -958,83 +1035,6 @@
 
 
   
-    <article id="post-Hello-Puli" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/Hello-Puli/">Hello Puli &amp; Hello Xuanlong!</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/Hello-Puli/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.694Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是继我的域名消失后又想重新拾起来的契机，可能是因为想留下念想纪录下生活，也可能是因为我划水划的太久了想收手了，不管怎么样<br>今天是2017/05/21，开始新的纪录和生活，this is my life !</p>
-<h2 id="埔里的夜晚"><a href="#埔里的夜晚" class="headerlink" title="埔里的夜晚"></a>埔里的夜晚</h2><p><img src="/images/Puli.jpeg" alt="Puli"></p>
-<h3 id="《海龟先生》"><a href="#《海龟先生》" class="headerlink" title="《海龟先生》"></a>《海龟先生》</h3><p>虽然歌名不是海龟先生但是我想叫你海龟先生～～</p>
-<p>｀｀｀｀｀｀｀<br>          我跟你描述一个灵魂<br>　　　　它拥有不谢的青春<br>　　　　每当夜色降临<br>　　　　就会轻轻歌唱 　　<br>　　　　<br>　　　　它唱着一个新鲜的故事<br>　　　　里面的人们相互微笑<br>　　　　是不是每个夜晚都要这样<br>　　　　为了爱<br>　　　　去用清醒交换 　　<br>　　　　<br>　　　　男孩别哭<br>　　　　美丽世界的孤儿<br>　　　　可 我的心<br>　　　　我的家<br>　　　　在哪里<br>　　　　在哪里呢我的朋友 　　<br>　　　　<br>　　　　静静的听<br>　　　　有个声音在说爱你<br>　　　　闭上眼<br>　　　　跟随她<br>　　　　跟随她<br>　　　　就像跟着希望 　　<br>　　　　<br>　　　　那些城市上空飘着一颗颗不安的心<br>　　　　她一定也曾在这儿跳过欢快的舞蹈<br>　　　　清风吹来让我感到一阵迷醉<br>　　　　那婆娑的身影<br>　　　　太阳般光洁 　　<br>｀｀｀｀｀｀</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Personal</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/Hello-Puli/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
@@ -1136,19 +1136,19 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">sdn</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Bigdata</a>
               </li>
              
               <li class="article-tag-list-item">
