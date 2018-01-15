@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>B树--动态索引 | XuanLong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
+  <meta name="description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 ###2-3树1-2个关键码，子节">
 <meta name="keywords" content="programming">
 <meta property="og:type" content="article">
 <meta property="og:title" content="B树--动态索引">
 <meta property="og:url" content="http://yoursite.com/2018/01/15/B_tree/index.html">
 <meta property="og:site_name" content="XuanLong&#39;s Blog">
-<meta property="og:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
+<meta property="og:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 ###2-3树1-2个关键码，子节">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/fenlie_before.png">
 <meta property="og:image" content="http://yoursite.com/images/fenlie_after.png">
 <meta property="og:image" content="http://yoursite.com/images/B_plus_tree.png">
-<meta property="og:updated_time" content="2018-01-15T13:40:50.445Z">
+<meta property="og:updated_time" content="2018-01-15T13:44:27.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="B树--动态索引">
-<meta name="twitter:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 2-3树1-2个关键码，子节点2-">
+<meta name="twitter:description" content="动态索引结构 索引结构本身也可能发生改变 在系统运行过程中插入和删除  B树一种平衡的多分树，  子节点个数 根节点至少有两个子节点 叶节点在同一层 子节点的非根接待你恰好包含k-1关键  B树的性质1.树高平衡2.关键码没有重复，父节点中的关键码是其子节点的分界3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理4.B树保证树中至少有一定比例的节点是满的 ###2-3树1-2个关键码，子节">
 <meta name="twitter:image" content="http://yoursite.com/images/fenlie_before.png">
   
     <link rel="alternative" href="/atom.xml" title="XuanLong&#39;s Blog" type="application/atom+xml">
@@ -221,9 +221,10 @@
 <li>子节点的非根接待你恰好包含k-1关键</li>
 </ul>
 <h3 id="B树的性质"><a href="#B树的性质" class="headerlink" title="B树的性质"></a>B树的性质</h3><p>1.树高平衡<br>2.关键码没有重复，父节点中的关键码是其子节点的分界<br>3.B树把相关激励放在同一个磁盘页中，利用了访问局部性原理<br>4.B树保证树中至少有一定比例的节点是满的</p>
-<p>2-3树<br>1-2个关键码，子节点2-3，等高</p>
+<p>###2-3树<br>1-2个关键码，子节点2-3，等高<br>2-3树是最简单的B-树（或-树）结构，其每个非叶节点都有两个或三个子女，而且所有叶都在统一层上。2-3树不是二叉树，其节点可拥有3个孩子。不过，2-3树与满二叉树相似。高为h的2-3树包含的节点数大于等于高度为h的满二叉树的节点数，即至少有2^h-1个节点</p>
 <p>###B树的结点结构<br>关键码有序<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">template&lt;class Key&gt;</div><div class="line"></div><div class="line">class BNode&#123;</div><div class="line">	int n ;</div><div class="line">	BNode&lt;key&gt;* parent;</div><div class="line">	Key key[MAXREC]; //最多有MAXREC个关键码</div><div class="line">	BNode&lt;key&gt;* ptr[MAXREC+1]//最多有MAXREC+1个指针</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>B树的查找：<br>索引和主文件（关键码有指针指向主文件）。<br>B树的插入：<br>上下界，不能把节点塞爆了。<br>超过关键码数码，插入可能会导致分裂。分裂时取中间的键码做分界点。<br>插入引起3阶B树节点连续分裂。<br>如图<br><img src="/images/fenlie_before.png" alt="fenlie_before"><br><img src="/images/fenlie_after.png" alt="fenlie_after"><br>注意保持性质，特别是等高和阶的限制<br>1.找最底层，插入<br>2.若溢出，则节点分裂，中间关键码联通新指针插入父节点<br>3.若父节点也溢出，则继续分裂<br>4.分裂过程可能传达到根节点（则树升高一层）</p>
+<p>B树的查找：<br>索引和主文件（关键码有指针指向主文件）。</p>
+<p>B树的插入：<br>上下界，不能把节点塞爆了。<br>超过关键码数码，插入可能会导致分裂。分裂时取中间的键码做分界点。<br>插入引起3阶B树节点连续分裂。<br>如图<br>分裂前<br><img src="/images/fenlie_before.png" alt="fenlie_before"><br>分裂后<br><img src="/images/fenlie_after.png" alt="fenlie_after"><br>注意保持性质，特别是等高和阶的限制<br>1.找最底层，插入<br>2.若溢出，则节点分裂，中间关键码联通新指针插入父节点<br>3.若父节点也溢出，则继续分裂<br>4.分裂过程可能传达到根节点（则树升高一层）</p>
 <h3 id="B树操作的访外次数"><a href="#B树操作的访外次数" class="headerlink" title="B树操作的访外次数"></a>B树操作的访外次数</h3><h3 id="B树的删除"><a href="#B树的删除" class="headerlink" title="B树的删除"></a>B树的删除</h3><p>保证不要下溢出，关键码个数不足，左右节点借（要把父节点的分界一起拿下来，去父节点分界）<br>一般只借左右兄弟，都不够的话，合并（合并左和右都可以）。</p>
 <ul>
 <li>保持性质：等高、阶（上下界）</li>
