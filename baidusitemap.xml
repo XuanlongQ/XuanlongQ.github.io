@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/10/29/interesting%20blog/</loc>
+    <lastmod>2018-01-21T14:24:19.083Z</lastmod>
+    <data>
+        <display>
+        <title>收录下看到的不错有干货的Blog</title>
+        <pubTime>2017-10-29T08:57:57.327Z</pubTime>
+        
+        <tag>network</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2018/01/15/B_tree/</loc>
     <lastmod>2018-01-15T13:44:27.553Z</lastmod>
     <data>
@@ -61,23 +78,6 @@
         <display>
         <title>在Ubuntu14.04下搭建NS-2.34</title>
         <pubTime>2017-12-22T08:44:47.601Z</pubTime>
-        
-        <tag>network</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/10/29/interesting%20blog/</loc>
-    <lastmod>2017-12-22T08:44:02.368Z</lastmod>
-    <data>
-        <display>
-        <title>收录下看到的不错有干货的Blog</title>
-        <pubTime>2017-10-29T08:57:57.327Z</pubTime>
         
         <tag>network</tag>
          
