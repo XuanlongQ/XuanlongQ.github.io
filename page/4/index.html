@@ -185,6 +185,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Selectsort" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/Selectsort/">选择排序和插入排序</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/Selectsort/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.874Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>选择排序􏰀高了冒泡排序的性能,它每遍历一次列表只交换一次数据,即进行一次遍历时找 到最大的项,完成遍历后,再把它换到正确的位置。和冒泡排序一样,第一次遍历后,最大的数 据项就已归位,第二次遍历使次大项归位。这个过程持续进行,一共需要n-1次遍历来排好n个数 据,因为最后一个数据必须在第n-1次遍历之后才能归位。<br>图3展示了选择排序的整个过程。每一次遍历,最大的数据项被选中,随后排到正确位置。 第一次遍历排好了93,第二次排好了77,第三次排好了55,以此类推。代码1展示了实现选择排 序的函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">选择排序</div><div class="line">def selectionSort(alist):</div><div class="line">    for fillslot in range(len(alist)-1,0,-1):</div><div class="line">        print fillslot</div><div class="line">        positionOfMax = 0</div><div class="line">        for location in range(1,fillslot+1):</div><div class="line">            #print location</div><div class="line">            if alist[location]&gt;alist[positionOfMax]:</div><div class="line">                positionOfMax = location</div><div class="line">        print alist[fillslot]</div><div class="line">        temp = alist[fillslot]</div><div class="line">        alist[fillslot] = alist[positionOfMax]</div><div class="line">        alist[positionOfMax] = temp</div><div class="line"></div><div class="line">alist = [54,26,93,17,77,31,44,55,20]</div><div class="line">selectionSort(alist)</div><div class="line">print alist</div></pre></td></tr></table></figure></p>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p>插入排序的算法复杂度仍然是O(n2),但其工作原理稍有不同。它总是保持一个位置靠前的 已排好的子表,然后每一个新的数据项被“插入”到前边的子表里,排好的子表增加一项。</p>
+<p>插入排序需要进行的最多的比较次数仍是从1到n-1的所有的整数之和,即复杂度为O(n2)。但 是,最好的情况下,每排一个数据只需要一次比较,即列表已经排好的情况。</p>
+<p>关于“转移”与“交换”操作的考虑也很重要。通常情况下,“转移”的步骤约为“交换” 步骤的1/3,因为它只有一次赋值操作。在基准测试中,插入排序将展示非常好的性能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def insertionSort(alist):</div><div class="line">    for index in range(1,len(alist)):</div><div class="line">        currentvalue = alist[index]</div><div class="line">        print currentvalue</div><div class="line">        position = index</div><div class="line">        print position</div><div class="line"></div><div class="line">        while position &gt; 0 and alist[position-1]&gt;currentvalue:</div><div class="line">            alist[position] = alist[position-1]</div><div class="line">            position = position -1</div><div class="line">            alist[position] = currentvalue</div><div class="line"></div><div class="line">alist = [54,26,93,17,77,31,44,55,20]</div><div class="line">insertionSort(alist)</div><div class="line">print alist</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/Selectsort/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-RAID" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1085,97 +1162,6 @@
 
 
   
-    <article id="post-ns3_mininet_intergation" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/ns3_mininet_intergation/">NS3-integration with mininet</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/ns3_mininet_intergation/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.839Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这个工作大约在我和敬轩调研了两天之后就放弃了，现在写一下调研的结果,最好还是host过一下realnetwork。</p>
-<h1 id="ns3为什么要做intergation？"><a href="#ns3为什么要做intergation？" class="headerlink" title="ns3为什么要做intergation？"></a>ns3为什么要做intergation？</h1><p>我们之所以这么做是因为ns2没有办法做sdn部分，之前在ns3-introducation部分有看到，ns3下面是通过rawsocket－&gt; realnetwork所以能外接到真实网络。所以才想到换成ns3的方案，于是便在ns3修改vmmodel，准备等mininet那边接过来。<br>但是我们发现事情没有想象的那么简单，之前我门认为根据github上的link-model可以将ns3和mininet的节点绑定起来，然后application直接将数据扔到节点，再接由mininet控制。实际上它是不是这么操作的呢，我们做了以下几件事。</p>
-<ul>
-<li>将github里面的代码git到本地进行编译，这个link我会贴出来，因为他类似一篇指导性的文章一样，发现其实里面的ns3的版本和mininet的版本是非常的低的，看了一下大约是14年最后更新的，我们git下来发现其实不能用，然后我们发现一个类似于将各种软件结合的软件OpenNet.</li>
-<li>OpenNet这个软件集合了Estinet,NS3,Mininet看起来和我们的需求非常近，我们立马git下来发现是可以用的，这大概是最不幸的事情了，然后我们在这里面做ns－intergarion，发现里面的code是和link-model一模一样，编译完成后发现通过了，但是怎么使用呢？</li>
-<li>我将bulk-send的文件执行，可以接受到数据，运行mininet 使用tcpdump监听数据发现没有任何数据？这是非常不正确的行为，这就说明一个问题ns3和mininet没有接起来。接下来的事情就是如何把这两个东西接起来。<br>－ 我们按照link的行为走了一圈，发现有个link模块叫做，btintf.py这个文件是测试文件之一是可以运行的，很明显就是绑定ns的节点和mininet的节点，里面的语句也很清晰，比如说：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">h0ns = ns.network.nodes();</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>这个模块非常简单，什么内容都没有，只好追根溯源，发现他的模块都来自ns3.py这个文件，（其实有个问题我是比较好奇的，为什么这么多人都是在做wireless network而常用的csma链路没人做，是因为觉得太简单了吗？真是一群扑街，欺负新手！）这个ns3模块我看完之后脑子都懵逼了，没有application的caller function,这个问题太大了，都不知道他正常运行的拓扑函数是数据来自哪里的？<br>－ 这个问题我当时决定撂在这里，因为已经看不出来问题在哪里了，然后我跑回去看架构，我给你们分析一下架构，先把架构图贴一下。<br><img src="/images/ns3_integration.jpeg" alt="ns3_intrgration_archtecture"><br>左边其实是mininet的部分，右边是ns3部分，中间是靠tap-deviece和tap－bridge这两个接口接在一起的，那tap-bridge是什么，我又跑回去翻看ns-3部分架构确实是有tap-bridge的而且这就是interface的接口，我大概猜到btintf.py的模块可能不是完整的，所以没有应用模块，我就去找了又tap-bridge的文件做测试。<br>－ 有tap-bridge部分的文件在/ns-3.23/src/tar-bridege这个文件夹下面，有两个文件比较有用，一个是tap-csma，一个是tap-wifi－dumbbel文件，第一个是p2p链路，第二个是带有csma子网的链路，所以我先跑第一个，（这个跑的方式和普通不一样，具体怎么跑code里面有写）跑完之后继续用tcpdump监听，发现linux和mininet都收不到数据，但是可以自己ping自己，第二个文件也是这样，但是好消息就是tap-bridge确实会产生一个thetap作为网卡来发送和接收数据，我又去看了tao-bridge，再次ping了linux和ns3确实可以ping过去，但是ns3怎么ping linux呢？因为我要确认ns3可以和外部交换信息，我就去读源码，发现居然没有目的地址，源地址是递加的，卧槽？什么情况，没有目的地址，目的地址是用节点代替，节点的ip递增，我确定代码里没有说往外ping的事情，ok，我这时候怀疑tap-bridge是不是只能模拟网口，在ns3内部使用。<br>好，我们现在总结一下，ns3和mininet做intergation的时候，ns3.py文件里面没有绑定application，同时tap-bridge可能是ns3自己构建的自洽网路。</p>
-<h1 id="怎么做integration"><a href="#怎么做integration" class="headerlink" title="怎么做integration?"></a>怎么做integration?</h1><h2 id="OpenNet"><a href="#OpenNet" class="headerlink" title="OpenNet"></a>OpenNet</h2><p>我觉得link-model既然不能用的话，那么去看OpenNet，我先去查阅了论文，我把这两篇论文贴到resource里面，你们可以直接下载，论文证明了一件事情mininet-wifi via ns3是可行的，我看了下论文的作者，卧槽NCHU，国立交大，在搜了一下作者发现是这边学长的好友，我发了邮件表示想去实验室问问，不得不说台湾做网络还是屌炸天的,柯志亨，陈健老师，曾建超老师，基本上都是这个领域的扛把子，老师们都说这是14年做的，已经毕业了，给我邮箱让我自己联系，不用看了，工作狗是不会理你的，还是自己看吧，继续看OpenNet架构，我忽然看见一个东西如下图。<br><img src="/images/tap_emu.jpeg" alt="tap_emu"><br>卧槽啊！！！！！！！！！！！！！！！！！！！！！！！！！！！<br>我忽然顿悟了，我应该用emu才对啊，可以把ns3当成一个host流量打到eth0，然后eth0接到mininet，那不就行了，如果host不够，用xen和kvm模拟八个虚拟机啊！！<br>我为自己的弱智震惊了。<br>我这时又一抬头，眼一黑，妈个鸡，tap-brdige是3.16版，现在都用fdNetdevice，这种差个0.1版基本上都会出bug，我顿时觉得我昨天晚上白熬了。</p>
-<h2 id="emu模块"><a href="#emu模块" class="headerlink" title="emu模块"></a>emu模块</h2><p>这个时候就很顺了，下面这个图一看我就知道稳了，我找了下别的文件，发现ping不能算application，但是可以用ns/application－module.h去自己改<br><img src="/images/ns3_realtime.jpeg" alt="ns3_realtime"></p>
-<ul>
-<li>怎么改，我发完文章会把代码po上来。<br>好了，我总结一下，ns3－integration其实还不完善，而且mininet和ns3版本老旧，没人维护，还是别用了。</li>
-<li>现在采取的做法不如直接把ns3作为一个host打流量到mininet，来实现ns3和mininet的链接。</li>
-</ul>
-<hr>
-<h1 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h1><p>1.<a href="http://people.cs.nctu.edu.tw/~lhyen/files/papers/OpenNet.pdf" target="_blank" rel="external">[OpenNet:A simulator for software-defined wireless local area network]</a>.<br>2.<a href="http://ieeexplore.ieee.org/document/7878816/" target="_blank" rel="external">Evaluation of mininet-wifi integration via ns-3</a>.<br>3.<a href="https://github.com/mininet/mininet/wiki/Link-modeling-using-ns-3" target="_blank" rel="external">[Link modeling using ns 3-github]</a>.<br>4.<a href="https://github.com/dlinknctu/OpenNet" target="_blank" rel="external">[OpenNet-github]</a>.<br>5.<a href="https://www.nsnam.org/wiki/HOWTO_make_ns-3_interact_with_the_real_world" target="_blank" rel="external">[HOWTO make ns-3 interact with the real world]</a>.这个救了我一命，你爱看不看。<br>6.<a href="https://www.nsnam.org/docs/release/3.11/models/html/emu.html" target="_blank" rel="external">[Emu NetDevice]</a>.这是emu部分，看看吧。</p>
-<h2 id="作为计算机的我还是要说下我的环境，ns-3-25-mininet-2-2-0，ubuntu-14-04"><a href="#作为计算机的我还是要说下我的环境，ns-3-25-mininet-2-2-0，ubuntu-14-04" class="headerlink" title="作为计算机的我还是要说下我的环境，ns-3.25 mininet 2.2.0，ubuntu 14.04 "></a>作为计算机的我还是要说下我的环境，ns-3.25 mininet 2.2.0，ubuntu 14.04 </h2><p>哎呀，今天的逻辑有些不对，但是就到这里吧，不然吴秉原要喷我了，有什么问题可以email我。如果我还是在校生我会回复你的。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/ns3_mininet_intergation/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1277,11 +1263,11 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -185,6 +185,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vm_migration" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/vm_migration/">HPCC-Based_SDN的老板的审核意见及问题</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/vm_migration/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.918Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>昨晚收到老板的邮件，大约提出了两个问题，一个是关于sdn和传输层优化的问题，一个是host和simulation的问题，我觉得写下来，会给做科研的人一些思考。</p>
+<ul>
+<li>1.sdn and the optimization of transport layer<br>老板的意思是写文章要有中心点，但是我在北大做的这部分是偏向于tcp的传输优化，而在清华做的这部分是偏向于sdn做寻路部分。实际上分开来看，一个是传输层优化一个是链路层上的优化，所以这两个问题怎噩梦结合起来，所以比较幸运的是这个问题都是基于vm migration这个场景，而migration在总的停机时间上不会有太长的优化，所以看起来两边的效果是差不多的。<br>－ 这个给我们的结论就是科研的点最好要聚焦在一点，而不是分到两个层，老板的意思这种做法基本上是上不了顶会，上c类还要看看人家给不给面子QAQ,那你让我拿ncca毕业我就不投了～真是。。。</li>
+<li>2.host &amp; simulation<br>这个问题就是因为现在做的是全仿真所以我们能在模拟器上看到问题，但是实际上仿真器时经过抽象的，那实际上究竟存不存在这个问题，这是一个伪命题的话而仿真器出现了，我们去解决它根本没有任何意义。但是其实我们之所以不做真机有一部分原因是真机的行为太复杂了，所以我们放到仿真里做，老板表示不要把真机和仿真作为一谈，如果过度抽象存在伪命题，那文章是无法服众的。<br>－ 这个给我们的结论就是在模型上一定要进行验证和比对，如果出现了模型和真机不符合一定要去找问题，然后仿真和真机要控制在一个容错范围内。</li>
+</ul>
+<p>针对这两个问题<br>1.这个问题其实是没有办法的事情，要把两个实验室的东西集合起来，虽然都是网络实验室，但是实际上差别还是很大，北大主要是在做传出层优化，而清华这边的主要在拿sdn做vcpe来做实现，其实是很偏应用层了，所以只能把点放到虚拟机迁移时间的减少。</p>
+<p>2.这个问题我在仿真器上有输出cwnd.tr的trace文件，发现在急剧掉包会出现在轮次时间点之后，所以在仿真器上是存在的，但是在真机上，我明天还要去找一下代码，到底buffer＝0后会有什么操作，会不会等到ack回来这个问题。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/vm_migration/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-treeBFSDFS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1029,83 +1109,6 @@
 
 
   
-    <article id="post-Selectsort" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/Selectsort/">选择排序和插入排序</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/Selectsort/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.874Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>选择排序􏰀高了冒泡排序的性能,它每遍历一次列表只交换一次数据,即进行一次遍历时找 到最大的项,完成遍历后,再把它换到正确的位置。和冒泡排序一样,第一次遍历后,最大的数 据项就已归位,第二次遍历使次大项归位。这个过程持续进行,一共需要n-1次遍历来排好n个数 据,因为最后一个数据必须在第n-1次遍历之后才能归位。<br>图3展示了选择排序的整个过程。每一次遍历,最大的数据项被选中,随后排到正确位置。 第一次遍历排好了93,第二次排好了77,第三次排好了55,以此类推。代码1展示了实现选择排 序的函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">选择排序</div><div class="line">def selectionSort(alist):</div><div class="line">    for fillslot in range(len(alist)-1,0,-1):</div><div class="line">        print fillslot</div><div class="line">        positionOfMax = 0</div><div class="line">        for location in range(1,fillslot+1):</div><div class="line">            #print location</div><div class="line">            if alist[location]&gt;alist[positionOfMax]:</div><div class="line">                positionOfMax = location</div><div class="line">        print alist[fillslot]</div><div class="line">        temp = alist[fillslot]</div><div class="line">        alist[fillslot] = alist[positionOfMax]</div><div class="line">        alist[positionOfMax] = temp</div><div class="line"></div><div class="line">alist = [54,26,93,17,77,31,44,55,20]</div><div class="line">selectionSort(alist)</div><div class="line">print alist</div></pre></td></tr></table></figure></p>
-<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p>插入排序的算法复杂度仍然是O(n2),但其工作原理稍有不同。它总是保持一个位置靠前的 已排好的子表,然后每一个新的数据项被“插入”到前边的子表里,排好的子表增加一项。</p>
-<p>插入排序需要进行的最多的比较次数仍是从1到n-1的所有的整数之和,即复杂度为O(n2)。但 是,最好的情况下,每排一个数据只需要一次比较,即列表已经排好的情况。</p>
-<p>关于“转移”与“交换”操作的考虑也很重要。通常情况下,“转移”的步骤约为“交换” 步骤的1/3,因为它只有一次赋值操作。在基准测试中,插入排序将展示非常好的性能。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">def insertionSort(alist):</div><div class="line">    for index in range(1,len(alist)):</div><div class="line">        currentvalue = alist[index]</div><div class="line">        print currentvalue</div><div class="line">        position = index</div><div class="line">        print position</div><div class="line"></div><div class="line">        while position &gt; 0 and alist[position-1]&gt;currentvalue:</div><div class="line">            alist[position] = alist[position-1]</div><div class="line">            position = position -1</div><div class="line">            alist[position] = currentvalue</div><div class="line"></div><div class="line">alist = [54,26,93,17,77,31,44,55,20]</div><div class="line">insertionSort(alist)</div><div class="line">print alist</div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/Selectsort/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1207,11 +1210,11 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

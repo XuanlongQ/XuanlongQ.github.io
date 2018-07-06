@@ -185,6 +185,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Graduation" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/06/Graduation/">For graduation!</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/06/Graduation/" class="archive-article-date">
+  	<time datetime="2018-07-06T03:50:52.372Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们总以为青春是永驻的。多么理所当然的想法。可我们就要毕业了，如同这三年短暂的高中时光，生命的价值也恰恰在于它并非永垂不朽。生命因其有限而可贵。现在的我深有体会。我记录下此时的心情，是想提醒大家，生即幸福。不要浪费生命为别人而活，要活出你自己的意义，为你珍视的事物奋斗，心无旁骛。即便最后未能如愿，至少我们也曾精彩地活过。</p>
+<p>在今天这样晴朗的日子里很容易让人产生希望。但人生的道路上也会有阴郁的日子。有让你觉得孤独的日子。这种时候才更要怀揣希望。不管有多遥不可及，不管有多痛苦失落。请向我保证，你都不会放弃希望。让希望永存。我们要从痛苦中收获坚强。我对你们的希望是，成为他人的希望。人们需要希望。即便不能如愿，至少我们也曾精彩的活过。今天我们环视四周，所有我们帮助过的人造就了今天的我们。今天我们似乎就此分别，但我们未来做的每一件事里都会有彼此的影子。提醒自己我是谁，我想成为谁。我与诸君共度了美好的三年，我会想念你们所有人。</p>
+<p>See you Peking!</p>
+<p><img src="/images/Graduation.png" alt="Graduation"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Personal</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/06/Graduation/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-B_tree" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1108,87 +1185,6 @@
 
 
   
-    <article id="post-buildryu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/buildryu/">SDN虚拟机环境搭建（Mininet+Ryu）</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/buildryu/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.962Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>因为hsnl的主要项目是sdn，所以我准备转到sdn方向做qos，而且由于有真机，在实作上可能效果会蛮好的。<br>开始搭建环境<br>首先我要说直接用sudo apt-get 是最简单，但是对环境的要求比较高，要求版本什么的都必须是要求的，对于我们计算机而言之前的环境搭的很幸苦，删了未免得不偿失，所以我们尽量用源码编译，或者直接使用git的方式。</p>
-<h1 id="基本环境"><a href="#基本环境" class="headerlink" title="基本环境"></a>基本环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-pip python-dev build-essential</div><div class="line">sudo apt-get install python-eventlet python-routes python-webob python-paramiko</div><div class="line">/*上面两个是安装ryu的依赖包*/</div><div class="line">/*关于mininet安装包及可能出现的问题我在mininet里面写*/</div></pre></td></tr></table></figure>
-<h1 id="Mininet"><a href="#Mininet" class="headerlink" title="Mininet"></a>Mininet</h1><p>mininet很多人都推荐使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install mininet</div><div class="line">sudo mn /*有拓扑不报错表示成功*/</div></pre></td></tr></table></figure></p>
-<p>实际上，这种方式虽然简单但是我还是觉得源码编译会靠谱一些，我是用源码安装的，当然直接get是可行的。<br>源码安装方式如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git://github.com/mininet/mininet</div><div class="line"><span class="built_in">cd</span> mininet</div><div class="line">git tag</div><div class="line">git checkout -b 2.2.2</div><div class="line">util/install.sh -a</div><div class="line">sudo mn</div></pre></td></tr></table></figure></p>
-<p>如果拓扑出来了，那就是没问题了，实际上还是可能会出现依赖包不匹配的问题，这个时候你看下他报什么错<br>1.你的版本过高  那么是可以兼容的<br>2.你的版本过低 更新版本，或者按照报错的去update。<br>我出现的是openswitch-common和openswitch-pki过低的问题，更新后是可以用的</p>
-<h1 id="Ryu"><a href="#Ryu" class="headerlink" title="Ryu"></a>Ryu</h1><p>Ryu安装的时候也建议源码安装,首先先安装我最上面说的基本环境然后输入下述指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/*没有pip的线安装pip*/</div><div class="line">wget https://bootstrap.pypa.io/get-pip.py</div><div class="line">python get-pip.py</div><div class="line">pip -V</div><div class="line"></div><div class="line">sudo pip install ryu</div><div class="line">ryu-manager</div><div class="line">/*出现loading app ryu.controller.ofp_handler.....就表示成功了*/</div></pre></td></tr></table></figure></p>
-<p>两个环境都搭好以后怎么连起来呢？如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> </div><div class="line">/*启动mininet，建立基本拓扑先*/</div><div class="line">$ sudo mn --topo single,3 --mac --switch ovsk --controller remote</div><div class="line">mininet &gt; pingall</div><div class="line">/*新开端口打开ryu准备连进去*/</div><div class="line">$ ryu-manager ryu/ryu/app/simple_switch.py</div><div class="line">/*这个时候应该可以在ryu捕捉到2层信息了，环境也算成功了*/</div></pre></td></tr></table></figure></p>
-<p>环境成功就可以开始学写了，具体的里面东西我下午开始学了，居然花了一个小时搭环境，我果然是个腊鸡。<br>成功后的图如下<br><img src="/images/ryu_mininet.jpeg" alt="ryu_mininet"><br>祝大家学习顺利，学习使我快乐，学习使我进步，学习使我没有女朋友，耶！</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/buildryu/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1290,11 +1286,11 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -185,6 +185,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-buildryu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/buildryu/">SDN虚拟机环境搭建（Mininet+Ryu）</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/11/buildryu/" class="archive-article-date">
+  	<time datetime="2017-10-11T12:48:39.962Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>因为hsnl的主要项目是sdn，所以我准备转到sdn方向做qos，而且由于有真机，在实作上可能效果会蛮好的。<br>开始搭建环境<br>首先我要说直接用sudo apt-get 是最简单，但是对环境的要求比较高，要求版本什么的都必须是要求的，对于我们计算机而言之前的环境搭的很幸苦，删了未免得不偿失，所以我们尽量用源码编译，或者直接使用git的方式。</p>
+<h1 id="基本环境"><a href="#基本环境" class="headerlink" title="基本环境"></a>基本环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-pip python-dev build-essential</div><div class="line">sudo apt-get install python-eventlet python-routes python-webob python-paramiko</div><div class="line">/*上面两个是安装ryu的依赖包*/</div><div class="line">/*关于mininet安装包及可能出现的问题我在mininet里面写*/</div></pre></td></tr></table></figure>
+<h1 id="Mininet"><a href="#Mininet" class="headerlink" title="Mininet"></a>Mininet</h1><p>mininet很多人都推荐使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install mininet</div><div class="line">sudo mn /*有拓扑不报错表示成功*/</div></pre></td></tr></table></figure></p>
+<p>实际上，这种方式虽然简单但是我还是觉得源码编译会靠谱一些，我是用源码安装的，当然直接get是可行的。<br>源码安装方式如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git://github.com/mininet/mininet</div><div class="line"><span class="built_in">cd</span> mininet</div><div class="line">git tag</div><div class="line">git checkout -b 2.2.2</div><div class="line">util/install.sh -a</div><div class="line">sudo mn</div></pre></td></tr></table></figure></p>
+<p>如果拓扑出来了，那就是没问题了，实际上还是可能会出现依赖包不匹配的问题，这个时候你看下他报什么错<br>1.你的版本过高  那么是可以兼容的<br>2.你的版本过低 更新版本，或者按照报错的去update。<br>我出现的是openswitch-common和openswitch-pki过低的问题，更新后是可以用的</p>
+<h1 id="Ryu"><a href="#Ryu" class="headerlink" title="Ryu"></a>Ryu</h1><p>Ryu安装的时候也建议源码安装,首先先安装我最上面说的基本环境然后输入下述指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/*没有pip的线安装pip*/</div><div class="line">wget https://bootstrap.pypa.io/get-pip.py</div><div class="line">python get-pip.py</div><div class="line">pip -V</div><div class="line"></div><div class="line">sudo pip install ryu</div><div class="line">ryu-manager</div><div class="line">/*出现loading app ryu.controller.ofp_handler.....就表示成功了*/</div></pre></td></tr></table></figure></p>
+<p>两个环境都搭好以后怎么连起来呢？如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> </div><div class="line">/*启动mininet，建立基本拓扑先*/</div><div class="line">$ sudo mn --topo single,3 --mac --switch ovsk --controller remote</div><div class="line">mininet &gt; pingall</div><div class="line">/*新开端口打开ryu准备连进去*/</div><div class="line">$ ryu-manager ryu/ryu/app/simple_switch.py</div><div class="line">/*这个时候应该可以在ryu捕捉到2层信息了，环境也算成功了*/</div></pre></td></tr></table></figure></p>
+<p>环境成功就可以开始学写了，具体的里面东西我下午开始学了，居然花了一个小时搭环境，我果然是个腊鸡。<br>成功后的图如下<br><img src="/images/ryu_mininet.jpeg" alt="ryu_mininet"><br>祝大家学习顺利，学习使我快乐，学习使我进步，学习使我没有女朋友，耶！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">sdn</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/11/buildryu/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-binaryorder" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -989,7 +1070,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Xuanlong-Qin-秦宣龙"><a href="#Xuanlong-Qin-秦宣龙" class="headerlink" title="Xuanlong Qin(秦宣龙)"></a>Xuanlong Qin(秦宣龙)</h1><p>Master of Science, Candidate,<br>Computer Science,<br>School of Electronics &amp; Computer Engineering,<br>Peking University (PKU)</p>
-<p>E-mail:<br><a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#120;&#117;&#x61;&#x6e;&#108;&#x6f;&#110;&#x67;&#64;&#112;&#107;&#x75;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#x6e;">&#120;&#117;&#x61;&#x6e;&#108;&#x6f;&#110;&#x67;&#64;&#112;&#107;&#x75;&#x2e;&#x65;&#x64;&#117;&#46;&#99;&#x6e;</a></p>
+<p>E-mail:<br><a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#120;&#x75;&#97;&#x6e;&#x6c;&#x6f;&#110;&#103;&#x40;&#x70;&#107;&#x75;&#x2e;&#101;&#100;&#x75;&#x2e;&#99;&#110;">&#120;&#x75;&#97;&#x6e;&#x6c;&#x6f;&#110;&#103;&#x40;&#x70;&#107;&#x75;&#x2e;&#101;&#100;&#x75;&#x2e;&#99;&#110;</a></p>
 <pre><code>- Please pay attention to case sensitive
 </code></pre><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Hello,It seems that you are interested in my resume,  I am a postgraduate student in computer science in Peking University and expect to receive master degree in 2018.</p>
 <p>My research interests include Network Congestion,VM live migration,Software-Defined Networking and basical Network Protocals (TCP,UDP,LLDP..etc)</p>
@@ -1064,86 +1145,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/11/XuanLong/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vm_migration" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/vm_migration/">HPCC-Based_SDN的老板的审核意见及问题</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/11/vm_migration/" class="archive-article-date">
-  	<time datetime="2017-10-11T12:48:39.918Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>昨晚收到老板的邮件，大约提出了两个问题，一个是关于sdn和传输层优化的问题，一个是host和simulation的问题，我觉得写下来，会给做科研的人一些思考。</p>
-<ul>
-<li>1.sdn and the optimization of transport layer<br>老板的意思是写文章要有中心点，但是我在北大做的这部分是偏向于tcp的传输优化，而在清华做的这部分是偏向于sdn做寻路部分。实际上分开来看，一个是传输层优化一个是链路层上的优化，所以这两个问题怎噩梦结合起来，所以比较幸运的是这个问题都是基于vm migration这个场景，而migration在总的停机时间上不会有太长的优化，所以看起来两边的效果是差不多的。<br>－ 这个给我们的结论就是科研的点最好要聚焦在一点，而不是分到两个层，老板的意思这种做法基本上是上不了顶会，上c类还要看看人家给不给面子QAQ,那你让我拿ncca毕业我就不投了～真是。。。</li>
-<li>2.host &amp; simulation<br>这个问题就是因为现在做的是全仿真所以我们能在模拟器上看到问题，但是实际上仿真器时经过抽象的，那实际上究竟存不存在这个问题，这是一个伪命题的话而仿真器出现了，我们去解决它根本没有任何意义。但是其实我们之所以不做真机有一部分原因是真机的行为太复杂了，所以我们放到仿真里做，老板表示不要把真机和仿真作为一谈，如果过度抽象存在伪命题，那文章是无法服众的。<br>－ 这个给我们的结论就是在模型上一定要进行验证和比对，如果出现了模型和真机不符合一定要去找问题，然后仿真和真机要控制在一个容错范围内。</li>
-</ul>
-<p>针对这两个问题<br>1.这个问题其实是没有办法的事情，要把两个实验室的东西集合起来，虽然都是网络实验室，但是实际上差别还是很大，北大主要是在做传出层优化，而清华这边的主要在拿sdn做vcpe来做实现，其实是很偏应用层了，所以只能把点放到虚拟机迁移时间的减少。</p>
-<p>2.这个问题我在仿真器上有输出cwnd.tr的trace文件，发现在急剧掉包会出现在轮次时间点之后，所以在仿真器上是存在的，但是在真机上，我明天还要去找一下代码，到底buffer＝0后会有什么操作，会不会等到ack回来这个问题。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/11/vm_migration/">展开全文 >></a>
         </p>
       
 
@@ -1274,11 +1275,11 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">network</a>
+                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Personal</a>
+                <a href="javascript:void(0)" class="js-tag color3">network</a>
               </li>
              
               <li class="article-tag-list-item">
